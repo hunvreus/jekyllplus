@@ -1,0 +1,31 @@
+.editor {
+  .header {
+    background: #FFF;
+    border-bottom: 1px solid $line-2;
+    left: 0;
+    margin: 0;
+    padding: $space/2 $space;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 999;
+  }
+  .body {
+    margin: 0 auto;
+    max-width: 720px;
+    padding-top: 46px;
+    input,
+    .select,
+    select,
+    textarea {
+      width: 100%;
+    }
+    .field {
+      input + input,
+      textarea + textarea,
+      .select + .select {
+        margin-top: $space/3;
+      }
+    }
+  }
+}

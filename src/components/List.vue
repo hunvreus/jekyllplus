@@ -1,10 +1,14 @@
 <template>
   <div>
+    <div v-if='error' class='notification is-danger'>{{ this.error }}</div>
+
     <table class='table'>
       <thead>
         <tr>
           <th>Name</th>
-          <th></th>
+          <th>
+            <router-link class='button is-small' v-if='path !== "/"' :to='{ name: "list", params: { path: parent }}'>Go Back</router-link>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -31,22 +35,40 @@ export default {
       username: this.$root.$data.username,
       repo: this.$root.$data.repo,
       token: this.$root.$data.token,
-      path: (this.$route.params.path) ? '/' + this.$route.params.path : '/',
-      files: []
+      path: '/',
+      files: [],
+      error: ''
     };
   },
   mounted() {
-    console.log('Mounted');
-    this.files = this.getFiles();
+    this.getFiles();
+  },
+  watch: {
+    '$route'(to, from) {
+      this.getFiles();
+    }
   },
   methods: {
-    getFiles: function() {
+    getFiles: function () {
+      this.path = (this.$route.params.path) ? '/' + this.$route.params.path : '/';
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents' + this.path + '?access_token=' + this.token;
       this.$http.get(url).then(response => {
+        this.error = '';
         this.files = response.body;
       }, response => {
-        // error callback
+        this.error = 'Error: ' + response.body.message;
       });
+    }
+  },
+  computed: {
+    parent: function () {
+      if (this.path === '/') {
+        return '';
+      }
+      else {
+        var parent = this.path.split('/').slice(0, -1).join('/');
+        return parent;
+      }
     }
   }
 }

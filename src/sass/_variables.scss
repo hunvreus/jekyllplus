@@ -1,0 +1,62 @@
+$black: #1b2733 !default;
+$blue: #0070e0 !default;
+$green: #2ECC40 !default;
+$grey: #637282 !default;
+$orange: #ff8e21 !default;
+$red: #ee310c !default;
+$silver: #DDDDDD !default;
+$yellow: #ffe28f !default;
+
+$primary: $blue !default;
+
+$light: #f7f9fa !default;
+$line: #c1c7cd !default;
+$line-2: #e6e8eb !default;
+$background: #FFF !default;
+
+/* Sizes */
+
+$pico: 10 !default;
+$micro: 11 !default;
+$small: 12 !default;
+$smaller: 14 !default;
+$regular: 16 !default;
+$larger: 18 !default;
+$large: 24 !default;
+$huge: 32 !default;
+$gigantic: 48 !default;
+$humongous: 64 !default;
+
+/* Fonts */
+
+$body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !default;
+$headline: $body !default;
+$code: 'Lucida Sans Typewriter', 'Lucida Console', monaco, 'Bitstream Vera Sans Mono', monospace !default;
+
+/* Misc */
+
+$ease: 0.2s !default;
+$space: 24px !default;
+$radius: 2px !default;
+$shadow: rgba(0, 0, 0, 0.1) 0 1px 1px 0 !default;
+$hover: rgba(0, 0, 0, 0.2) 0 1px 10px 0 !default;
+
+/* Responsive */
+
+$breakpoints: (
+  tablet: 640px,
+  desktop: 1024px,
+  highres: 1280px
+);
+
+/* Partials */
+
+$partials: (
+  base,
+  button,
+  form,
+  menu,
+  modal,
+  notification,
+  tooltip
+) !default;

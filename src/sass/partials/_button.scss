@@ -1,0 +1,83 @@
+@mixin button($color: $blue, $clear: false, $border: true) {
+  color: #FFF;
+
+
+}
+
+@if index($partials, button) {
+  .button {
+    background: $background;
+    border: 1px solid $line;
+    border-radius: $radius;
+    box-sizing: border-box;
+    color: $black;
+    cursor: pointer;
+    display: inline-block;
+    font-size: inherit;
+    line-height: inherit;
+    outline: none;
+    padding: $space/4 1.5*$space/2;
+    text-align: center;
+    transition-property: background, border, box-shadow, color;
+    transition-duration: $ease;
+    &.small {
+      padding: $space/8 $space/2;
+    }
+    &:hover {
+      border-color: $primary;
+      color: $primary;
+      text-decoration: none;
+    }
+    &:active,
+    &:focus {
+      box-shadow: 0 0 0 2px rgba($blue, 0.2);
+    }
+    &[disabled=disabled],
+    &[disabled=true],
+    &[disabled],
+    &.disabled {
+      border-color: $line-2;
+      color: $line;
+    }
+    &.primary {
+      background: $primary;
+      border-color: $primary;
+      color: #FFF;
+      &:hover {
+        background: shade($primary, 20%);
+        border-color: shade($primary, 20%);
+      }
+      &[disabled=disabled],
+      &[disabled=true],
+      &[disabled],
+      &.disabled {
+        background: $line;
+        border: $line;
+      }
+    }
+  }
+
+  .bundle {
+    display: inline-block;
+    > .button,
+    > * .button {
+      border-radius: 0;
+      border-right-width: 0;
+      &:hover {
+        & + .button,
+        & + * .button {
+          border-left-color: $primary;
+        }
+      }
+    }
+    > .button:first-child,
+    > *:first-child .button {
+      border-radius: $radius 0 0 $radius;
+    }
+    > .button:last-child,
+    > *:last-child .button {
+      border-radius: 0 $radius $radius 0;
+      border-right-width: 1px;
+    }
+  }
+}

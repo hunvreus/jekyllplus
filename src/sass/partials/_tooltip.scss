@@ -1,0 +1,23 @@
+@if index($partials, tooltip) {
+  .tooltip,
+  .tooltip-top { @include tooltip; }
+  .tooltip-bottom { @include tooltip(bottom); }
+  .tooltip-left { @include tooltip(left); }
+  .tooltip-right { @include tooltip(right); }
+
+  .tooltip,
+  .tooltip-bottom,
+  .tooltip-left,
+  .tooltip-right,
+  .tooltip-top {
+    > span {
+      opacity: 0;
+      transition-property: opacity;
+      transition-duration: $ease;
+    }
+    &:hover > span,
+    > span:hover {
+      opacity: 1;
+    }
+  }
+}

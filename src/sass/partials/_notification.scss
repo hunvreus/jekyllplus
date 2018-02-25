@@ -1,0 +1,47 @@
+@if index($partials, notification) {
+  .notification {
+    border-radius: $radius;
+    color: #FFF;
+    display: block;
+    @include font-size($smaller);
+    margin-bottom: $space;
+    padding: $space/4 $space/2;
+    &.error {
+      background: lighten($red, 45%);
+      color: $red;
+    }
+    &.success {
+      background: lighten($blue, 50%);
+      color: $blue;
+    }
+    &.warning {
+      background: lighten($orange, 38%);
+      color: $orange;
+    }
+    > *:last-child {
+      margin-bottom: 0;
+    }
+    a {
+      color: inherit;
+      text-decoration: underline;
+      &:active,
+      &:hover {
+        text-decoration: none;
+      }
+    }
+    .close {
+      background: transparent;
+      border: 0;
+      color: inherit;
+      float: right;
+      opacity: 0.5;
+      padding: 0;
+      text-decoration: none;
+      transition-property: opacity;
+      transition-duration: $ease;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}

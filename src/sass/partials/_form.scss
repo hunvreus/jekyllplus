@@ -1,0 +1,107 @@
+@if index($partials, form) {
+  .field {
+    margin-bottom: $space/2;
+    .description {
+      color: $grey;
+      display: block;
+      @include font-size($small);
+    }
+  }
+
+  fieldset {
+    border: 1px solid $line;
+    border-radius: $radius;
+    margin: 0 0 $space/2;
+    padding: $space/2 $space/2 0;
+    position: relative;
+  }
+
+  label,
+  .label {
+    @include font-size($small);
+    font-weight: 500;
+    text-transform: uppercase;
+    display: block;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  input:not([type=button]):not([type=checkbox]):not([type=file]):not([type=hidden]):not([type=radio]):not([type=range]):not([type=reset]):not([type=submit]),
+  textarea,
+  .select select {
+    background: $background;
+    border: 1px solid $line;
+    border-radius: $radius;
+    box-shadow: $shadow inset;
+    box-sizing: border-box;
+    display: inline-block;
+    padding: $space/4 $space/2;
+    transition-property: background, border;
+    transition-duration: $ease;
+    &.small {
+      padding: $space/8 $space/4;
+    }
+    &:hover {
+      border-color: shade($line, 20%);
+    }
+    &:active,
+    &:focus {
+      border-color: $blue;
+      box-shadow: 0 0 0 2px rgba($blue, 0.2);
+      outline: none;
+    }
+    &[disabled],
+    &[disabled=disabled],
+    &[disabled=true],
+    &[disabled],
+    &[readonly=true],
+    &[readonly=readonly],
+    &[readonly] {
+      border-color: $light;
+      &:active,
+      &:focus,
+      &:hover {
+        background: $light;
+        border-color: $light;
+      }
+    }
+  }
+
+  .select {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    & > select {
+      appearance: none;
+      -webkit-appearance: none;
+      box-shadow: none;
+      cursor: pointer;
+      padding-right: 1.5*$space;
+    }
+    &:after {
+      bottom: 0;
+      content: '▾';
+      cursor: pointer;
+      @include font-size($smaller);
+      line-height: 120%;
+      pointer-events: none;
+      position: absolute;
+      right: $space/2;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .actions {
+    margin-top: $space;
+    > * {
+      margin-right: $space/4;
+    }
+  }
+}

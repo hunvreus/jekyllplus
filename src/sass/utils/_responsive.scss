@@ -1,0 +1,37 @@
+@mixin breakpoint($class) {
+  @if $class == mobile {
+    @media (max-width: map-get($breakpoints, tablet)) { @content; }
+  }
+
+  @else if $class == tablet {
+    @media (min-width: (map-get($breakpoints, tablet) + 1)) { @content; }
+  }
+
+  @else if $class == only_tablet {
+    @media (min-width: (map-get($breakpoints, tablet) + 1)) and (max-width: map-get($breakpoints, desktop)) { @content; }
+  }
+
+  @else if $class == up_to_desktop {
+    @media (max-width: map-get($breakpoints, desktop)) { @content; }
+  }
+
+  @else if $class == desktop {
+    @media (min-width: (map-get($breakpoints, desktop) + 1)) { @content; }
+  }
+
+  @else if $class == only_desktop {
+    @media (min-width: (map-get($breakpoints, desktop) + 1)) and (max-width: map-get($breakpoints, highres)) { @content; }
+  }
+
+  @else if $class == up_to_highres {
+    @media (max-width: map-get($breakpoints, highres)) { @content; }
+  }
+
+  @else if $class == highres {
+    @media (min-width: (map-get($breakpoints, highres) + 1)) { @content; }
+  }
+
+  @else {
+    @warn "Breakpoint mixin supports: mobile, tablet, desktop, highres";
+  }
+}

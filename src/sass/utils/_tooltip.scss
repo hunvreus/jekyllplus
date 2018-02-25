@@ -1,0 +1,65 @@
+@mixin tooltip($position: top, $color: $black, $arrow: 5px) {
+  position: relative;
+  > span {
+    background: $color;
+    border-radius: $radius;
+    color: #FFF;
+    @include font-size($small);
+    font-weight: 600;
+    line-height: 140%;
+    padding: 1.5*$space/4 1.5*$space/2;
+    position: absolute;
+    text-align: center;
+    visibility: hidden;
+    white-space: nowrap;
+    width: auto;
+    z-index: 999;
+  }
+  &:hover > span {
+    visibility: visible;
+  }
+  @if $position == top {
+    > span {
+      bottom: 100%;
+      left: 50%;
+      margin-bottom: $arrow;
+      transform: translateX(-50%);
+      &:after {
+        @include arrow(bottom, $color);
+      }
+    }
+  }
+  @else if $position == bottom {
+    > span {
+      left: 50%;
+      margin-top: $arrow;
+      top: 100%;
+      transform: translateX(-50%);
+      &:after {
+        @include arrow(top, $color);
+      }
+    }
+  }
+  @else if $position == left {
+    > span {
+      margin-right: $arrow;
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      &:after {
+        @include arrow(right, $color);
+      }
+    }
+  }
+  @else if $position == right {
+    > span {
+      left: 100%;
+      margin-left: $arrow;
+      top: 50%;
+      transform: translateY(-50%);
+      &:after {
+        @include arrow(left, $color);
+      }
+    }
+  }
+}

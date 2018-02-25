@@ -2,6 +2,7 @@
   <div id='app'>
     <section class='section'>
       <div class='container'>
+        <div v-if='error' class='notification error'>{{ this.error }}</div>
         <router-view></router-view>
       </div>
     </section>
@@ -13,12 +14,15 @@ export default {
   name: 'app',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      username: this.$root.$data.username,
+      repo: this.$root.$data.repo,
+      token: this.$root.$data.token,
+      error: ''
     }
   }
 }
 </script>
 
-<style>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css');
+<style lang='scss'>
+  @import '/sass/egg.scss';
 </style>

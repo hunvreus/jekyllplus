@@ -1,0 +1,13 @@
+// Loading normalize & bourbon, you could load them from somewhere else
+@import './vendors/_normalize.scss';
+
+/*** VARIABLES (colors, layout, spacing & typography) ***/
+
+@import '_variables';
+
+/*** MIXINS & PARTIALS ***/
+
+@import 'utils/_all';
+@import 'partials/_all';
+
+@import '_custom';
