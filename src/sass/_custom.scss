@@ -4,11 +4,25 @@
     border-bottom: 1px solid $line-2;
     left: 0;
     margin: 0;
-    padding: $space/2 $space;
+    padding: $space/3 $space;
     position: fixed;
     right: 0;
+    text-align: right;
     top: 0;
     z-index: 999;
+    .meta {
+      color: $grey;
+      float: left;
+      .file,
+      .updated {
+        @include font-size($small);
+        line-height: 160%;
+      }
+      text-align: left;
+    }
+    .button {
+      margin-top: $space/8;
+    }
   }
   .body {
     margin: 0 auto;

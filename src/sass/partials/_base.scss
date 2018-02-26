@@ -104,12 +104,10 @@
   code,
   .code {
     background: $light;
-    border: 1px solid $line;
     border-radius: $radius;
     display: inline-block;
     font-family: $code;
-    @include font-size($smaller);
-    line-height: 140%;
+    @include font-size($regular - 1);
     padding: 0 $space/4;
   }
 

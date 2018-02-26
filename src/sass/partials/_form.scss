@@ -38,7 +38,6 @@
     background: $background;
     border: 1px solid $line;
     border-radius: $radius;
-    box-shadow: $shadow inset;
     box-sizing: border-box;
     display: inline-block;
     padding: $space/4 $space/2;
@@ -80,7 +79,6 @@
     & > select {
       appearance: none;
       -webkit-appearance: none;
-      box-shadow: none;
       cursor: pointer;
       padding-right: 1.5*$space;
     }
