@@ -11,17 +11,36 @@
     top: 0;
     z-index: 999;
     .meta {
-      color: $grey;
       float: left;
+      text-align: left;
       .file,
       .updated {
+        color: $grey;
         @include font-size($small);
         line-height: 160%;
       }
-      text-align: left;
+      .file a {
+        color: inherit;
+      }
+      .updated {
+        &:after {
+          content: ' ▾';
+          opacity: 0.4;
+        }
+      }
+      .options {
+        max-height: 236px;
+        overflow: auto;
+        img {
+          border-radius: $radius;
+          float: left;
+          height: 5*$space/6;
+          margin-right: $space/4;
+        }
+      }
     }
     .button {
-      margin-top: $space/8;
+      margin-top: $space/12;
     }
   }
   .body {
@@ -38,6 +57,9 @@
       input + input,
       textarea + textarea,
       .select + .select {
+        margin-top: $space/3;
+      }
+      .button.add {
         margin-top: $space/3;
       }
     }

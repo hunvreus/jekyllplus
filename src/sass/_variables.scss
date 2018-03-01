@@ -40,6 +40,7 @@ $space: 24px !default;
 $radius: 3px !default;
 $shadow: rgba(0, 0, 0, 0.1) 0 1px 1px 0 !default;
 $hover: rgba(0, 0, 0, 0.2) 0 1px 10px 0 !default;
+$shadow-1: rgba(0, 0, 0, 0.08) 0 4px 6px 0 !default;
 
 /* Responsive */
 
@@ -54,8 +55,9 @@ $breakpoints: (
 $partials: (
   base,
   button,
+  dropdown,
   form,
-  menu,
+  layout,
   modal,
   notification,
   tooltip

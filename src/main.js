@@ -16,23 +16,28 @@ const router = new VueRouter({
   base: __dirname,
   routes: [
     {
-      path: '/list',
+      path: '/:username/:repo/:ref/list',
       component: List
     },
     {
       name: 'list',
-      path: '/list/:path',
+      path: '/:username/:repo/:ref/list/:path',
       component: List
     },
     {
-      name: 'editor',
-      path: '/edit/:path',
+      name: 'edit',
+      path: '/:username/:repo/:ref/edit/:path',
       component: Editor
     },
     {
-      path: '*',
-      redirect: '/list'
-    }
+      name: 'new',
+      path: '/:username/:repo/:ref/new/:type',
+      component: Editor
+    },
+    // {
+    //   path: '*',
+    //   redirect: '/:username/:repo/:ref/list'
+    // }
   ]
 })
 
@@ -42,6 +47,8 @@ new Vue({
   data: {
     username: 'hunvreus',
     repo: 'marketing',
+    ref: 'master',
+    // token: null
     token: ''
   },
   render: h => h(App)

@@ -32,10 +32,11 @@
 export default {
   data: function() {
     return {
-      username: this.$root.$data.username,
-      repo: this.$root.$data.repo,
+      username: this.$route.params.username,
+      repo: this.$route.params.repo,
+      ref: this.$route.params.ref,
+      path: this.$route.params.path,
       token: this.$root.$data.token,
-      path: '/',
       files: [],
       error: ''
     };
@@ -62,7 +63,8 @@ export default {
   },
   computed: {
     parent: function () {
-      if (this.path === '/') {
+
+      if (this.path === '/' || this.path === '') {
         return '';
       }
       else {

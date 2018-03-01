@@ -1,0 +1,61 @@
+@if index($partials, dropdown) {
+  .dropdown {
+    position: relative;
+    > *:first-child {
+      cursor: pointer;
+    }
+    .options {
+      background: #FFF;
+      border: 1px solid $line-2;
+      border-radius: $radius;
+      box-shadow: $shadow-1;
+      box-sizing: border-box;
+      display: block;
+      // min-width: 100%;
+      opacity: 0;
+      position: absolute;
+      top: 100%;
+      transform: translateY(-$space/2);
+      transition-property: opacity, transform;
+      transition-duration: $ease;
+      visibility: hidden;
+      z-index: 999;
+    }
+    &.active .options {
+      visibility: visible;
+    }
+    &:hover .options,
+    &.active .options,
+    .options:hover {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+    &.menu {
+      .options {
+        padding: $space/6 0;
+        a {
+          background: rgba($light, 0);
+          display: block;
+          color: inherit;
+          @include font-size($smaller);
+          line-height: 160%;
+          padding: $space/4 $space/2;
+          margin: $space/6 0;
+          transition-property: background;
+          transition-duration: $ease;
+          white-space: nowrap;
+          &:hover {
+            background: $light;
+            text-decoration: none;
+          }
+        }
+        hr {
+          border: 0;
+          border-top: 1px solid $line;
+          margin: $space/6 0;
+        }
+      }
+    }
+  }
+}
