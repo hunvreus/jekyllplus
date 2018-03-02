@@ -15,8 +15,12 @@
     text-transform: uppercase;
     transition-property: background, border, box-shadow, color;
     transition-duration: $ease;
-    &.small {
+    &.smaller {
       padding: $space/8 $space/2;
+    }
+    &.larger {
+      padding: $space/3 $space;
+      @include font-size($smaller);
     }
     &:hover {
       border-color: $primary;

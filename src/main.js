@@ -44,23 +44,21 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // If the user doesn't have a token, he needs to log in
-  var token = localStorage.getItem('token');
-  if (to.name != 'login' && token === null) {
+  // Callback from GitHub Oauth
+  if (to.query.access_token) {
+    console.log(to.query);
+    localStorage.setItem('token', to.query.access_token);
+    var redirect = localStorage.getItem('redirect');
+    if (redirect) {
+      next({ path: redirect })
+      localStorage.removeItem('redirect');
+    }
+  }
+  else if (to.name != 'login' && localStorage.getItem('token') === null) {
+    // If the user doesn't have a token, he needs to log in
     var token = localStorage.getItem('token');
     localStorage.setItem('redirect', to.fullPath);
-    next({
-      path: '/login',
-      query: { redirect_uri: to.fullPath }
-    })
-  }
-  else if (to.query.access_token) {
-    localStorage.setItem('token', to.query.access_token);
-    // var redirect = localStorage.getItem('redirect');
-    // next({
-    //   path: redirect
-    // })
-    // localStorage.removeItem('redirect');
+    next({ path: '/login' })
   }
   next();
 })

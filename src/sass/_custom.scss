@@ -1,3 +1,21 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+.button {
+  svg {
+    float: left;
+    margin: 0 $space/4 0 (-$space/4);
+  }
+  &.primary {
+    svg {
+      fill: #FFF;
+    }
+  }
+}
+
 .editor {
   .header {
     background: #FFF;
@@ -62,6 +80,36 @@
       .button.add {
         margin-top: $space/3;
       }
+    }
+  }
+}
+
+.route-login {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  .login {
+    background: #FFF;
+    border: 1px solid $line;
+    border-radius: $radius;
+    left: 50%;
+    padding: $space;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 10*$space;
+    h1 {
+      border-bottom: 1px solid $line-2;
+      @include font-size($larger);
+      margin-bottom: 1.5*$space/2;
+      padding-bottom: 1.5*$space/2;
+    }
+    .button {
+      width: 100%;
     }
   }
 }
