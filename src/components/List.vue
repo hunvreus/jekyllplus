@@ -1,7 +1,6 @@
 <template>
   <div>
     <div v-if='error' class='notification is-danger'>{{ this.error }}</div>
-
     <table class='table'>
       <thead>
         <tr>
@@ -63,7 +62,6 @@ export default {
   },
   computed: {
     parent: function () {
-
       if (this.path === '/' || this.path === '') {
         return '';
       }

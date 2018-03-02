@@ -10,19 +10,21 @@ import App from './App.vue'
 import Field from './components/Field.vue'
 import List from './components/List.vue'
 import Editor from './components/Editor.vue'
+import Picker from './components/Editor.vue'
+import Login from './components/Login.vue'
 
 const router = new VueRouter({
   mode: 'history',
   base: __dirname,
   routes: [
     {
-      path: '/:username/:repo/:ref/list',
-      component: List
+      path: '/',
+      component: Picker
     },
     {
-      name: 'list',
-      path: '/:username/:repo/:ref/list/:path',
-      component: List
+      name: 'login',
+      path: '/login',
+      component: Login
     },
     {
       name: 'edit',
@@ -34,11 +36,33 @@ const router = new VueRouter({
       path: '/:username/:repo/:ref/new/:type',
       component: Editor
     },
-    // {
-    //   path: '*',
-    //   redirect: '/:username/:repo/:ref/list'
-    // }
+    {
+      path: '*',
+      redirect: '/'
+    }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  // If the user doesn't have a token, he needs to log in
+  var token = localStorage.getItem('token');
+  if (to.name != 'login' && token === null) {
+    var token = localStorage.getItem('token');
+    localStorage.setItem('redirect', to.fullPath);
+    next({
+      path: '/login',
+      query: { redirect_uri: to.fullPath }
+    })
+  }
+  else if (to.query.access_token) {
+    localStorage.setItem('token', to.query.access_token);
+    // var redirect = localStorage.getItem('redirect');
+    // next({
+    //   path: redirect
+    // })
+    // localStorage.removeItem('redirect');
+  }
+  next();
 })
 
 new Vue({
@@ -48,8 +72,7 @@ new Vue({
     username: 'hunvreus',
     repo: 'marketing',
     ref: 'master',
-    // token: null
-    token: ''
+    token: localStorage.getItem('token')
   },
   render: h => h(App)
 })
