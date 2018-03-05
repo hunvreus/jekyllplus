@@ -2,9 +2,8 @@
   <div>
     <div v-if='error' class='notification error'>{{ this.error }}</div>
     <ul class='list files'>
-      <li v-for='file in files'>
+      <li v-for='file in filteredFiles'>
         <div class='directory' v-if='file.type === "dir"'>
-
           <div class='name'>{{ file.name }}</div>
         </div>
         <div class='file' v-if='file.type === "file"'>
@@ -58,16 +57,14 @@ export default {
       });
     }
   },
-  // computed: {
-  //   filteredFiles() {
-  //     return this.files.filter((file) => {
-  //       var extension = file.name.substr(file.name.lastIndexOf('.') + 1);
-  //       toLowerCase
-  //       return movie.time_session.reduce((acc, session) => {
-  //         return acc || (moment(session.time).hour() > 20);
-  //       }, false);
-  //     });
-  //   }
-  // }
+  computed: {
+    filteredFiles() {
+      return this.files.filter((file) => {
+        var extension = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
+        console.log(extension);
+        return (['png', 'jpg', 'jpeg', 'gif', 'tiff', 'bmp'].indexOf(extension) > -1);
+      });
+    }
+  }
 }
 </script>
