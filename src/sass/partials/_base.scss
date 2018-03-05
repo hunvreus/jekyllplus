@@ -39,7 +39,7 @@
   h6 {
     color: $black;
     font-family: $headline;
-    font-weight: bold;
+    font-weight: 500;
     line-height: 120%;
     margin: 0 0 $space;
   }
@@ -57,6 +57,11 @@
   h5,
   h6 {
     @include font-size($larger);
+  }
+
+  strong,
+  b {
+    font-weight: 500;
   }
 
   p,

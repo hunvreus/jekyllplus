@@ -1,7 +1,6 @@
 $black: #1b2733 !default;
 $blue: #0070e0 !default;
 $green: #2ECC40 !default;
-$grey: #637282 !default;
 $orange: #ff8e21 !default;
 $red: #ee310c !default;
 $silver: #DDDDDD !default;
@@ -10,8 +9,16 @@ $yellow: #ffe28f !default;
 $primary: $blue !default;
 
 $light: #f7f9fa !default;
+
+$grey: #637282 !default;
+$grey-2: rgba($grey, 0.6);
+$grey-3: rgba($grey, 0.3);
+
 $line: #c1c7cd !default;
-$line-2: #e6e8eb !default;
+$line-1: $line;
+$line-2: rgba($line, 0.6) !default;
+$line-3: rgba($line, 0.3) !default;
+
 $background: #FFF !default;
 
 /* Sizes */
@@ -38,9 +45,10 @@ $code: 'Lucida Sans Typewriter', 'Lucida Console', monaco, 'Bitstream Vera Sans 
 $ease: 0.2s !default;
 $space: 24px !default;
 $radius: 3px !default;
-$shadow: rgba(0, 0, 0, 0.1) 0 1px 1px 0 !default;
+$shadow: rgba(0, 0, 0, 0.1) 0 1px 4px 0 !default;
+$shadow-1: $shadow;
+$shadow-2: rgba(0, 0, 0, 0.1) 0 2px 8px 0 !default;
 $hover: rgba(0, 0, 0, 0.2) 0 1px 10px 0 !default;
-$shadow-1: rgba(0, 0, 0, 0.08) 0 4px 6px 0 !default;
 
 /* Responsive */
 
@@ -48,6 +56,14 @@ $breakpoints: (
   tablet: 640px,
   desktop: 1024px,
   highres: 1280px
+);
+
+/* Switch */
+
+$switch: (
+  size: 1.5*$space/2,
+  length: 5*$space/3,
+  padding: 2px
 );
 
 /* Partials */

@@ -1,0 +1,7 @@
+.loading {
+  &:after {
+    @include spinner();
+    content: '';
+    display: block;
+  }
+}

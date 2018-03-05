@@ -1,0 +1,13 @@
+@mixin spinner($thickness: $space/12, $size: $space, $color: $blue, $background: $light, $ease: 3*$ease) {
+  animation: spin $ease linear infinite;
+  border: $thickness solid $background;
+  border-radius: 50%;
+  border-top-color: $color;
+  height: $size;
+  width: $size;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

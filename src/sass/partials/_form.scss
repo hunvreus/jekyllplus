@@ -1,6 +1,6 @@
 @if index($partials, form) {
   .field {
-    margin-bottom: $space/2;
+    margin-bottom: 1.5*$space/2;
     .description {
       color: $grey;
       display: block;
@@ -32,7 +32,7 @@
     line-height: inherit;
   }
 
-  input:not([type=button]):not([type=checkbox]):not([type=file]):not([type=hidden]):not([type=radio]):not([type=range]):not([type=reset]):not([type=submit]),
+  input,
   textarea,
   .select select {
     background: $background;
@@ -62,12 +62,15 @@
     &[readonly=true],
     &[readonly=readonly],
     &[readonly] {
-      border-color: $light;
+      background: $light;
+      border-color: $line-2;
+      color: $grey;
       &:active,
       &:focus,
       &:hover {
-        background: $light;
-        border-color: $light;
+        border-color: $line-2;
+        box-shadow: none;
+        cursor: not-allowed;
       }
     }
   }

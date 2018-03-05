@@ -1,6 +1,7 @@
 <template>
-  <div class='editor' :class='status'>
+  <div id='editor' :class='status'>
     <form v-if='config && config.collections && config.collections.posts' v-on:submit.prevent='save'>
+      <!-- Header (save button, history, file name...) -->
       <header class='header'>
         <div class='meta'>
           <code class='file'><a :href='"https://github.com/" + username + "/" + repo + "/blob/" + this.ref + "/" + this.path' target='_blank'>{{ this.path }}</a></code>
@@ -13,6 +14,7 @@
         </div>
         <button class='button primary' :class='{ disabled: status != "" }'>Save</button>
       </header>
+      <!-- Body (fields for editing) -->
       <div class='body'>
         <field v-for='field in config.collections.posts.fields' :key='field.name' :field='field' :model='model'></field>
       </div>
@@ -22,9 +24,9 @@
 
 <script>
 const YAML = require('js-yaml');
-import Field from './Field.vue'
-import History from './History.vue'
-import moment from 'moment'
+import Field from './Field.vue';
+import History from './History.vue';
+import moment from 'moment';
 
 export default {
   data: function() {
@@ -105,37 +107,44 @@ export default {
       }
       return model;
     },
-    getFile: function () {
-      var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.path + '?access_token=' + this.token;
-      this.$http.get(url).then(response => {
-        this.error = '';
-        this.file = jsyaml.loadFront(window.atob(response.body.content), 'body');
-        this.sha = response.body.sha;
-        this.getHistory();
-        //
-        var fields = this.config.collections.posts.fields;
-        var content = this.file;
-        this.model = this.createModel(fields, content);
-      }, response => {
-        this.error = 'Error: ' + response.body.message;
-      });
-    },
     getConfig: function () {
+      // Retrieve the configuration (`.jekyllplus.yml`) from GitHub
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/.jekyllplus.yml';
       var params = {
         access_token: this.token,
         ref: this.ref
       };
       this.$http.get(url, {headers: {'Accept': 'application/vnd.github.v3.raw'}, params: params}).then(response => {
+        // Upon retrieval, we parse the YAML file
         this.error = '';
         this.config = YAML.safeLoad(response.body);
         this.config['__content'] = this.config.body;
+        // We then retrieve the file we want to edit
         this.getFile();
       }, response => {
         this.error = 'Couldn\'t retrieve the configuration file (.jekyllplus.yml): ' + response.body.message;
       });
     },
+    getFile: function () {
+      // Retrieve the file we want to edit from GitHub
+      var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.path + '?access_token=' + this.token;
+      this.$http.get(url).then(response => {
+        // Upon retrieval, we decode and parse the YAML front matter and body
+        this.error = '';
+        this.file = jsyaml.loadFront(window.atob(response.body.content), 'body');
+        this.sha = response.body.sha;
+        var fields = this.config.collections.posts.fields;
+        var content = this.file;
+        // We create a model by merging the file and config
+        this.model = this.createModel(fields, content);
+        // We also get the commit history
+        this.getHistory();
+      }, response => {
+        this.error = 'Error: ' + response.body.message;
+      });
+    },
     getHistory: function () {
+      // Retrieve the commit history of the file we edit from GitHub
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/commits?path=' + this.path + '&access_token=' + this.token;
       this.$http.get(url).then(response => {
         this.error = '';
@@ -145,7 +154,7 @@ export default {
       });
     },
     save: function (e) {
-      // Prepare the file content
+      // Create the file content from the model
       var body = this.model.body;
       var yaml = this.model;
       delete yaml.body;
@@ -154,7 +163,7 @@ export default {
           content += yaml;
           content += '---\n';
           content += body;
-
+      // Saves the content in GitHub
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.path + '?access_token=' + this.token;
       var params = {
         path: this.path,
@@ -164,6 +173,7 @@ export default {
       };
       this.status = 'saving';
       this.$http.put(url, params).then(response => {
+        // Upon saving the file, we getch again the file and history to update the state
         this.getFile();
         this.getHistory();
         this.status = '';

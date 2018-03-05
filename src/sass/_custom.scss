@@ -16,8 +16,41 @@ body {
   }
 }
 
-.editor {
-  .header {
+#user {
+  left: $space;
+  position: fixed;
+  bottom: $space/2;
+  z-index: 1000;
+  .dropdown {
+    & > a {
+      display: block;
+      padding-top: $space/4;
+      img {
+        border-radius: 50%;
+        opacity: 0.6;
+        transition-property: opacity;
+        transition-duration: $ease;
+        width: 1.5*$space;
+      }
+    }
+    &:hover {
+      & > a img {
+        opacity: 1;
+      }
+    }
+  }
+  .options {
+    bottom: 100%;
+    top: auto;
+    a.logout:hover {
+      color: $red;
+    }
+  }
+}
+
+// Editor
+#editor {
+  form > .header {
     background: #FFF;
     border-bottom: 1px solid $line-2;
     left: 0;
@@ -61,10 +94,10 @@ body {
       margin-top: $space/12;
     }
   }
-  .body {
+  form > .body {
     margin: 0 auto;
     max-width: 720px;
-    padding-top: 46px;
+    padding-top: 60px;
     input,
     .select,
     select,
@@ -85,6 +118,7 @@ body {
 }
 
 .route-login {
+  background: $light;
   bottom: 0;
   left: 0;
   margin: auto;
@@ -93,23 +127,127 @@ body {
   top: 0;
   .login {
     background: #FFF;
-    border: 1px solid $line;
+    border: 1px solid $line-2;
     border-radius: $radius;
     left: 50%;
+    max-width: 10*$space;
     padding: $space;
     position: absolute;
     text-align: center;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 10*$space;
-    h1 {
-      border-bottom: 1px solid $line-2;
-      @include font-size($larger);
-      margin-bottom: 1.5*$space/2;
-      padding-bottom: 1.5*$space/2;
+    a.logo {
+      background: #FFF;
+      border: 1px solid $line-2;
+      border-radius: 50%;
+      box-sizing: border-box;
+      display: block;
+      height: 2.5*$space;
+      margin: (-7*$space/3) auto $space/2;
+      padding: $space/2;
+      width: 2.5*$space;
+      svg {
+        display: block;
+        height: 1.5*$space;
+        width: 1.5*$space;
+      }
+    }
+    p {
+      color: $grey;
+      @include font-size($smaller);
+      line-height: 160%;
+      margin-bottom: $space/2;
+      text-align: left;
     }
     .button {
       width: 100%;
     }
+  }
+}
+
+.picker {
+  .search {
+    position: relative;
+    input {
+      border-radius: $space;
+      padding-left: 1.5*$space/2;
+      padding-right: 1.5*$space/2 + $space;
+      width: 100%;
+    }
+  }
+  .results {
+    margin-top: $space/2;
+    .empty {
+      background: $light;
+      border: $radius;
+      color: $grey;
+      @include font-size($smaller);
+      line-height: 160%;
+      padding: $space/2 1.5*$space/2;
+      strong {
+        display: block;
+      }
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      li {
+        border-bottom: 1px solid $line-3;
+        margin: 0;
+        &:first-child {
+          border-top: 1px solid $line-3;
+        }
+        a {
+          color: inherit;
+          display: block;
+          padding: $space/2 1.5*$space/2;
+          &:hover {
+            background: $light;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+    .meta {
+      color: $grey;
+      @include font-size($small);
+      line-height: 160%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      svg {
+        fill: $grey;
+        height: $space/2;
+        vertical-align: text-bottom;
+        width: $space/2;
+      }
+    }
+  }
+  &.searching {
+    .search {
+      position: relative;
+      &:after {
+        @include spinner();
+        content: '';
+        display: block;
+        position: absolute;
+        right: $space/3;
+        top: $space/4 - 1;
+      }
+    }
+    .results {
+      opacity: 0.6;
+    }
+  }
+}
+
+.route-home {
+  .container {
+    text-align: center;
+  }
+  .picker {
+    margin: 6*$space auto 0;
+    max-width: 20*$space;
+    text-align: left;
   }
 }

@@ -7,10 +7,10 @@ Vue.use(VueRouter)
 Vue.use(VueResource)
 
 import App from './App.vue'
+import Home from './components/Home.vue'
 import Field from './components/Field.vue'
 import List from './components/List.vue'
 import Editor from './components/Editor.vue'
-import Picker from './components/Editor.vue'
 import Login from './components/Login.vue'
 
 const router = new VueRouter({
@@ -18,13 +18,19 @@ const router = new VueRouter({
   base: __dirname,
   routes: [
     {
+      name: 'home',
       path: '/',
-      component: Picker
+      component: Home
     },
     {
       name: 'login',
       path: '/login',
       component: Login
+    },
+    {
+      name: 'list',
+      path: '/:username/:repo/:ref/list/',
+      component: List
     },
     {
       name: 'edit',
@@ -46,19 +52,21 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   // Callback from GitHub Oauth
   if (to.query.access_token) {
-    console.log(to.query);
     localStorage.setItem('token', to.query.access_token);
-    var redirect = localStorage.getItem('redirect');
-    if (redirect) {
-      next({ path: redirect })
-      localStorage.removeItem('redirect');
-    }
+    var redirect = localStorage.getItem('redirect') ? localStorage.getItem('redirect') : '/' ;
+    next({ path: redirect });
+    localStorage.removeItem('redirect');
   }
-  else if (to.name != 'login' && localStorage.getItem('token') === null) {
-    // If the user doesn't have a token, he needs to log in
+  // If the user doesn't have a token, we redirect him to log in and save the
+  // initial path for later redirection
+  if (to.name != 'login' && localStorage.getItem('token') === null) {
     var token = localStorage.getItem('token');
     localStorage.setItem('redirect', to.fullPath);
     next({ path: '/login' })
+  }
+  // If the user is logged in, we prevent him from going to the login page
+  if (to.name == 'login' && localStorage.getItem('token') !== null) {
+    next({ path: '/' })
   }
   next();
 })
@@ -66,11 +74,15 @@ router.beforeEach((to, from, next) => {
 new Vue({
   el: '#app',
   router,
-  data: {
-    username: 'hunvreus',
-    repo: 'marketing',
-    ref: 'master',
-    token: localStorage.getItem('token')
+  data: function() {
+    return {
+      get token() {
+        return localStorage.getItem('token') || null;
+      },
+      set token(value) {
+        localStorage.setItem('token', value);
+      }
+    };
   },
   render: h => h(App)
 })

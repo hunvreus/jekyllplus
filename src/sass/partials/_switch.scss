@@ -1,14 +1,11 @@
-$switch_size: 1.5*$space/2;
-$switch_length: 5*$space/3;
-$switch_padding: 2px;
 .switch {
   display: block;
-  height: $switch_size + 2*$switch_padding;
+  height: map-get($switch, size) + 2*map-get($switch, padding);
   position: relative;
-  width: $switch_length + 2*$switch_padding;
+  width: map-get($switch, length) + 2*map-get($switch, padding);
   &:active {
     border-color: $blue;
-    border-radius: 2*$switch_size;
+    border-radius: 2*map-get($switch, size);
     box-shadow: 0 0 0 2px rgba($blue, 0.2);
     outline: none;
   }
@@ -18,12 +15,12 @@ $switch_padding: 2px;
       background: $blue;
     }
     &:checked+.slider span {
-      transform: translateX($switch_length - $switch_size);
+      transform: translateX(map-get($switch, length) - map-get($switch, size));
     }
   }
   .slider {
     background: $line;
-    border-radius: 2*$switch_size;
+    border-radius: 2*map-get($switch, size);
     bottom: 0;
     cursor: pointer;
     left: 0;
@@ -34,11 +31,11 @@ $switch_padding: 2px;
     span {
       background: #FFF;
       border-radius: 50%;
-      bottom: $switch_padding;
-      height: $switch_size;
-      left: $switch_padding;
+      bottom: map-get($switch, padding);
+      height: map-get($switch, size);
+      left: map-get($switch, padding);
       position: absolute;
-      width: $switch_size;
+      width: map-get($switch, size);
       transition-duration: $ease;
       &:after {
         content: '';
@@ -51,12 +48,12 @@ $switch_padding: 2px;
         -ms-transform: scale(0);
         -webkit-transform: scale(0);
         transform: scale(0);
-        height: $switch_size*1.6;
-        width: $switch_size*1.6;
+        height: map-get($switch, size)*1.6;
+        width: map-get($switch, size)*1.6;
       }
     }
   }
-  &+label {
+  & + label {
     cursor: pointer;
     display: inline-block;
   }
