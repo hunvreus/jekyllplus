@@ -59,14 +59,14 @@ export default {
     }
   },
   // computed: {
-  //   parent: function () {
-  //     if (this.path === '/' || this.path === '') {
-  //       return '';
-  //     }
-  //     else {
-  //       var parent = this.path.split('/').slice(0, -1).join('/');
-  //       return parent;
-  //     }
+  //   filteredFiles() {
+  //     return this.files.filter((file) => {
+  //       var extension = file.name.substr(file.name.lastIndexOf('.') + 1);
+  //       toLowerCase
+  //       return movie.time_session.reduce((acc, session) => {
+  //         return acc || (moment(session.time).hour() > 20);
+  //       }, false);
+  //     });
   //   }
   // }
 }
