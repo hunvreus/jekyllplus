@@ -31,8 +31,10 @@ export default {
       this.$http.get(url).then(response => {
         this.error = '';
         this.user = response.body;
+
         this.$root.$data.user = this.user;
       }, response => {
+        if (response.status == 401) this.logout(); // 401 is "Unauthorized access" (either the token expired or is invalid)
         this.error = 'Error: ' + response.body.message;
       });
     },

@@ -4,11 +4,13 @@
     <ul class='list files'>
       <li v-for='file in filteredFiles'>
         <div class='directory' v-if='file.type === "dir"'>
+          <svg style='width:24px;height:24px' viewBox='0 0 24 24'>
+            <path fill='#000000' d='M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z' />
+          </svg>
           <div class='name'>{{ file.name }}</div>
         </div>
         <div class='file' v-if='file.type === "file"'>
           <img :src='file.download_url + "&sanitize=1"' alt='file.name'/>
-          {{ file }}
           <div class='name'>{{ file.name }}</div>
         </div>
       </li>
@@ -52,6 +54,9 @@ export default {
       this.$http.get(url, {params: params}).then(response => {
         this.error = '';
         this.files = response.body;
+        // We add the extension and type
+        file.extension = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
+        return (['png', 'jpg', 'jpeg', 'gif', 'tiff', 'bmp'].indexOf(file.extension) > -1);
       }, response => {
         this.error = 'Error: ' + response.body.message;
       });
@@ -60,9 +65,8 @@ export default {
   computed: {
     filteredFiles() {
       return this.files.filter((file) => {
-        var extension = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
-        console.log(extension);
-        return (['png', 'jpg', 'jpeg', 'gif', 'tiff', 'bmp'].indexOf(extension) > -1);
+        file.extension = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
+        return (['png', 'jpg', 'jpeg', 'gif', 'tiff', 'bmp'].indexOf(file.extension) > -1);
       });
     }
   }

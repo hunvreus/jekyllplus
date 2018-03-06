@@ -4,8 +4,8 @@
       <!-- Header (save button, history, file name...) -->
       <header class='header'>
         <div class='meta'>
-          <code class='file'><a :href='"https://github.com/" + username + "/" + repo + "/blob/" + this.ref + "/" + this.path' target='_blank'>{{ this.path }}</a></code>
           <div class='dropdown menu'>
+            <code class='file'><a :href='"https://github.com/" + username + "/" + repo + "/blob/" + this.ref + "/" + this.path' target='_blank'>{{ this.path }}</a></code>
             <div class='updated' v-if='history[0]'>Last updated {{ history[0].commit.author.date | fromNow }}</div>
             <div class='options'>
               <history :commits='history'></history>
@@ -13,9 +13,23 @@
           </div>
         </div>
         <button class='button primary' :class='{ disabled: status != "" }'>Save</button>
+        <div class='dropdown menu'>
+          <svg style='width:24px;height:24px' viewBox='0 0 24 24'>
+            <path fill='#000000' d='M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z' />
+          </svg>
+          <div class='options'>
+            <a>Duplicate</a>
+            <hr/>
+            <a>Remove</a>
+          </div>
+        </div>
       </header>
       <!-- Body (fields for editing) -->
       <div class='body'>
+        <header class='meta'>
+          <label>Path</label>
+          <input type='text' v-model='path'/>
+        </header>
         <field v-for='field in config.collections.posts.fields' :key='field.name' :field='field' :model='model'></field>
       </div>
     </form>
@@ -126,22 +140,28 @@ export default {
       });
     },
     getFile: function () {
-      // Retrieve the file we want to edit from GitHub
-      var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.path + '?access_token=' + this.token;
-      this.$http.get(url).then(response => {
-        // Upon retrieval, we decode and parse the YAML front matter and body
-        this.error = '';
-        this.file = jsyaml.loadFront(window.atob(response.body.content), 'body');
-        this.sha = response.body.sha;
-        var fields = this.config.collections.posts.fields;
-        var content = this.file;
-        // We create a model by merging the file and config
-        this.model = this.createModel(fields, content);
-        // We also get the commit history
-        this.getHistory();
-      }, response => {
-        this.error = 'Error: ' + response.body.message;
-      });
+      var fields = this.config.collections.posts.fields;
+      if (this.$route.name == 'edit') {
+        // If we're editing a file, we retrieve it from GitHub
+        var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.path + '?access_token=' + this.token;
+        this.$http.get(url).then(response => {
+          // Upon retrieval, we decode and parse the YAML front matter and body
+          this.error = '';
+          this.file = jsyaml.loadFront(window.atob(response.body.content), 'body');
+          this.sha = response.body.sha;
+          var content = this.file;
+          // We create a model by merging the file and config
+          this.model = this.createModel(fields, content);
+          // We also get the commit history
+          this.getHistory();
+        }, response => {
+          this.error = 'Error: ' + response.body.message;
+        });
+      }
+      else {
+        // If it's a new file, we simply create a model with no content
+        this.model = this.createModel(fields, {});
+      }
     },
     getHistory: function () {
       // Retrieve the commit history of the file we edit from GitHub
@@ -154,7 +174,7 @@ export default {
       });
     },
     save: function (e) {
-      // Create the file content from the model
+      // Prepare the file content from the model
       var body = this.model.body;
       var yaml = this.model;
       delete yaml.body;
@@ -163,23 +183,34 @@ export default {
           content += yaml;
           content += '---\n';
           content += body;
-      // Saves the content in GitHub
+
+      // We edit/create the file on GitHub
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.path + '?access_token=' + this.token;
       var params = {
         path: this.path,
         message: 'Update '+ this.path + ' (via Jekyll+)',
         content: window.btoa(content),
-        sha: this.sha
+        branch: this.ref
       };
+      if (this.$route.name == 'edit') params.sha = this.sha; // For edit we need the sha
+
       this.status = 'saving';
+
       this.$http.put(url, params).then(response => {
-        // Upon saving the file, we getch again the file and history to update the state
-        this.getFile();
-        this.getHistory();
-        this.status = '';
+        if (this.$route.name == 'new') {
+          // Upon creating the file, we redirect the user to the edit form
+          this.$router.push('/' + this.username + '/' + this.repo + '/' + this.ref + '/edit/' + encodeURIComponent(this.path));
+        }
+        else {
+          // Upon editing the file, we getch again the file and history to update the state
+          this.getFile();
+          this.getHistory();
+          this.status = '';
+        }
       }, response => {
         this.error = 'Couldn\'t save the file: ' + response.body.message;
       });
+
     }
   }
 }

@@ -6,6 +6,11 @@
       <input type='text' v-if='field.multiple' v-for='n in count' v-model='model[field.name][n - 1]'/>
       <input type='text' v-else v-model='model[field.name]'/>
     </div>
+    <!-- Hidden -->
+    <div v-if='field.type == "hidden"'>
+      <input type='text' v-if='field.multiple' v-for='n in count' v-model='model[field.name][n - 1]'/>
+      <input type='text' v-else v-model='model[field.name]'/>
+    </div>
     <!-- Image -->
     <div v-if='field.type == "image"'>
       <div class='image-picker' v-if='field.multiple' v-for='n in count'>
@@ -76,8 +81,8 @@
         <field v-for='childField in field.fields' :key='childField.name' :field='childField' :model='model[field.name]'></field>
       </fieldset>
     </div>
-    <a v-if='field.multiple' v-on:click='count += 1' class='button smaller add'>Add an entry</a>
-
+    <!-- Add an entry for multiple fields -->
+    <a v-if='field.multiple && field.type != "hidden"' v-on:click='count += 1' class='button smaller add'>Add an entry</a>
   </div>
 
 </template>
