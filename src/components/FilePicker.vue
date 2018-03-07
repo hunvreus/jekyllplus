@@ -55,8 +55,8 @@ export default {
         this.error = '';
         this.files = response.body;
         // We add the extension and type
-        file.extension = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
-        return (['png', 'jpg', 'jpeg', 'gif', 'tiff', 'bmp'].indexOf(file.extension) > -1);
+        // file.extension = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
+        // return (['png', 'jpg', 'jpeg', 'gif', 'tiff', 'bmp'].indexOf(file.extension) > -1);
       }, response => {
         this.error = 'Error: ' + response.body.message;
       });
