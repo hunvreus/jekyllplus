@@ -3,6 +3,18 @@
     <form v-if='config && config.collections && config.collections.posts' v-on:submit.prevent='save'>
       <!-- Header (save button, history, file name...) -->
       <header class='header'>
+        <label>Path</label>
+        <input type='text' v-model='path'/>
+        <div class='dropdown menu'>
+          <svg style='width:24px;height:24px' viewBox='0 0 24 24'>
+            <path fill='#000000' d='M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z' />
+          </svg>
+          <div class='options'>
+            <a>Duplicate</a>
+            <hr/>
+            <a>Delete</a>
+          </div>
+        </div>
         <div class='meta'>
           <div class='dropdown menu'>
             <code class='file'><a :href='"https://github.com/" + username + "/" + repo + "/blob/" + this.ref + "/" + this.path' target='_blank'>{{ this.path }}</a></code>
@@ -12,26 +24,15 @@
             </div>
           </div>
         </div>
-        <button class='button primary' :class='{ disabled: status != "" }'>Save</button>
-        <div class='dropdown menu'>
-          <svg style='width:24px;height:24px' viewBox='0 0 24 24'>
-            <path fill='#000000' d='M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z' />
-          </svg>
-          <div class='options'>
-            <a>Duplicate</a>
-            <hr/>
-            <a>Remove</a>
-          </div>
-        </div>
       </header>
       <!-- Body (fields for editing) -->
       <div class='body'>
-        <header class='meta'>
-          <label>Path</label>
-          <input type='text' v-model='path'/>
-        </header>
         <field v-for='field in config.collections.posts.fields' :key='field.name' :field='field' :model='model'></field>
       </div>
+      <!-- Controls (Save button) -->
+      <footer class='controls'>
+        <button class='button primary save' :class='{ disabled: status != "" }'>Save</button>
+      </footer>
     </form>
   </div>
 </template>
@@ -69,6 +70,14 @@ export default {
   watch: {
     '$route'(to, from) {
       this.getFile();
+    },
+    'model.title': function (to, from) {
+      if (this.$route.name == 'new') {
+        var title = this.model.title.trim();
+        if (title == '') this.path = 'Untitled.md';
+        else this.path = title.replace(/\s+/g, '-').toLowerCase() + '.md';
+        // TODO: Add transliteration (e.g. https://www.npmjs.com/package/transliteration)
+      }
     }
   },
   methods: {
@@ -198,11 +207,11 @@ export default {
 
       this.$http.put(url, params).then(response => {
         if (this.$route.name == 'new') {
-          // Upon creating the file, we redirect the user to the edit form
+          // Upon creating a file, we redirect the user to the edit form
           this.$router.push('/' + this.username + '/' + this.repo + '/' + this.ref + '/edit/' + encodeURIComponent(this.path));
         }
         else {
-          // Upon editing the file, we getch again the file and history to update the state
+          // Upon editing a file, we getch again the file and history to update the state
           this.getFile();
           this.getHistory();
           this.status = '';
