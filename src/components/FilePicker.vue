@@ -9,10 +9,11 @@
           </svg>
           <div class='name'>{{ file.name }}</div>
         </div>
-        <div class='file' v-if='file.type === "file"'>
+        <label class='file' v-if='file.type === "file"'>
+          <input type='radio' :value='file.name' v-model='picked'/>
           <img :src='file.download_url + "&sanitize=1"' alt='file.name'/>
           <div class='name'>{{ file.name }}</div>
-        </div>
+        </label>
       </li>
     </ul>
   </div>
@@ -36,6 +37,7 @@ export default {
       ref: this.$route.params.ref,
       token: this.$root.$data.token,
       files: [],
+      picked: null,
       error: ''
     };
   },
