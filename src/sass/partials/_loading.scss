@@ -1,7 +1,23 @@
 .loading {
+  &:before {
+    background: rgba(#FFF, 0.6);
+    bottom: 0;
+    content: '';
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 99;
+  }
+  position: relative;
   &:after {
     @include spinner();
     content: '';
     display: block;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
   }
 }

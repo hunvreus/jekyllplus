@@ -113,6 +113,20 @@ body {
       .button.add {
         margin-top: $space/3;
       }
+      .image-picker {
+        > input[readonly=readonly] {
+          cursor: pointer;
+        }
+        > .button {
+          border-radius: 0 $radius $radius 0;
+        }
+        &:hover {
+          > .button {
+            border-color: $blue;
+            color: $blue;
+          }
+        }
+      }
     }
   }
 }
@@ -249,5 +263,105 @@ body {
     margin: 6*$space auto 0;
     max-width: 20*$space;
     text-align: left;
+  }
+}
+
+.filepicker {
+  .breadcrumb {
+    border-bottom: 1px solid $line-3;
+    color: $grey;
+    margin-bottom: $space/4;
+    padding-bottom: $space/2;
+    a {
+      color: $black;
+      transition-property: color;
+      transition-duration: $ease;
+      svg {
+        height: 1.5*$space/2;
+        fill: $black;
+        transition-property: fill;
+        transition-duration: $ease;
+        vertical-align: text-bottom;
+        width: 1.5*$space/2;
+      }
+      &:hover {
+        color: $blue;
+        text-decoration: none;
+        svg {
+          fill: $blue;
+        }
+      }
+    }
+  }
+  ul {
+    @include grid(6);
+  }
+  li {
+    cursor: pointer;
+    padding: $space/2;
+    .thumbnail {
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      border-radius: $radius;
+      height: 0;
+      padding-top: 100%;
+      overflow: hidden;
+      position: relative;
+      transition-property: border;
+      transition-duration: $ease;
+      width: 100%;
+      svg {
+        fill: rgba($blue, 0.6);
+        height: 80%;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+      }
+    }
+    .name {
+      color: $grey;
+      @include font-size($small);
+      overflow: hidden;
+      text-align: center;
+      text-overflow: ellipsis;
+      transition-property: color;
+      transition-duration: $ease;
+      white-space: nowrap;
+    }
+    &.image {
+      .thumbnail {
+        border: 1px solid $line;
+      }
+    }
+    &:hover {
+      .thumbnail {
+        background-color: $light;
+      }
+      &.image {
+        .thumbnail {
+          border-color: $blue;
+        }
+      }
+      .name {
+        color: $black;
+      }
+    }
+    &.active {
+      .thumbnail {
+        border-color: $blue;
+        box-shadow: 0 0 0 4px rgba($blue, 0.2);
+      }
+    }
+  }
+}
+
+.modal-rename {
+  .body {
+    input {
+      width: 100%;
+    }
   }
 }

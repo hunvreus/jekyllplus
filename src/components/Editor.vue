@@ -3,26 +3,46 @@
     <form v-if='config && config.collections && config.collections.posts' v-on:submit.prevent='save'>
       <!-- Header (save button, history, file name...) -->
       <header class='header'>
-        <label>Path</label>
-        <input type='text' v-model='path'/>
-        <div class='dropdown menu'>
-          <svg style='width:24px;height:24px' viewBox='0 0 24 24'>
-            <path fill='#000000' d='M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z' />
-          </svg>
-          <div class='options'>
-            <a>Duplicate</a>
-            <hr/>
-            <a>Delete</a>
-          </div>
-        </div>
         <div class='meta'>
-          <div class='dropdown menu'>
-            <code class='file'><a :href='"https://github.com/" + username + "/" + repo + "/blob/" + this.ref + "/" + this.path' target='_blank'>{{ this.path }}</a></code>
-            <div class='updated' v-if='history[0]'>Last updated {{ history[0].commit.author.date | fromNow }}</div>
+          <!-- Filename -->
+          <code class='file'><a :href='"https://github.com/" + username + "/" + repo + "/blob/" + this.ref + "/" + this.path' target='_blank'>{{ this.path }}</a></code>
+          <a @click.prevent='modal = true'>
+            <svg style='width:24px;height:24px' viewBox='0 0 24 24'>
+              <path fill='#000000' d='M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z' />
+            </svg>
+          </a>
+          <!-- Rename modal -->
+          <div class='modal modal-rename' :class='{ active: modal }' @click.prevent.self='modal = false'>
+            <div class='box smaller'>
+              <header class='header'>
+                <a class='close' @click.prevent='modal = false'>
+                  <svg style='width:24px;height:24px' viewBox='0 0 24 24'>
+                    <path d='M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z'/>
+                  </svg>
+                </a>
+                <h2>Rename your file</h2>
+              </header>
+              <section class='body'>
+                <input type='text' v-model='path'/>
+              </section>
+              <footer class='footer'>
+                <button class='button smaller' @click.prevent='modal = false'>Cancel</button>
+                <button class='button primary smaller'>Rename</button>
+              </footer>
+            </div>
+          </div>
+          <!-- History -->
+          <span class='dropdown menu'>
+            <div class='updated' v-if='history[0]'>
+              <svg style='width:24px;height:24px' viewBox='0 0 24 24'>
+                <path fill='#000000' d='M11,7V12.11L15.71,14.9L16.5,13.62L12.5,11.25V7M12.5,2C8.97,2 5.91,3.92 4.27,6.77L2,4.5V11H8.5L5.75,8.25C6.96,5.73 9.5,4 12.5,4A7.5,7.5 0 0,1 20,11.5A7.5,7.5 0 0,1 12.5,19C9.23,19 6.47,16.91 5.44,14H3.34C4.44,18.03 8.11,21 12.5,21C17.74,21 22,16.75 22,11.5A9.5,9.5 0 0,0 12.5,2Z' />
+              </svg>
+              {{ history[0].commit.author.date | fromNow }}
+            </div>
             <div class='options'>
               <history :commits='history'></history>
             </div>
-          </div>
+          </span>
         </div>
       </header>
       <!-- Body (fields for editing) -->
@@ -31,7 +51,15 @@
       </div>
       <!-- Controls (Save button) -->
       <footer class='controls'>
-        <button class='button primary save' :class='{ disabled: status != "" }'>Save</button>
+        <button class='button primary save' :class='{ disabled: status != "" }'>Save</button><span class='dropdown menu'><button class='button primary more'><svg style='width:24px;height:24px' viewBox='0 0 24 24'>
+            <path fill='#000000' d='M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z' />
+          </svg></button>
+          <div class='options'>
+            <a>Duplicate</a>
+            <hr/>
+            <a>Delete</a>
+          </div>
+        </span>
       </footer>
     </form>
   </div>
@@ -57,7 +85,8 @@ export default {
       history: {},
       model: null,
       error: '',
-      status: ''
+      status: '',
+      modal: false,
     };
   },
   components: {
@@ -156,7 +185,7 @@ export default {
         this.$http.get(url).then(response => {
           // Upon retrieval, we decode and parse the YAML front matter and body
           this.error = '';
-          this.file = jsyaml.loadFront(window.atob(response.body.content), 'body');
+          this.file = jsyaml.loadFront(Base64.decode(response.body.content), 'body');
           this.sha = response.body.sha;
           var content = this.file;
           // We create a model by merging the file and config
@@ -198,7 +227,7 @@ export default {
       var params = {
         path: this.path,
         message: 'Update '+ this.path + ' (via Jekyll+)',
-        content: window.btoa(content),
+        content: Base64.encode(content),
         branch: this.ref
       };
       if (this.$route.name == 'edit') params.sha = this.sha; // For edit we need the sha

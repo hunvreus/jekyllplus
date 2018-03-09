@@ -1,0 +1,24 @@
+// Super dupper simple grid
+@mixin grid($columns: 3, $square: false) {
+  @include clearfix;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  > * {
+    box-sizing: border-box;
+    clear: none;
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 100%/$columns;
+    @if ($square) {
+      height: 0;
+      padding-bottom: 100%/$columns;
+    }
+    @else {
+      &:nth-child(#{$columns}n + 1) {
+        clear: left;
+      }
+    }
+  }
+}
