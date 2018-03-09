@@ -21,7 +21,7 @@
         <input readonly type='text' @click.prevent='modal = true' v-model='model[field.name]'/>
         <button class='button' @click.prevent='modal = true'>Select file</button>
       </div>
-      <div class='modal' :class='{ active: modal }' @click.prevent.self='modal = false'>
+      <div class='modal' :class='{ active: modal }' @click.self.prevent='modal = false'>
         <div class='box large'>
           <header class='header'>
             <a class='close' @click.prevent='modal = false'>
