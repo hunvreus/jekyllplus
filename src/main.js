@@ -2,9 +2,11 @@ import moment from 'moment'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
+import Notifications from 'vue-notification'
 
 Vue.use(VueRouter)
 Vue.use(VueResource)
+Vue.use(Notifications)
 
 import App from './App.vue'
 import Home from './components/Home.vue'

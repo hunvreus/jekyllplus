@@ -6,6 +6,14 @@
       display: block;
       @include font-size($small);
     }
+    &.full-width {
+      input,
+      .select,
+      .select select,
+      textarea {
+        width: 100%;
+      }
+    }
   }
 
   fieldset {

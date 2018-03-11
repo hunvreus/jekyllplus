@@ -1,5 +1,5 @@
 <template>
-  <div class='field' v-if='model'>
+  <div class='field full-width' v-if='model'>
     <label>{{ field.label }}</label>
     <!-- String -->
     <div v-if='field.type == "string"'>
@@ -10,39 +10,54 @@
     </div>
     <!-- Hidden -->
     <div v-if='field.type == "hidden"'>
-      <input type='text' v-if='field.multiple' v-for='n in count' v-model='model[field.name][n - 1]'/>
+      <div v-if='field.multiple' class='multiple'>
+        <input type='text' v-for='n in model[field.name].length' v-model='model[field.name][n - 1]'/>
+      </div>
       <input type='text' v-else v-model='model[field.name]'/>
     </div>
     <!-- Image -->
     <div v-if='field.type == "image"'>
-      <file-picker v-if='field.multiple' v-for='n in count' v-model='model[field.name][n - 1]' :type='"image"'/>
+      <div v-if='field.multiple' class='multiple'>
+        <file-picker v-for='n in model[field.name].length' :key='n' v-model='model[field.name][n - 1]' :type='"image"'/>
+      </div>
       <file-picker v-else v-model='model[field.name]' :type='"image"'/>
     </div>
     <!-- Checkbox -->
     <div v-if='field.type == "checkbox"'>
-      <input type='checkbox' v-if='field.multiple' v-for='n in count' v-model='model[field.name][n - 1]'/>
+      <div v-if='field.multiple' class='multiple'>
+        <input type='checkbox' v-for='n in model[field.name].length' v-model='model[field.name][n - 1]'/>
+      </div>
       <input type='checkbox' v-else v-model='model[field.name]'/>
     </div>
     <!-- Switch -->
     <div v-if='field.type == "switch"'>
-      <label class='switch'>
-        <input type='checkbox' v-if='field.multiple' v-for='n in count' v-model='model[field.name][n - 1]'/>
-        <input type='checkbox' v-else v-model='model[field.name]'/>
+      <div v-if='field.multiple' class='multiple'>
+        <label class='switch' v-for='n in model[field.name].length'>
+          <input type='checkbox' v-model='model[field.name][n - 1]'/>
+          <div class='slider'><span></span></div>
+        </label>
+      </div>
+      <label v-else class='switch'>
+        <input type='checkbox' v-model='model[field.name]'/>
         <div class='slider'><span></span></div>
       </label>
     </div>
     <!-- Date -->
     <div v-else-if='field.type == "date"'>
-      <input type='date' v-if='field.multiple' v-for='n in model[field.name].length' v-model='model[field.name][n - 1]'/>
+      <div v-if='field.multiple' class='multiple'>
+        <input type='date' v-for='n in model[field.name].length' v-model='model[field.name][n - 1]'/>
+      </div>
       <input type='date' v-else v-model='model[field.name]'/>
     </div>
     <!-- List -->
     <div v-else-if='field.type == "select"'>
-      <span class='select' v-if='field.multiple' v-for='n in count'>
-        <select v-model='model[field.name][n - 1]'>
-          <option v-for='option in field.options' :value='(typeof option == "string") ? option : option.value'>{{ (typeof option == "string") ? option : option.label }}</option>
-        </select>
-      </span>
+      <div v-if='field.multiple' class='multiple'>
+        <span class='select' v-for='n in model[field.name].length'>
+          <select v-model='model[field.name][n - 1]'>
+            <option v-for='option in field.options' :value='(typeof option == "string") ? option : option.value'>{{ (typeof option == "string") ? option : option.label }}</option>
+          </select>
+        </span>
+      </div>
       <span class='select' v-else>
         <select v-model='model[field.name]'>
           <option v-for='option in field.options' :value='(typeof option == "string") ? option : option.value'>{{ (typeof option == "string") ? option : option.label }}</option>
@@ -51,12 +66,19 @@
     </div>
     <!-- Text -->
     <div v-else-if='field.type == "text" || field.type=="markdown"'>
-      <textarea rows='20' v-if='field.multiple' v-for='n in count' v-model='model[field.name][n - 1]'/>
+      <div v-if='field.multiple' class='multiple'>
+        <textarea rows='20' v-for='n in model[field.name].length' v-model='model[field.name][n - 1]'/>
+      </div>
       <textarea rows='20' v-else v-model='model[field.name]'/>
     </div>
     <!-- Object -->
     <div v-else-if='field.type == "object"'>
-      <fieldset>
+      <div v-if='field.multiple' class='multiple'>
+        <fieldset v-for='n in model[field.name].length' v-model='model[field.name][n - 1]'>
+          <field v-for='childField in field.fields' :key='childField.name' :field='childField' :model='model[field.name][n - 1]'></field>
+        </fieldset>
+      </div>
+      <fieldset v-else>
         <field v-for='childField in field.fields' :key='childField.name' :field='childField' :model='model[field.name]'></field>
       </fieldset>
     </div>
@@ -67,6 +89,7 @@
 
 <script>
 import FilePicker from './FilePicker.vue';
+import Helper from '../helper.js';
 
 export default {
   name: 'field',
@@ -79,14 +102,18 @@ export default {
       repo: this.$route.params.repo,
       ref: this.$route.params.ref,
       token: this.$root.$data.token,
-      modal: false,
-      value: '',
-      count: 1
+      value: ''
     }
   },
   methods: {
     addEntry: function () {
-      
+      // <input type='text' v-for='n in model[field.name].length' v-model='model[field.name][n - 1]'/>
+      // model[name] = this.createModel(fields[i].fields, content[name], model[name]);
+      console.log(this.model[this.field.name]);
+      this.model[this.field.name].push('');
+      console.log(this.model[this.field.name]);
+      var stuff = Helper.createModel(this.field, {}, this.model[this.field.name]);
+      console.log(stuff);
     }
   }
 }

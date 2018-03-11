@@ -59,6 +59,7 @@ export default {
 
       this.$http.put(url, params).then(response => {
         this.status = '';
+        this.$emit('uploaded', this.file);
       }, response => {
         this.status = '';
         this.error = 'Couldn\'t upload the file: ' + response.body.message;

@@ -12,12 +12,14 @@
   position: relative;
   &:after {
     @include spinner();
+    bottom: 0;
     content: '';
     display: block;
-    left: 50%;
+    left: 0;
+    margin: auto;
     position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    right: 0;
+    top: 0;
     z-index: 100;
   }
 }

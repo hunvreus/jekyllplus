@@ -1,3 +1,7 @@
+/**
+ * General
+ */
+
 html,
 body {
   height: 100%;
@@ -5,16 +9,65 @@ body {
 }
 
 .button {
-  svg {
-    float: left;
-    margin: 0 $space/4 0 (-$space/4);
+ svg {
+   float: left;
+   margin: 0 $space/4 0 (-$space/4);
+ }
+ &.primary {
+   svg {
+     fill: #FFF;
+   }
+ }
+}
+
+.thumbnail {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: $radius;
+  border: 1px solid $line;
+  box-sizing: border-box;
+}
+
+.empty {
+  background: $light;
+  border-radius: $radius;
+  color: $grey;
+  @include font-size($smaller);
+  line-height: 160%;
+  padding: $space/2 1.5*$space/2;
+  strong {
+    display: block;
   }
-  &.primary {
+}
+
+.centered {
+  text-align: center;
+}
+
+.icon {
+  border: 1px solid transparent;
+  display: inline-block;
+  padding: $space/4;
+  svg {
+    display: inline-block;
+    fill: $grey;
+    height: $space;
+    transition-property: fill;
+    transition-duration: $ease;
+    vertical-align: middle;
+    width: $space;
+  }
+  &:hover {
     svg {
-      fill: #FFF;
+      fill: $black;
     }
   }
 }
+
+/**
+ * User component
+ */
 
 #user {
   left: $space;
@@ -48,7 +101,10 @@ body {
   }
 }
 
-// Editor
+/**
+ * Editor component
+ */
+
 #editor {
   form > .header {
     background: #FFF;
@@ -86,7 +142,17 @@ body {
     }
     .meta {
       float: left;
-      padding: $space/4 0;
+      line-height: 120%;
+      .type {
+        background: $line-2;
+        border-radius: $radius - 1;
+        @include font-size($pico);
+        padding: $space/12 $space/6;
+        text-transform: uppercase;
+      }
+      .file-name {
+        @include font-size($smaller);
+      }
       a {
         color: $grey;
         &:hover {
@@ -100,12 +166,6 @@ body {
     margin: 0 auto;
     max-width: 720px;
     padding-top: 56px;
-    input,
-    .select,
-    select,
-    textarea {
-      width: 100%;
-    }
     .field {
       .file-picker + .file-picker,
       input + input,
@@ -116,12 +176,13 @@ body {
       .button.add {
         margin-top: $space/3;
       }
-      .image-picker {
-
-      }
     }
   }
 }
+
+/**
+ * Login component
+ */
 
 .route-login {
   background: $light;
@@ -247,7 +308,45 @@ body {
   }
 }
 
-// File picker
+/**
+ * History component
+ */
+
+.history {
+  .modal {
+    .body {
+      a {
+        border-radius: $radius;
+        color: inherit;
+        display: block;
+        padding: $space/4 $space/2;
+        img {
+          border-radius: $radius;
+          float: left;
+          height: 1.5*$space;
+          margin: $space/6 $space/4 0 0;
+          width: 1.5*$space;
+        }
+        strong,
+        small {
+          display: block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        &:hover {
+          background: $light;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * File picker component
+ */
+
 .file-picker {
   .input {
     position: relative;
@@ -357,59 +456,6 @@ body {
           box-shadow: 0 0 0 4px rgba($blue, 0.2);
         }
       }
-    }
-  }
-}
-
-.modal-rename {
-  .body {
-    input {
-      width: 100%;
-    }
-  }
-}
-
-.thumbnail {
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  border-radius: $radius;
-  border: 1px solid $line;
-  box-sizing: border-box;
-}
-
-.empty {
-  background: $light;
-  border-radius: $radius;
-  color: $grey;
-  @include font-size($smaller);
-  line-height: 160%;
-  padding: $space/2 1.5*$space/2;
-  strong {
-    display: block;
-  }
-}
-
-.centered {
-  text-align: center;
-}
-
-.icon {
-  border: 1px solid transparent;
-  display: inline-block;
-  padding: $space/4;
-  svg {
-    display: inline-block;
-    fill: $grey;
-    height: $space;
-    transition-property: fill;
-    transition-duration: $ease;
-    vertical-align: middle;
-    width: $space;
-  }
-  &:hover {
-    svg {
-      fill: $black;
     }
   }
 }

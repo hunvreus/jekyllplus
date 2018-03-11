@@ -33,7 +33,7 @@ module.exports = {
                   value = false;
                   break;
                 case 'date':
-                  value = moment().format('YYYY-MM-DD');
+                  // value = moment().format('YYYY-MM-DD');
                   break;
                 default:
                   value = '';

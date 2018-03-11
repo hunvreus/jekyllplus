@@ -17,19 +17,17 @@
       background: #FFF;
       border: 1px solid $grey-2;
       border-radius: 2*$radius;
-      bottom: 0;
       box-shadow: $shadow-2;
       display: table;
-      left: 0;
-      margin: auto;
+      left: 50%;
+      max-height: 90%;
       max-width: 24*$space;
       opacity: 0;
       position: absolute;
-      right: 0;
       text-align: left;
-      top: 0;
+      top: 50%;
       width: 90%;
-      transform: scale(0.6);
+      transform: translate(-50%, -50%) scale(0.6);
       transition-property: opacity, transform;
       transition-duration: $ease/2;
       width: 90%;
@@ -95,7 +93,7 @@
       visibility: visible;
       .box {
         opacity: 1;
-        transform: scale(1);
+        transform: translate(-50%, -50%) scale(1);
       }
     }
   }

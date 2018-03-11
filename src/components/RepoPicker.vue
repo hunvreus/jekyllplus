@@ -69,7 +69,6 @@ export default {
         this.$http.get(url).then(response => {
           this.error = '';
           this.results = response.body;
-          console.log(response.body);
           this.status = '';
         }, response => {
           this.error = 'Error: ' + response.body.message;

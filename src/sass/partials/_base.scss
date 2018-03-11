@@ -25,6 +25,8 @@
     cursor: pointer;
     color: $blue;
     text-decoration: none;
+    transition-property: color;
+    transition-duration: $ease;
     &:hover {
       color: shade($blue, 10%);
       text-decoration: underline;
@@ -88,6 +90,7 @@
 
   small {
     @include font-size($small);
+    line-height: 160%;
   }
 
   blockquote {

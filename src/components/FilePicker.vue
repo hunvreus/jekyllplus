@@ -30,7 +30,7 @@
           </header>
           <!-- Content -->
           <ul v-if='filteredFiles.length'>
-            <li v-for='file in filteredFiles' :class='{ active: file.path == selected.path, image: file.image }' :title='file.name'>
+            <li v-for='file in filteredFiles' :key='file.name' :class='{ active: file.path == selected.path, image: file.image }' :title='file.name'>
               <!-- Directories -->
               <div class='directory' v-if='file.type === "dir"' @click='changeDir(file.path)'>
                 <div class='thumbnail'>
