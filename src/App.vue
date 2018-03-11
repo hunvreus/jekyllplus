@@ -6,7 +6,6 @@
         <router-view></router-view>
       </div>
     </section>
-    <user/>
   </div>
 </template>
 
@@ -20,8 +19,6 @@ export default {
   },
   data () {
     return {
-      username: this.$root.$data.username,
-      repo: this.$root.$data.repo,
       token: this.$root.$data.token,
       error: '',
       user: {}

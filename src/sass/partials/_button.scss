@@ -22,6 +22,39 @@
       padding: $space/3 $space;
       @include font-size($smaller);
     }
+    &.processing {
+      padding-right: 1.5*$space/2 + 1.5*$space/2;
+      position: relative;
+      &:before {
+        @include spinner($space/24, $space/2, #FFF, rgba(#000, 0.1));
+        content: '';
+        display: block;
+        height: 1.5*$space/2;
+        margin-top: -1.5*$space/4;
+        position: absolute;
+        right: 1.5*$space/4;
+        top: 50%;
+        width: 1.5*$space/2;
+      }
+      &.larger {
+        padding-right: $space + $space;
+        &:before {
+          height: $space;
+          margin-top: -$space/2;
+          right: $space/2;
+          width: $space;
+        }
+      }
+      &.smaller {
+        padding-right: $space/2 + $space/2;
+        &:before {
+          height: $space/2;
+          margin-top: -$space/4;
+          right: $space/4;
+          width: $space/2;
+        }
+      }
+    }
     &:hover {
       border-color: $primary;
       color: $primary;
@@ -51,7 +84,7 @@
       &[disabled],
       &.disabled {
         background: $line;
-        border: $line;
+        border-color: $line;
       }
     }
   }

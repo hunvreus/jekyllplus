@@ -63,8 +63,10 @@
           float: right;
           svg {
             fill: $grey-2;
+            height: $space;
             transition-property: fill;
             transition-duration: $ease;
+            width: $space;
           }
           &:hover {
             svg {

@@ -3,7 +3,9 @@
     <label>{{ field.label }}</label>
     <!-- String -->
     <div v-if='field.type == "string"'>
-      <input type='text' v-if='field.multiple' v-for='n in count' v-model='model[field.name][n - 1]'/>
+      <div v-if='field.multiple' class='multiple'>
+        <input type='text' v-for='n in model[field.name].length' v-model='model[field.name][n - 1]'/>
+      </div>
       <input type='text' v-else v-model='model[field.name]'/>
     </div>
     <!-- Hidden -->
@@ -13,34 +15,8 @@
     </div>
     <!-- Image -->
     <div v-if='field.type == "image"'>
-      <div class='image-picker' v-if='field.multiple' v-for='n in count'>
-        <input readonly type='text' v-model='model[field.name][n - 1]'/>
-        <button class='button' v-on:click=''>Select file</button>
-      </div>
-      <div class='image-picker' v-else>
-        <input readonly type='text' @click.prevent='modal = true' v-model='model[field.name]'/>
-        <button class='button' @click.prevent='modal = true'>Select file</button>
-      </div>
-      <div class='modal' :class='{ active: modal }' @click.self.prevent='modal = false'>
-        <div class='box large'>
-          <header class='header'>
-            <a class='close' @click.prevent='modal = false'>
-              <svg style='width:24px;height:24px' viewBox='0 0 24 24'>
-                <path d='M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z'/>
-              </svg>
-            </a>
-            <h2>Choose a file</h2>
-          </header>
-          <section class='body'>
-            <file-picker :model='model[field.name]' :type='"image"' @selected='selected'/>
-          </section>
-          <footer class='footer'>
-            <upload/>
-            <button class='button smaller' @click.prevent='modal = false'>Cancel</button>
-            <button class='button primary smaller' @click.prevent='model[field.name] = value; modal = false'>Select</button>
-          </footer>
-        </div>
-      </div>
+      <file-picker v-if='field.multiple' v-for='n in count' v-model='model[field.name][n - 1]' :type='"image"'/>
+      <file-picker v-else v-model='model[field.name]' :type='"image"'/>
     </div>
     <!-- Checkbox -->
     <div v-if='field.type == "checkbox"'>
@@ -57,7 +33,7 @@
     </div>
     <!-- Date -->
     <div v-else-if='field.type == "date"'>
-      <input type='date' v-if='field.multiple' v-for='n in count' v-model='model[field.name][n - 1]'/>
+      <input type='date' v-if='field.multiple' v-for='n in model[field.name].length' v-model='model[field.name][n - 1]'/>
       <input type='date' v-else v-model='model[field.name]'/>
     </div>
     <!-- List -->
@@ -85,22 +61,17 @@
       </fieldset>
     </div>
     <!-- Add an entry for multiple fields -->
-    <a v-if='field.multiple && field.type != "hidden"' v-on:click='count += 1' class='button smaller add'>Add an entry</a>
+    <a v-if='field.multiple && field.type != "hidden"' @click='addEntry' class='button smaller add'>Add an entry</a>
   </div>
-
 </template>
 
 <script>
 import FilePicker from './FilePicker.vue';
-import Upload from './Upload.vue';
 
 export default {
   name: 'field',
   props: ['field', 'model'],
-  components: {
-    FilePicker,
-    Upload
-  },
+  components: { FilePicker },
   data: function () {
     // TODO: Remove
     return {
@@ -108,14 +79,14 @@ export default {
       repo: this.$route.params.repo,
       ref: this.$route.params.ref,
       token: this.$root.$data.token,
-      modal: null,
+      modal: false,
       value: '',
       count: 1
     }
   },
   methods: {
-    selected: function (path) {
-      this.value = path;
+    addEntry: function () {
+      
     }
   }
 }

@@ -3,6 +3,7 @@
   border: $thickness solid $background;
   border-radius: 50%;
   border-top-color: $color;
+  box-sizing: border-box;
   height: $size;
   width: $size;
 }

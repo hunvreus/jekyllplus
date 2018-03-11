@@ -20,9 +20,7 @@
       visibility: hidden;
       z-index: 999;
     }
-    &.active .options {
-      visibility: visible;
-    }
+    > *.active:first-child + .options,
     &:hover .options,
     &.active .options,
     .options:hover {

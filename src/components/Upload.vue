@@ -1,73 +1,74 @@
 <template>
-  <label class='button primary smaller'>
+  <label class='button primary smaller' :class='{ processing: status == "uploading", disabled: status == "uploading" }'>
     Upload
-    <input type='file' @change='upload'/>
+    <input type='file' @change='picked'/>
   </label>
 </template>
 
 <script>
 export default {
   name: 'upload',
-  props: [ 'path' ],
+  props: {
+    path: {
+      default: 'images'
+    }
+  },
   data: function() {
     return {
       username: this.$route.params.username,
       repo: this.$route.params.repo,
       ref: this.$route.params.ref,
       token: this.$root.$data.token,
-      current: this.path,
+      file: {},
+      content: '',
       error: '',
       status: ''
     };
   },
   methods: {
-    upload: function (e) {
-      var files = e.target.files || e.dataTransfer.files;
-      console.log(files[0]);
-      // this.someData = event.target.files[0]
+    picked: function (event) {
+      this.status = 'uploading';
+      var input = event.target;
+      // Check if we have a file
+      if (input.files && input.files[0]) {
+        this.file = input.files[0];
+        // Read the image and converts it to base64 format
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          // We strip out the info at the beginning of the file (mime type + encoding)
+          this.content = e.target.result.replace(/^(.+,)/, '');
+          // Once we have the base64 content we upload it to GitHub
+          this.upload();
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
       return;
-      // Prepare the file content from the model
-      var body = this.model.body;
-      var yaml = this.model;
-      delete yaml.body;
-      yaml = YAML.safeDump(yaml);
-      var content = '---\n';
-          content += yaml;
-          content += '---\n';
-          content += body;
-
-      // We edit/create the file on GitHub
-      var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.path + '?access_token=' + this.token;
+    },
+    upload: function () {
+      // TODO:
+      // 1. Support multifiles
+      // 2. Support overriding of file when already existing (or should we rename?)
+      // We create the file on GitHub
+      var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.path + '/' + this.file.name + '?access_token=' + this.token;
       var params = {
         path: this.path,
-        message: 'Update '+ this.path + ' (via Jekyll+)',
-        content: Base64.encode(content),
+        message: 'Uploaded '+ this.file.name + ' (via Jekyll+)',
+        content: this.content,
         branch: this.ref
       };
-      if (this.$route.name == 'edit') params.sha = this.sha; // For edit we need the sha
-
-      this.status = 'saving';
 
       this.$http.put(url, params).then(response => {
-        if (this.$route.name == 'new') {
-          // Upon creating a file, we redirect the user to the edit form
-          this.$router.push('/' + this.username + '/' + this.repo + '/' + this.ref + '/edit/' + encodeURIComponent(this.path));
-        }
-        else {
-          // Upon editing a file, we getch again the file and history to update the state
-          this.getFile();
-          this.getHistory();
-          this.status = '';
-        }
+        this.status = '';
       }, response => {
-        this.error = 'Couldn\'t save the file: ' + response.body.message;
+        this.status = '';
+        this.error = 'Couldn\'t upload the file: ' + response.body.message;
       });
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 label.button {
   float: left;
   font-weight: normal;

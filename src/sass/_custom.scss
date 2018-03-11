@@ -58,46 +58,48 @@ body {
     padding: $space/3 $space;
     position: fixed;
     right: 0;
-    text-align: right;
     top: 0;
     z-index: 999;
-    .meta {
-      float: left;
-      text-align: left;
-      .file,
-      .updated {
-        color: $grey;
-        @include font-size($small);
-        line-height: 160%;
-      }
-      .file a {
-        color: inherit;
-      }
-      .updated {
-        &:after {
-          content: ' ▾';
-          opacity: 0.4;
+    .controls {
+      float: right;
+      .more {
+        .icon {
+          padding-left: 0;
+          padding-right: 0;
         }
       }
-      .options {
-        max-height: 236px;
-        overflow: auto;
-        img {
-          border-radius: $radius;
-          float: left;
-          height: 5*$space/6;
-          margin-right: $space/4;
+      .dropdown {
+        display: inline-block;
+        .options {
+          max-height: 10*$space;
+          overflow: auto;
+          right: 0;
+          img {
+            border-radius: $radius;
+            float: left;
+            height: 5*$space/6;
+            margin-right: $space/4;
+            width: 5*$space/6;
+          }
         }
       }
     }
-    .button {
-      margin-top: $space/12;
+    .meta {
+      float: left;
+      padding: $space/4 0;
+      a {
+        color: $grey;
+        &:hover {
+          color: $black;
+          text-decoration: none;
+        }
+      }
     }
   }
   form > .body {
     margin: 0 auto;
     max-width: 720px;
-    padding-top: 60px;
+    padding-top: 56px;
     input,
     .select,
     select,
@@ -105,6 +107,7 @@ body {
       width: 100%;
     }
     .field {
+      .file-picker + .file-picker,
       input + input,
       textarea + textarea,
       .select + .select {
@@ -114,18 +117,7 @@ body {
         margin-top: $space/3;
       }
       .image-picker {
-        > input[readonly=readonly] {
-          cursor: pointer;
-        }
-        > .button {
-          border-radius: 0 $radius $radius 0;
-        }
-        &:hover {
-          > .button {
-            border-color: $blue;
-            color: $blue;
-          }
-        }
+
       }
     }
   }
@@ -191,17 +183,6 @@ body {
   }
   .results {
     margin-top: $space/2;
-    .empty {
-      background: $light;
-      border: $radius;
-      color: $grey;
-      @include font-size($smaller);
-      line-height: 160%;
-      padding: $space/2 1.5*$space/2;
-      strong {
-        display: block;
-      }
-    }
     ul {
       list-style: none;
       margin: 0;
@@ -266,93 +247,115 @@ body {
   }
 }
 
-.filepicker {
-  .breadcrumb {
-    border-bottom: 1px solid $line-3;
-    color: $grey;
-    margin-bottom: $space/4;
-    padding-bottom: $space/2;
-    a {
-      color: $black;
-      transition-property: color;
-      transition-duration: $ease;
-      svg {
-        height: 1.5*$space/2;
-        fill: $black;
-        transition-property: fill;
-        transition-duration: $ease;
-        vertical-align: text-bottom;
-        width: 1.5*$space/2;
+// File picker
+.file-picker {
+  .input {
+    position: relative;
+    .thumbnail {
+      border-radius: $radius 0 0 $radius;
+      height: 39px;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 39px;
+      & + input[readonly=readonly] {
+        padding-left: 39 + $space/2;
       }
-      &:hover {
-        color: $blue;
-        text-decoration: none;
+    }
+    input[readonly=readonly] {
+      padding-right: 103 + $space/2;
+    }
+    .button {
+      border-radius: 0 $radius $radius 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+  .modal {
+    .breadcrumb {
+      border-bottom: 1px solid $line-3;
+      color: $grey;
+      margin-bottom: $space/4;
+      padding-bottom: $space/2;
+      a {
+        color: $black;
+        transition-property: color;
+        transition-duration: $ease;
         svg {
-          fill: $blue;
+          height: 1.5*$space/2;
+          fill: $black;
+          transition-property: fill;
+          transition-duration: $ease;
+          vertical-align: text-bottom;
+          width: 1.5*$space/2;
+        }
+        &:hover {
+          color: $blue;
+          text-decoration: none;
+          svg {
+            fill: $blue;
+          }
         }
       }
     }
-  }
-  ul {
-    @include grid(6);
-  }
-  li {
-    cursor: pointer;
-    padding: $space/2;
-    .thumbnail {
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      border-radius: $radius;
-      height: 0;
-      padding-top: 100%;
-      overflow: hidden;
-      position: relative;
-      transition-property: border;
-      transition-duration: $ease;
-      width: 100%;
-      svg {
-        fill: rgba($blue, 0.6);
-        height: 80%;
-        left: 50%;
-        position: absolute;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: 80%;
-      }
+    ul {
+      @include grid(6);
     }
-    .name {
-      color: $grey;
-      @include font-size($small);
-      overflow: hidden;
-      text-align: center;
-      text-overflow: ellipsis;
-      transition-property: color;
-      transition-duration: $ease;
-      white-space: nowrap;
-    }
-    &.image {
+    li {
+      cursor: pointer;
+      padding: $space/2;
       .thumbnail {
-        border: 1px solid $line;
-      }
-    }
-    &:hover {
-      .thumbnail {
-        background-color: $light;
-      }
-      &.image {
-        .thumbnail {
-          border-color: $blue;
+        height: 0;
+        overflow: hidden;
+        padding-top: 100%;
+        position: relative;
+        transition-property: border;
+        transition-duration: $ease;
+        width: 100%;
+        svg {
+          fill: rgba($blue, 0.6);
+          height: 80%;
+          left: 50%;
+          position: absolute;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 80%;
         }
       }
       .name {
-        color: $black;
+        color: $grey;
+        @include font-size($small);
+        overflow: hidden;
+        text-align: center;
+        text-overflow: ellipsis;
+        transition-property: color;
+        transition-duration: $ease;
+        white-space: nowrap;
       }
-    }
-    &.active {
-      .thumbnail {
-        border-color: $blue;
-        box-shadow: 0 0 0 4px rgba($blue, 0.2);
+      .directory {
+        .thumbnail {
+          border: 0;
+        }
+      }
+      &:hover {
+        .thumbnail {
+          background-color: $light;
+        }
+        &.image {
+          .thumbnail {
+            border-color: $blue;
+          }
+        }
+        .name {
+          color: $black;
+        }
+      }
+      &.active {
+        .thumbnail {
+          border-color: $blue;
+          box-shadow: 0 0 0 4px rgba($blue, 0.2);
+        }
       }
     }
   }
@@ -362,6 +365,51 @@ body {
   .body {
     input {
       width: 100%;
+    }
+  }
+}
+
+.thumbnail {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: $radius;
+  border: 1px solid $line;
+  box-sizing: border-box;
+}
+
+.empty {
+  background: $light;
+  border-radius: $radius;
+  color: $grey;
+  @include font-size($smaller);
+  line-height: 160%;
+  padding: $space/2 1.5*$space/2;
+  strong {
+    display: block;
+  }
+}
+
+.centered {
+  text-align: center;
+}
+
+.icon {
+  border: 1px solid transparent;
+  display: inline-block;
+  padding: $space/4;
+  svg {
+    display: inline-block;
+    fill: $grey;
+    height: $space;
+    transition-property: fill;
+    transition-duration: $ease;
+    vertical-align: middle;
+    width: $space;
+  }
+  &:hover {
+    svg {
+      fill: $black;
     }
   }
 }
