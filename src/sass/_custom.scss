@@ -3,7 +3,8 @@
  */
 
 html,
-body {
+body,
+#app {
   height: 100%;
   width: 100%;
 }
@@ -106,6 +107,7 @@ body {
  */
 
 #editor {
+  height: 100%;
   form > .header {
     background: #FFF;
     border-bottom: 1px solid $line-2;

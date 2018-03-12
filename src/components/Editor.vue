@@ -112,20 +112,22 @@ export default {
         // First, we check the extension is html or md
         if (['html', 'md'].indexOf(this.extension) > -1) {
           var segments = this.path.split('/');
-          if (segments.length == 1) {
-            // Path doesn't include a subfolder, we're dealing with a page
-            this.type = 'pages';
-          }
-          else if (segments[0].substring(0, 1) == '_') {
-            // Path starts with a "_"
+          if (segments.length > 1 && segments[0].substring(0, 1) == '_') {
+            // Path includes a subfolder that starts with a "_": collection
             this.type = segments[0].substring(1);
           }
           else {
-            this.type = 'default';
+            // Path doesn't include a subfolder, we're defaulting to a page
+            this.type = 'pages';
           }
         }
         else {
-          // TODO: add error if it's not a supported file
+          this.$notify({
+            type: 'warn',
+            text: 'The editor only supports HTML and Markdown: switching to default.',
+            duration: -1
+          });
+          this.type = 'default';
         }
       }
     },
@@ -144,7 +146,13 @@ export default {
           // We create a model by merging the file and config
           this.model = Helper.createModel(fields, content);
         }, response => {
-          this.error = 'Error: ' + response.body.message;
+          this.$notify({
+            type: 'error',
+            text: 'Couldn\'t retrive the file (' + response.body.message + ')',
+            duration: -1
+          });
+          // We send the user back to the repo
+          this.$router.push('/' + this.username + '/' + this.repo + '/' + this.ref);
         });
       }
       else {
@@ -189,7 +197,11 @@ export default {
           this.getFile();
         }
       }, response => {
-        this.error = 'Couldn\'t save the file: ' + response.body.message;
+        this.$notify({
+          type: 'error',
+          text: 'Couldn\'t save the file: ' + response.body.message,
+          duration: -1
+        });
       });
     }
   }
