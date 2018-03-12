@@ -87,7 +87,7 @@ export default {
             var file = response.body.tree.filter(function(obj) {
               return obj.path == path;
             });
-            console.log(file[0]);
+
             // 3. Create a new tree
             var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/git/trees?access_token=' + this.token;
             var params = {

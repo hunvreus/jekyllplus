@@ -1,3 +1,9 @@
 .container {
-  padding: $space;
+  box-sizing: border-box;
+  @include clearfix;
+  padding-left: $space/2;
+  padding-right: $space/2;
+  &.narrow {
+    max-width: 30*$space;
+  }
 }

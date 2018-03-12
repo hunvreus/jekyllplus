@@ -3,32 +3,34 @@
     <form v-if='config && config.collections && config.collections[type]' v-on:submit.prevent='saveFile'>
       <!-- Header (save button, history, file name...) -->
       <header class='header'>
-        <div class='controls'>
-          <!-- History -->
-          <history :path='path'/>
-          <!-- Save -->
-          <button class='button primary save' :disabled='status != ""' :class='{ processing: status != "" }'>Save</button>
-          <!-- More -->
-          <span class='dropdown menu more'>
-            <a class='icon'>
-              <svg viewBox='0 0 24 24'>
-                <path d='M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z'/>
-              </svg>
-            </a>
-            <div class='options'>
-              <a>Duplicate</a>
-              <hr/>
-              <a>Delete</a>
-            </div>
-          </span>
-        </div>
-        <div class='meta'>
-          <a class='type'>{{ type }}</a>
-          <file-name v-if='model' v-model='path' :title='model.title' :type='type'/>
+        <div class='container'>
+          <div class='controls'>
+            <!-- History -->
+            <history :path='path'/>
+            <!-- Save -->
+            <button class='button primary save' :disabled='status != ""' :class='{ processing: status != "" }'>Save</button>
+            <!-- More -->
+            <span class='dropdown menu more'>
+              <a class='icon'>
+                <svg viewBox='0 0 24 24'>
+                  <path d='M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z'/>
+                </svg>
+              </a>
+              <div class='options'>
+                <a>Duplicate</a>
+                <hr/>
+                <a>Delete</a>
+              </div>
+            </span>
+          </div>
+          <div class='meta'>
+            <a class='type'>{{ type }}</a>
+            <file-name v-if='model' v-model='path' :title='model.title' :type='type'/>
+          </div>
         </div>
       </header>
       <!-- Body (fields for editing) -->
-      <div class='body'>
+      <div class='body container narrow'>
         <field v-for='field in config.collections[type].fields' :key='field.name' :field='field' :model='model'></field>
       </div>
     </form>
