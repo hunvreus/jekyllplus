@@ -68,11 +68,6 @@ export default {
   },
   mounted() {
     this.getConfig();
-    this.$notify({
-      type: 'error',
-      text: 'Couldn\'t retrieve the configuration file',
-      duration: -1
-    });
   },
   watch: {
     '$route'(to, from) {
@@ -124,8 +119,7 @@ export default {
         else {
           this.$notify({
             type: 'warn',
-            text: 'The editor only supports HTML and Markdown: switching to default.',
-            duration: -1
+            text: 'The editor only supports HTML and Markdown: switching to default.'
           });
           this.type = 'default';
         }

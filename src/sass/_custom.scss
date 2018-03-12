@@ -144,16 +144,19 @@ body,
     }
     .meta {
       float: left;
-      line-height: 120%;
+      .type,
+      .file-name > a {
+        line-height: 120%;
+      }
+      .file-name > a {
+        @include font-size($smaller);
+      }
       .type {
         background: $line-2;
         border-radius: $radius - 1;
         @include font-size($pico);
         padding: $space/12 $space/6;
         text-transform: uppercase;
-      }
-      .file-name {
-        @include font-size($smaller);
       }
       a {
         color: $grey;
