@@ -88,9 +88,9 @@ export default {
               return obj.path == path;
             });
 
-            // 3. Create a new tree
+            // 3. Create a new tree\
             var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/git/trees?access_token=' + this.token;
-            var params = {
+            var input = {
               base_tree: response.body.sha,
               tree: [
                 {
@@ -101,21 +101,21 @@ export default {
                 }
               ]
             };
-            this.$http.post(url, { headers: {'Content-type': 'application/json'}, params: params }).then(response => {
+            this.$http.post(url, input).then(response => {
               // 4. Create a commit for the new tree
-              var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/git/commits/?access_token=' + this.token;
-              var params = {
-                message: 'Rename ' + path + ' to ' + newPath,
+              var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/git/commits?access_token=' + this.token;
+              var input = {
+                message: 'Rename ' + path + ' to ' + this.newPath,
                 tree: response.body.sha,
                 parents: [sha]
               };
-              this.$http.post(url, {params: params}).then(response => {
+              this.$http.post(url, input).then(response => {
                 // 5. Point your branch at the new commit
                 var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/git/refs/heads/' + this.ref + '?access_token=' + this.token;
-                var params = {
+                var input = {
                   sha: response.body.sha
                 };
-                this.$http.patch(url, {headers: {'Content-type': 'application/json'}, params: params}).then(response => {
+                this.$http.patch(url, input).then(response => {
                   this.path = this.newPath;
                   this.status = '';
                   this.modal = false;

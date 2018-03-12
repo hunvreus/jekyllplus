@@ -321,12 +321,15 @@ body,
         color: inherit;
         display: block;
         padding: $space/4 $space/2;
-        img {
+        .avatar,
+        .avatar img {
           border-radius: $radius;
-          float: left;
           height: 1.5*$space;
-          margin: $space/6 $space/4 0 0;
           width: 1.5*$space;
+        }
+        .avatar {
+          float: left;
+          margin: $space/6 $space/4 0 0;
         }
         strong,
         small {

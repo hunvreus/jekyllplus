@@ -19,7 +19,9 @@
         </header>
         <section class='body'>
           <a v-for='commit in history' :href='commit.html_url' :title='commit.commit.message' target='_blank'>
-            <img :src='commit.author.avatar_url'>
+            <div class='avatar'>
+              <img v-if='commit.author' :src='commit.author.avatar_url'/>
+            </div>
             <strong>{{ commit.commit.message }}</strong>
             <small>
               {{ commit.commit.author.name }}
@@ -52,6 +54,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.path);
     this.getHistory();
   },
   methods: {
@@ -61,8 +64,13 @@ export default {
       this.$http.get(url).then(response => {
         this.error = '';
         this.history = response.body;
+        console.log(this.history)
       }, response => {
-        this.error = 'Couldn\'t retrieve the commit history: ' + response.body.message;
+        this.$notify({
+          type: 'error',
+          text: 'Couldn\'t retrieve the commit history (' + response.body.message + ')',
+          duration: -1
+        });
       });
     }
   }
