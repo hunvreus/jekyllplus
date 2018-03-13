@@ -83,14 +83,8 @@ export default {
           // 2. Get the current tree
           var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/git/trees/' + sha + '?recursive=1&access_token=' + this.token;
           this.$http.get(url).then(response => {
-            // Get the file we want to rename
-            // var file = response.body.tree.filter(function(obj) {
-            //   return obj.path == path;
-            // });
-            console.log(response.body.tree);
-            console.log(path);
             var newTree = response.body.tree
-              // .filter(item => item.type !== 'tree')
+              .filter(item => item.type !== 'tree')
               .map(i => {
                 if (i.path === path) {
                   return {
@@ -98,22 +92,19 @@ export default {
                     mode: i.mode,
                     type: i.type,
                     sha: i.sha
-                  }
+                  };
                 }
                 return {
                   path: i.path,
                   mode: i.mode,
                   type: i.type,
                   sha: i.sha
-                }
-              })
-console.log(newTree);
+                };
+              });
+
             // 3. Create a new tree\
             var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/git/trees?access_token=' + this.token;
-            var input = {
-              base_tree: response.body.sha,
-              tree: newTree
-            };
+            var input = { tree: newTree };
             this.$http.post(url, input).then(response => {
               // 4. Create a commit for the new tree
               var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/git/commits?access_token=' + this.token;
