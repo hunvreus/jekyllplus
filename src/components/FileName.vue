@@ -40,7 +40,7 @@ export default {
       token: this.$root.$data.token,
       path: this.value,
       newPath: '',
-      lock: this.$route.name != 'new',
+      lock: this.$route.name == 'edit',
       modal: false,
       status: ''
     };

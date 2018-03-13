@@ -99,7 +99,7 @@ export default {
     },
     getType: function () {
       if (this.$route.name == 'new') {
-        this.type = this.$route.params.type;
+        this.type = (this.$route.query.type) ? this.$route.query.type : 'default';
       }
       else {
         // Define the type of file we're dealing with: page, collection, include...
@@ -108,8 +108,12 @@ export default {
         if (['html', 'md'].indexOf(this.extension) > -1) {
           var segments = this.path.split('/');
           if (segments.length > 1 && segments[0].substring(0, 1) == '_') {
-            // Path includes a subfolder that starts with a "_": collection
+            // Path includes a subfolder that starts with a "_": it's collection (maybe)
             this.type = segments[0].substring(1);
+            if (typeof this.config.collections[this.type] === 'undefined') {
+              // Collection or not, it's not defined, default
+              this.type = 'default';
+            }
           }
           else {
             // Path doesn't include a subfolder, we're defaulting to a page
@@ -127,7 +131,7 @@ export default {
     },
     getFile: function () {
       var fields = this.config.collections[this.type].fields;
-      if (this.$route.name == 'edit') {
+      if (this.$route.name == 'edit' || this.$route.name == 'duplicate') {
         // If we're editing a file, we retrieve it from GitHub
         var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.path + '?access_token=' + this.token;
         this.$http.get(url).then(response => {
@@ -135,6 +139,8 @@ export default {
           this.error = '';
           this.status = '';
           this.file = jsyaml.loadFront(Base64.decode(response.body.content), 'body');
+          // Somehow the library returns the body with a new line at the beginning
+          this.file.body = this.file.body.replace(/^\n/, '');
           this.sha = response.body.sha;
           var content = this.file;
           // We create a model by merging the file and config
@@ -154,6 +160,9 @@ export default {
         this.model = Helper.createModel(fields, {});
         this.status = '';
       }
+    },
+    deleteFile: function (e) {
+
     },
     saveFile: function (e) {
       // Prepare the file content from the model
@@ -182,7 +191,11 @@ export default {
       this.status = 'saving';
 
       this.$http.put(url, params).then(response => {
-        if (this.$route.name == 'new') {
+        this.$notify({
+          type: 'success',
+          text: 'File saved.'
+        });
+        if (this.$route.name == 'new' || this.$route.name == 'duplicate') {
           // Upon creating a file, we redirect the user to the edit form
           this.$router.push('/' + this.username + '/' + this.repo + '/' + this.ref + '/edit/' + encodeURIComponent(this.path));
         }

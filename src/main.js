@@ -41,7 +41,7 @@ const router = new VueRouter({
     },
     {
       name: 'new',
-      path: '/:username/:repo/:ref/new/:type',
+      path: '/:username/:repo/:ref/new/',
       component: Editor
     },
     {

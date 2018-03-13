@@ -54,7 +54,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.path);
     this.getHistory();
   },
   methods: {
@@ -64,7 +63,6 @@ export default {
       this.$http.get(url).then(response => {
         this.error = '';
         this.history = response.body;
-        console.log(this.history)
       }, response => {
         this.$notify({
           type: 'error',

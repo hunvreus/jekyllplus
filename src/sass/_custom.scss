@@ -144,12 +144,14 @@ body,
     }
     .meta {
       float: left;
-      .type,
-      .file-name > a {
-        line-height: 120%;
-      }
-      .file-name > a {
-        @include font-size($smaller);
+      line-height: 120%;
+      .file-name {
+        > a {
+          @include font-size($smaller);
+        }
+        .modal {
+          line-height: 160%;
+        }
       }
       .type {
         background: $line-2;
@@ -320,10 +322,12 @@ body,
   .modal {
     .body {
       a {
-        border-radius: $radius;
         color: inherit;
         display: block;
-        padding: $space/4 $space/2;
+        margin-bottom: $space/3;
+        &:last-child {
+          margin-bottom: 0;
+        }
         .avatar,
         .avatar img {
           border-radius: $radius;
@@ -332,7 +336,7 @@ body,
         }
         .avatar {
           float: left;
-          margin: $space/6 $space/4 0 0;
+          margin: $space/6 $space/3 0 0;
         }
         strong,
         small {
@@ -342,8 +346,10 @@ body,
           white-space: nowrap;
         }
         &:hover {
-          background: $light;
           text-decoration: none;
+          strong {
+            text-decoration: underline;
+          }
         }
       }
     }

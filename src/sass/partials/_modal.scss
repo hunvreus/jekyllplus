@@ -18,9 +18,8 @@
       border: 1px solid $grey-2;
       border-radius: 2*$radius;
       box-shadow: $shadow-2;
-      display: table;
+      display: block;
       left: 50%;
-      max-height: 90%;
       max-width: 24*$space;
       opacity: 0;
       position: absolute;
