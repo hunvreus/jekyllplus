@@ -10,8 +10,9 @@ Vue.use(Notifications)
 
 import App from './App.vue'
 import Home from './components/Home.vue'
+import Repo from './components/Repo.vue'
 import Field from './components/Field.vue'
-import List from './components/List.vue'
+import Files from './components/Files.vue'
 import Editor from './components/Editor.vue'
 import Login from './components/Login.vue'
 
@@ -30,19 +31,30 @@ const router = new VueRouter({
       component: Login
     },
     {
-      name: 'list',
-      path: '/:username/:repo/:ref/list/',
-      component: List
-    },
-    {
-      name: 'edit',
-      path: '/:username/:repo/:ref/edit/:path',
-      component: Editor
-    },
-    {
-      name: 'new',
-      path: '/:username/:repo/:ref/new/',
-      component: Editor
+      name: 'repo',
+      path: '/:username/:repo/:ref',
+      component: Repo,
+      children: [
+        {
+          name: 'files',
+          path: 'files',
+          component: Files
+        },
+        {
+          name: 'edit',
+          path: 'edit/:path',
+          component: Editor
+        },
+        {
+          name: 'new',
+          path: 'new',
+          component: Editor
+        },
+        {
+          path: '*',
+          redirect: 'files'
+        }
+      ]
     },
     {
       path: '*',

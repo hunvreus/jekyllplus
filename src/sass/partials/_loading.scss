@@ -1,13 +1,13 @@
 .loading {
   &:before {
-    background: rgba(#FFF, 0.6);
+    background: rgba(#FFF, 0.8);
     bottom: 0;
     content: '';
     left: 0;
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
-    z-index: 99;
+    z-index: 999;
   }
   position: relative;
   &:after {
@@ -20,6 +20,6 @@
     position: absolute;
     right: 0;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
   }
 }

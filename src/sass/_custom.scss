@@ -4,7 +4,9 @@
 
 html,
 body,
-#app {
+#app,
+#main,
+#content {
   height: 100%;
   width: 100%;
 }
@@ -20,6 +22,40 @@ body,
    }
  }
 }
+
+/**
+ * Utils
+ */
+
+// Breadcrumb for files list and file picker
+
+.breadcrumb {
+  color: $grey;
+  svg {
+    fill: $grey;
+    height: 1.5*$space/2;
+    width: 1.5*$space/2;
+    vertical-align: text-bottom;
+  }
+  a {
+    color: $black;
+    transition-property: color;
+    transition-duration: $ease;
+    svg {
+      fill: $black;
+      transition-property: fill;
+      transition-duration: $ease;
+    }
+    &:hover {
+      color: $blue;
+      text-decoration: none;
+      svg {
+        fill: $blue;
+      }
+    }
+  }
+}
+
 
 .thumbnail {
   background-position: center center;
@@ -46,69 +82,212 @@ body,
   text-align: center;
 }
 
-.icon {
-  border: 1px solid transparent;
-  display: inline-block;
-  padding: $space/4;
-  svg {
-    display: inline-block;
-    fill: $grey;
-    height: $space;
-    transition-property: fill;
-    transition-duration: $ease;
-    vertical-align: middle;
-    width: $space;
-  }
-  &:hover {
-    svg {
-      fill: $black;
-    }
-  }
+.notification {
+  border: 0;
+  box-shadow: $shadow;
+  text-align: center;
 }
 
-/**
- * User component
- */
-
-#user {
-  left: $space;
-  position: fixed;
-  bottom: $space/2;
-  z-index: 1000;
-  .dropdown {
-    & > a {
+.list {
+  list-style: none;
+  margin: 0;
+  li {
+    border-bottom: 1px solid $line-3;
+    margin: 0;
+    &:first-child {
+      border-top: 1px solid $line-3;
+    }
+    a {
+      color: inherit;
       display: block;
-      padding-top: $space/4;
-      img {
-        border-radius: 50%;
-        opacity: 0.6;
-        transition-property: opacity;
-        transition-duration: $ease;
-        width: 1.5*$space;
+      padding: $space/2 1.5*$space/2;
+      &:hover {
+        background: $light;
+        text-decoration: none;
       }
-    }
-    &:hover {
-      & > a img {
-        opacity: 1;
-      }
-    }
-  }
-  .options {
-    bottom: 100%;
-    top: auto;
-    a.logout:hover {
-      color: $red;
     }
   }
 }
 
 /**
- * Editor component
+ * Navigation (Repo component)
  */
 
-#editor {
+#navigation {
+  background: rgba($black, 0);
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  overflow-y: auto;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transition-property: opacity, visibility;
+  transition-duration: $ease/2;
+  visibility: hidden;
+  z-index: 9999;
+  &.active {
+    background: rgba($black, 0.3);
+    opacity: 1;
+    visibility: visible;
+    .box {
+      transform: translateX(0);
+    }
+  }
+  .box {
+    background: #FFF;
+    border-right: 1px solid $grey-2;
+    bottom: 0;
+    box-shadow: $shadow-2;
+    box-sizing: border-box;
+    left: 0;
+    max-width: 12*$space;
+    padding: $space/2 1.5*$space/2;
+    position: fixed;
+    top: 0;
+    transform: translateX(-100%);
+    transition-property: transform;
+    transition-duration: $ease;
+    width: 90%;
+    z-index: 999;
+    & + #editor {
+      margin-left: 2*$space;
+      .header {
+        left: 2*$space;
+      }
+    }
+    a {
+      color: $black;
+      &:hover,
+      &.router-link-active {
+        color: $blue;
+        text-decoration: none;
+      }
+    }
+    hr {
+      border: 0;
+      border-bottom: 1px solid $line-3;
+    }
+    .avatar {
+      border-radius: $radius;
+      box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+      display: inline-block;
+      margin-right: $space/6;
+      transition-property: opacity;
+      transition-duration: $ease;
+      vertical-align: text-bottom;
+      width: 1.5*$space/2;
+    }
+    .label {
+      color: $grey-2;
+      @include font-size($pico);
+      margin-bottom: $space/4;
+    }
+    .header {
+      @include clearfix;
+      margin-bottom: 1.5*$space;
+      svg {
+        display: block;
+      }
+      .logo {
+        float: left;
+        svg {
+          height: $space;
+          width: $space;
+        }
+      }
+      .close {
+        float: right;
+      }
+    }
+    .body {
+      .controls,
+      .repo,
+      .branch {
+        @include clearfix;
+      }
+      .controls {
+        margin-bottom: $space;
+      }
+      .repo,
+      .branch {
+        margin-bottom: $space/4;
+      }
+      .repo {
+        .username {
+          margin-right: $space/6;
+        }
+        img {
+          margin-right: 0;
+        }
+      }
+      .branch {
+        .select,
+        .select select {
+          width: 100%;
+        }
+        .select select {
+          border-color: $line-3;
+          padding: $space/6 $space/3;
+        }
+      }
+      .links {
+        border-top: 1px solid $line-3;
+        margin-top: $space/2;
+        padding-top: $space/4;
+        a {
+          display: block;
+          padding: $space/4 0;
+          svg {
+            display: block;
+            display: inline-block;
+            fill: $grey;
+            margin-right: $space/6;
+            transition-property: transform;
+            transition-duration: $ease;
+            vertical-align: text-bottom;
+            width: 1.5*$space/2;
+          }
+          &:hover,
+          &.router-link-active {
+            svg {
+              fill: $blue;
+            }
+          }
+        }
+      }
+    }
+    .footer {
+      bottom: 0;
+      box-sizing: border-box;
+      left: 0;
+      padding: $space/2 1.5*$space/2;
+      position: absolute;
+      width: 100%;
+      .user {
+        .logout {
+          float: right;
+          svg {
+            display: block;
+          }
+          &:hover {
+            svg {
+              fill: $blue;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Content
+ */
+
+#content {
   height: 100%;
-  form > .header {
+  > .header {
     background: #FFF;
     border-bottom: 1px solid $line-2;
     left: 0;
@@ -117,7 +296,16 @@ body,
     position: fixed;
     right: 0;
     top: 0;
-    z-index: 999;
+    z-index: 99;
+    .icon {
+      border: 1px solid transparent;
+      margin-top: $space/12;
+      padding: $space/4;
+      &.menu {
+        float: left;
+        margin-right: $space/6;
+      }
+    }
     .controls {
       float: right;
       .more {
@@ -132,6 +320,9 @@ body,
           max-height: 10*$space;
           overflow: auto;
           right: 0;
+          a.delete:hover {
+            color: $red;
+          }
           img {
             border-radius: $radius;
             float: left;
@@ -140,6 +331,9 @@ body,
             width: 5*$space/6;
           }
         }
+      }
+      .new {
+        margin-left: $space/4;
       }
     }
     .meta {
@@ -156,6 +350,7 @@ body,
       .type {
         background: $line-2;
         border-radius: $radius - 1;
+        color: $grey;
         @include font-size($pico);
         padding: $space/12 $space/6;
         text-transform: uppercase;
@@ -169,9 +364,17 @@ body,
       }
     }
   }
-  form > .body {
+  > .body {
     margin: 0 auto;
+    padding-bottom: $space;
     padding-top: 56 + $space;
+  }
+}
+
+// Editor component
+
+#content.editor {
+  > .body {
     .field {
       .file-picker + .file-picker,
       input + input,
@@ -186,12 +389,27 @@ body,
   }
 }
 
+// Files component
+
+#content.files {
+  .breadcrumb {
+    padding: $space/2 1.5*$space/2;
+  }
+  li {
+    svg {
+      fill: $grey;
+      height: 1.5*$space/2;
+      vertical-align: text-bottom;
+      width: 1.5*$space/2;
+    }
+  }
+}
+
 /**
  * Login component
  */
 
 .route-login {
-  background: $light;
   bottom: 0;
   left: 0;
   margin: auto;
@@ -250,26 +468,6 @@ body,
   }
   .results {
     margin-top: $space/2;
-    ul {
-      list-style: none;
-      margin: 0;
-      li {
-        border-bottom: 1px solid $line-3;
-        margin: 0;
-        &:first-child {
-          border-top: 1px solid $line-3;
-        }
-        a {
-          color: inherit;
-          display: block;
-          padding: $space/2 1.5*$space/2;
-          &:hover {
-            background: $light;
-            text-decoration: none;
-          }
-        }
-      }
-    }
     .meta {
       color: $grey;
       @include font-size($small);
@@ -284,6 +482,15 @@ body,
         width: $space/2;
       }
     }
+    li {
+      a > svg {
+        fill: $black;
+        float: left;
+        height: 1.5*$space;
+        margin: $space/6 $space/4 0 0;
+        width: 1.5*$space;
+      }
+    }
   }
   &.searching {
     .search {
@@ -294,7 +501,7 @@ body,
         display: block;
         position: absolute;
         right: $space/3;
-        top: $space/4 - 1;
+        top: $space/3;
       }
     }
     .results {
@@ -387,29 +594,8 @@ body,
   .modal {
     .breadcrumb {
       border-bottom: 1px solid $line-3;
-      color: $grey;
       margin-bottom: $space/4;
       padding-bottom: $space/2;
-      a {
-        color: $black;
-        transition-property: color;
-        transition-duration: $ease;
-        svg {
-          height: 1.5*$space/2;
-          fill: $black;
-          transition-property: fill;
-          transition-duration: $ease;
-          vertical-align: text-bottom;
-          width: 1.5*$space/2;
-        }
-        &:hover {
-          color: $blue;
-          text-decoration: none;
-          svg {
-            fill: $blue;
-          }
-        }
-      }
     }
     ul {
       @include grid(6);

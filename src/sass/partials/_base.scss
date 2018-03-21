@@ -162,4 +162,52 @@
       }
     }
   }
+
+  /* Icons */
+
+  .icon {
+    display: inline-block;
+    vertical-align: middle;
+    svg {
+      display: block;
+      fill: $grey;
+      height: $space;
+      transition-property: fill;
+      transition-duration: $ease;
+      vertical-align: middle;
+      width: $space;
+    }
+    &.smaller {
+      svg {
+        height: 1.5*$space/2;
+        width: 1.5*$space/2;
+      }
+    }
+    &.small {
+      svg {
+        height: $space/2;
+        width: $space/2;
+      }
+    }
+    &.larger {
+      svg {
+        height: 1.5*$space;
+        width: 1.5*$space;
+      }
+    }
+    &.large {
+      svg {
+        height: 2*$space;
+        width: 2*$space;
+      }
+    }
+  }
+}
+
+a.icon {
+  &:hover {
+    svg {
+      fill: $black;
+    }
+  }
 }

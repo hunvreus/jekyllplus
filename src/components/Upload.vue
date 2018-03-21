@@ -1,7 +1,7 @@
 <template>
-  <label class='button primary smaller' :class='{ processing: status == "uploading", disabled: status == "uploading" }'>
+  <label class="button" :class="{ processing: status == 'uploading', disabled: status == 'uploading' }">
     Upload
-    <input type='file' @change='picked'/>
+    <input type="file" @change="picked"/>
   </label>
 </template>
 

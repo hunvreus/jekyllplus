@@ -1,5 +1,5 @@
 <template>
-  <div id='app' :class='"route-" + $route.name'>
+  <div id='app' :class='"route-" + $route.name' @loading>
     <router-view></router-view>
     <notifications position='bottom center'/>
   </div>
@@ -7,13 +7,10 @@
 
 <script>
 import User from './components/User.vue';
-import Notification from './components/Notification.vue';
 
 export default {
   name: 'app',
-  components: {
-    User
-  },
+  components: { User },
   data () {
     return {
       token: this.$root.$data.token,

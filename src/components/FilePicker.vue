@@ -1,62 +1,62 @@
 <template>
-  <div class='file-picker'>
-    <div class='input'>
-      <input readonly type='text' v-model='value'/>
-      <button class='button' @click.prevent='show = true'>Select file</button>
+  <div class="file-picker">
+    <div class="input">
+      <input readonly type="text" v-model="value"/>
+      <a class="button" @click.prevent="show = true">Select file</a>
     </div>
-    <div class='modal' :class='{ active: show }' @click.self.prevent='show = false'>
-      <div class='box larger'>
-        <header class='header'>
-          <a class='close' @click.prevent='show = false'>
-            <svg viewBox='0 0 24 24'>
-              <path d='M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z'/>
+    <div class="modal" :class="{ active: show }" @click.self.prevent="show = false">
+      <div class="box larger">
+        <header class="header">
+          <a class="close" @click.prevent="show = false">
+            <svg viewBox="0 0 24 24">
+              <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
             </svg>
           </a>
           <h2>Choose a file</h2>
         </header>
-        <section class='body' :class='status'>
+        <section class="body" :class="status">
           <!-- Breadcrumb -->
-          <header v-if='breadcrumb' class='breadcrumb'>
-            <a @click.prevent='changeDir("", "dir")'>
-              <svg viewBox='0 0 24 24'>
-                <path d='M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z'/>
+          <header v-if="breadcrumb" class="breadcrumb">
+            <a @click.prevent="changeDir('', 'dir')">
+              <svg viewBox="0 0 24 24">
+                <path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/>
               </svg>
             </a>
-            <span v-for='link in breadcrumb'>
+            <span v-for="link in breadcrumb">
               /
-              <a @click.prevent='changeDir(link.path)' v-if='link.last != true'>{{ link.label }}</a>
+              <a @click.prevent="changeDir(link.path)" v-if="link.last != true">{{ link.label }}</a>
               <span v-else>{{ link.label }}</span>
             </span>
           </header>
-          <!-- Content -->
-          <ul v-if='filteredFiles.length'>
-            <li v-for='file in filteredFiles' :key='file.name' :class='{ active: file.path == selected.path, image: file.image }' :title='file.name'>
+          <!-- Files -->
+          <ul v-if="filteredFiles.length">
+            <li v-for="file in filteredFiles" :key="file.name" :class="{ active: file.path == selected.path, image: file.image }" :title="file.name">
               <!-- Directories -->
-              <div class='directory' v-if='file.type === "dir"' @click='changeDir(file.path)'>
-                <div class='thumbnail'>
+              <div class="directory" v-if="file.type === 'dir'" @click="changeDir(file.path)">
+                <div class="thumbnail">
                   {{ file.path }}
-                  <svg viewBox='0 0 24 24'>
-                    <path d='M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z' />
+                  <svg viewBox="0 0 24 24">
+                    <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
                   </svg>
                 </div>
-                <div class='name'>{{ file.name }}</div>
+                <div class="name">{{ file.name }}</div>
               </div>
               <!-- Images -->
-              <div class='file' v-if='file.type === "file"' @click='select(file)'>
-                <div class='thumbnail' :style='{ backgroundImage: "url("+ file.download_url + "&sanitize=1)" }'></div>
-                <div class='name'>{{ file.name }}</div>
+              <div class="file" v-if="file.type === 'file'" @click="select(file)">
+                <div class="thumbnail" :style="{ backgroundImage: 'url(' + file.download_url + '&sanitize=1)' }"></div>
+                <div class="name">{{ file.name }}</div>
               </div>
             </li>
           </ul>
-          <div class='empty centered' v-else>
+          <div class="empty centered" v-else>
             No file to select.
           </div>
         </section>
         <!-- Footer -->
-        <footer class='footer'>
-          <upload :path='current' @uploaded='getFiles'/>
-          <button class='button smaller' @click.prevent='show = false'>Cancel</button>
-          <button class='button primary smaller' @click.prevent='$emit("input", "/" + selected.path); show = false'>Select</button>
+        <footer class="footer">
+          <upload :path="current" :class="'primary smaller'" @uploaded="setFiles"/>
+          <a class="button smaller" @click.prevent="show = false">Cancel</a>
+          <a class="button primary smaller" @click.prevent="$emit('input', '/' + selected.path); show = false">Select</a>
         </footer>
       </div>
     </div>
@@ -95,15 +95,18 @@ export default {
     };
   },
   mounted() {
-    this.getFiles();
+    this.setFiles();
+    document.addEventListener('keydown', (e) => {
+      if (e.keyCode == 27) this.show = false;
+    });
   },
   watch: {
     'current': function (to, from) {
-      this.getFiles();
+      this.setFiles();
     }
   },
   methods: {
-    getFiles: function () {
+    setFiles: function () {
       // Retrieve the configuration (`.jekyllplus.yml`) from GitHub
       this.status = 'loading';
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.current;

@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 module.exports = {
   createModel: function (fields, content, model = {}) {
     // Traverse the fields and merge it with content into the model
@@ -33,7 +35,7 @@ module.exports = {
                   value = false;
                   break;
                 case 'date':
-                  // value = moment().format('YYYY-MM-DD');
+                  value = moment().format('YYYY-MM-DD');
                   break;
                 default:
                   value = '';

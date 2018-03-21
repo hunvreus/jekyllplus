@@ -1,25 +1,25 @@
 <template>
-  <div class='file-name'>
-    <a @click.prevent='modal = true'>{{ this.path }}</a>
+  <div class="file-name">
+    <a @click.prevent="modal = true">{{ this.path }}</a>
     <!-- Rename modal -->
-    <div class='modal' :class='{ active: modal }' @click.self.prevent='modal = false'>
-      <div class='box smaller' :class='{ loading: status != "" }'>
-        <header class='header'>
-          <a class='close' @click.prevent='modal = false'>
-            <svg viewBox='0 0 24 24'>
-              <path d='M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z'/>
+    <div class="modal" :class="{ active: modal }" @click.self.prevent="closeModal">
+      <div class="box smaller" :class="{ loading: status != '' }">
+        <header class="header">
+          <a class="close" @click.prevent="closeModal">
+            <svg viewBox="0 0 24 24">
+              <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
             </svg>
           </a>
           <h2>Rename your file</h2>
         </header>
-        <section class='body'>
-          <div class='field full-width'>
-            <input type='text' v-model='newPath'/>
+        <section class="body">
+          <div class="field full-width">
+            <input type="text" v-model="newPath"/>
           </div>
         </section>
-        <footer class='footer'>
-          <button class='button smaller' @click.prevent='modal = false'>Cancel</button>
-          <button class='button primary smaller' @click.prevent='rename' :disabled='status != ""' :class='{ processing: status != "" }'>Rename</button>
+        <footer class="footer">
+          <button class="button smaller" @click.prevent="closeModal" :disabled="status != ''">Cancel</button>
+          <button class="button primary smaller" @click.prevent="rename" :disabled="status != ''" :class="{ processing: status != '' }">Rename</button>
         </footer>
       </div>
     </div>
@@ -31,7 +31,7 @@ import moment from 'moment'
 
 export default {
   name: 'file-name',
-  props: [ 'value', 'title', 'type' ],
+  props: [ 'value', 'title', 'collection' ],
   data: function() {
     return {
       username: this.$route.params.username,
@@ -50,23 +50,37 @@ export default {
       this.createPath();
     },
     'path': function (to, from) {
+      this.newPath = this.path;
       this.$emit('input', this.path);
+    },
+    '$route': function (to, from) {
+      this.lock = (this.$route.name == 'edit');
+      this.createPath();
     }
   },
   mounted() {
     this.createPath();
     this.newPath = this.path;
+    document.addEventListener('keydown', (e) => {
+      if (e.keyCode == 27) this.closeModal();
+    });
   },
   methods: {
+    closeModal: function () {
+      if (this.status == '') {
+        this.newPath = this.path;
+        this.modal = false;
+      }
+    },
     createPath: function () {
       if (!this.lock) {
         var time = moment().format('YYYY-MM-DD');
         var title = this.title.trim();
         var name = '';
         if (title == '') name = time + '-Untitled.md';
-        else name = time + '-' + title.replace(/\s+/g, '-').toLowerCase() + '.md';
+        else name = time + '-' + title.replace(/\W+/g, '-').toLowerCase() + '.md';
         // TODO: Add transliteration (e.g. https://www.npmjs.com/package/transliteration)
-        this.path = '_' + this.type + '/' + name;
+        this.path = '_' + this.collection + '/' + name;
       }
     },
     rename: function () {
@@ -123,6 +137,7 @@ export default {
                   this.path = this.newPath;
                   this.status = '';
                   this.modal = false;
+                  this.$router.push('/' + this.username + '/' + this.repo + '/' + this.ref + '/edit/' + encodeURIComponent(this.path));
                 }, response => {
                   // TODO: Throw error
                 });
