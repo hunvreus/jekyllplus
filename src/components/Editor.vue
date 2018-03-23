@@ -7,22 +7,22 @@
           <!-- History -->
           <history :path="path"/>
           <!-- Save -->
-          <button class="button primary save" :disabled="status != ''" :class="{ processing: status != '' }">Save</button>
+          <button class="button primary save" :disabled="status != ''" :class="{ processing: status != '' }"  @click.prevent="saveFile">Save</button>
           <!-- More -->
-          <span class="dropdown menu more" v-if="$route.name == 'edit'">
-            <a class="icon">
+          <span class="dropdown menu more" v-if="$route.name == 'edit'" :class="{ active: more }">
+            <a class="icon" @click.prevent="more = !more">
               <svg viewBox="0 0 24 24">
                 <path d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"/>
               </svg>
             </a>
             <div class="options">
-              <router-link :to="{ name: 'new', query: { duplicate: path } }">Duplicate</router-link>
+              <router-link :to="{ name: 'new', query: { duplicate: path } }" :class="'option'">Duplicate</router-link>
               <hr/>
-              <a class="delete" @click="">Delete</a>
+              <delete-file :path="path" :sha="sha"/>
             </div>
           </span>
         </div>
-        <a class="icon menu" @click="$emit('menu')">
+        <a class="icon menu" @click.prevent="$emit('menu')">
           <svg viewBox="0 0 24 24">
             <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
           </svg>
@@ -47,12 +47,13 @@
 const YAML = require('js-yaml');
 import Field from './Field.vue';
 import FileName from './FileName.vue';
+import DeleteFile from './DeleteFile.vue';
 import History from './History.vue';
 import Helper from '../helper.js';
 
 export default {
   name: 'editor',
-  components: { Field, History, FileName },
+  components: { Field, History, FileName, DeleteFile },
   props: [ 'config', 'jekyllConfig' ],
   data: function() {
     return {
@@ -68,7 +69,8 @@ export default {
       collection: '',
       sha: '',
       model: null,
-      status: 'loading'
+      status: 'loading',
+      more: false
     };
   },
   mounted() {

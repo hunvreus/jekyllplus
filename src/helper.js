@@ -1,7 +1,7 @@
 var moment = require('moment');
 
 module.exports = {
-  createModel: function (fields, content, model = {}) {
+  createModel: function (fields, content = null, model = {}) {
     // Traverse the fields and merge it with content into the model
     for (var i = 0, length = fields.length; i < length; i++) {
       if (fields[i].name) {
@@ -10,7 +10,10 @@ module.exports = {
           // For objects, we use a recursion
           content[name] = content[name] ? content[name] : {};
           model[name] = {};
-          model[name] = this.createModel(fields[i].fields, content[name], model[name]);
+          // We wrap the model in an array if the field is "multiple"
+          model[name] = (fields[i].multiple) ?
+            [ this.createModel(fields[i].fields, content[name], model[name]) ] :
+            this.createModel(fields[i].fields, content[name], model[name]);
         }
         else {
           if (content.hasOwnProperty(name)) {

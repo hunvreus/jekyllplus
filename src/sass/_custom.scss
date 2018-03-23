@@ -317,18 +317,18 @@ body,
       .dropdown {
         display: inline-block;
         .options {
-          max-height: 10*$space;
-          overflow: auto;
           right: 0;
-          a.delete:hover {
-            color: $red;
-          }
           img {
             border-radius: $radius;
             float: left;
             height: 5*$space/6;
             margin-right: $space/4;
             width: 5*$space/6;
+          }
+          .modal {
+            @include font-size($regular);
+            color: $black;
+            white-space: normal;
           }
         }
       }
@@ -569,26 +569,26 @@ body,
 
 .file-picker {
   .input {
-    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
     .thumbnail {
       border-radius: $radius 0 0 $radius;
-      height: 39px;
-      left: 0;
-      position: absolute;
-      top: 0;
-      width: 39px;
       & + input[readonly=readonly] {
         padding-left: 39 + $space/2;
       }
     }
-    input[readonly=readonly] {
-      padding-right: 103 + $space/2;
+    input {
+      border-radius: $radius 0 0 $radius;
+      border-right: 0;
+      width: 100%;
     }
     .button {
       border-radius: 0 $radius $radius 0;
-      position: absolute;
-      right: 0;
-      top: 0;
+      white-space: nowrap;
     }
   }
   .modal {
@@ -598,7 +598,16 @@ body,
       padding-bottom: $space/2;
     }
     ul {
-      @include grid(6);
+
+      @include breakpoint(mobile) {
+        @include grid(2);
+      }
+      @include breakpoint(only_tablet) {
+        @include grid(4);
+      }
+      @include breakpoint(desktop) {
+        @include grid(6);
+      }
     }
     li {
       cursor: pointer;

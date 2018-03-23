@@ -11,30 +11,32 @@
       box-shadow: $shadow-1;
       box-sizing: border-box;
       display: block;
+      margin-top: -$space/2;
       opacity: 0;
       position: absolute;
       top: 100%;
-      transform: translateY(-$space/2);
-      transition-property: opacity, transform;
+      transition-property: opacity, margin;
       transition-duration: $ease;
       visibility: hidden;
       z-index: 999;
     }
     > *.active:first-child + .options,
-    &:hover .options,
     &.active .options,
-    .options:hover {
+    .options:hover,
+    &.hover:hover .options {
       opacity: 1;
-      transform: translateY(0);
+      margin-top: 0;
       visibility: visible;
     }
+
     &.menu {
       .options {
         padding: $space/6 0;
-        a {
+        .option {
           background: rgba($light, 0);
           display: block;
           color: inherit;
+          cursor: pointer;
           @include font-size($smaller);
           line-height: 160%;
           padding: $space/8 $space/2;
@@ -46,8 +48,19 @@
             background: $light;
             text-decoration: none;
           }
+          &.danger:hover {
+            color: $red;
+          }
+          a,
+          a:hover {
+            color: inherit;
+            display: block;
+            font-size: inherit;
+            line-height: inherit;
+            text-decoration: inherit;
+          }
         }
-        hr {
+        > hr {
           border: 0;
           border-top: 1px solid $line-2;
           margin: $space/6 0;

@@ -69,6 +69,11 @@
   p,
   pre {
     margin: 0 0 $space;
+    &.smaller {
+      @include font-size($smaller);
+      line-height: 160%;
+      margin-bottom: $space/2;
+    }
   }
 
   ul,
@@ -115,7 +120,7 @@
     border-radius: $radius;
     display: inline-block;
     font-family: $code;
-    @include font-size($regular - 1);
+    font-size: 85%;
     padding: 0 $space/4;
   }
 

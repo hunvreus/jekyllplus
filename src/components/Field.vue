@@ -102,18 +102,12 @@ export default {
       repo: this.$route.params.repo,
       ref: this.$route.params.ref,
       token: this.$root.$data.token,
-      value: ''
+      empty: (this.field.type == 'object') ? Helper.createModel(this.field.fields, {}) : ''
     }
   },
   methods: {
     addEntry: function () {
-      // <input type='text' v-for='n in model[field.name].length' v-model='model[field.name][n - 1]'/>
-      // model[name] = this.createModel(fields[i].fields, content[name], model[name]);
-      // console.log(this.model[this.field.name]);
-      this.model[this.field.name].push('');
-      // console.log(this.model[this.field.name]);
-      var stuff = Helper.createModel(this.field, {}, this.model[this.field.name]);
-      // console.log(stuff);
+      this.model[this.field.name].push(this.empty);
     }
   }
 }

@@ -1,0 +1,163 @@
+<template>
+  <div class="file-picker">
+    <div class="input">
+      <input readonly type="text" v-model="value"/>
+      <a class="button" @click.prevent="show = true">Select file</a>
+    </div>
+    <div class="modal" :class="{ active: show }" @click.self.prevent="show = false">
+      <div class="box larger">
+        <header class="header">
+          <a class="close" @click.prevent="show = false">
+            <svg viewBox="0 0 24 24">
+              <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
+            </svg>
+          </a>
+          <h2>Choose a file</h2>
+        </header>
+        <section class="body" :class="status">
+          <!-- Breadcrumb -->
+          <header v-if="breadcrumb" class="breadcrumb">
+            <a @click.prevent="changeDir('', 'dir')">
+              <svg viewBox="0 0 24 24">
+                <path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/>
+              </svg>
+            </a>
+            <span v-for="link in breadcrumb">
+              /
+              <a @click.prevent="changeDir(link.path)" v-if="link.last != true">{{ link.label }}</a>
+              <span v-else>{{ link.label }}</span>
+            </span>
+          </header>
+          <!-- Files -->
+          <ul v-if="filteredFiles.length">
+            <li v-for="file in filteredFiles" :key="file.name" :class="{ active: file.path == selected.path, image: file.image }" :title="file.name">
+              <!-- Directories -->
+              <div class="directory" v-if="file.type === 'dir'" @click="changeDir(file.path)">
+                <div class="thumbnail">
+                  {{ file.path }}
+                  <svg viewBox="0 0 24 24">
+                    <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
+                  </svg>
+                </div>
+                <div class="name">{{ file.name }}</div>
+              </div>
+              <!-- Images -->
+              <div class="file" v-if="file.type === 'file'" @click="select(file)">
+                <div class="thumbnail" :style="{ backgroundImage: 'url(' + file.download_url + '&sanitize=1)' }"></div>
+                <div class="name">{{ file.name }}</div>
+              </div>
+            </li>
+          </ul>
+          <div class="empty centered" v-else>
+            No file to select.
+          </div>
+        </section>
+        <!-- Footer -->
+        <footer class="footer">
+          <upload :path="current" :class="'primary smaller'" @uploaded="setFiles"/>
+          <a class="button smaller" @click.prevent="show = false">Cancel</a>
+          <a class="button primary smaller" @click.prevent="$emit('input', '/' + selected.path); show = false">Select</a>
+        </footer>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Upload from './Upload.vue';
+
+export default {
+  name: 'file-picker',
+  components: { Upload },
+  props: {
+    value: {
+      default: ''
+    },
+    path: {
+      default: 'images'
+    },
+    type: {
+      default: ''
+    }
+  },
+  data: function() {
+    return {
+      username: this.$route.params.username,
+      repo: this.$route.params.repo,
+      ref: this.$route.params.ref,
+      token: this.$root.$data.token,
+      current: this.path,
+      files: [],
+      preview: null,
+      selected: {},
+      show: false,
+      status: ''
+    };
+  },
+  mounted() {
+    this.setFiles();
+    document.addEventListener('keydown', (e) => {
+      if (e.keyCode == 27) this.show = false;
+    });
+  },
+  watch: {
+    'current': function (to, from) {
+      this.setFiles();
+    }
+  },
+  methods: {
+    setFiles: function () {
+      // Retrieve the configuration (`.jekyllplus.yml`) from GitHub
+      this.status = 'loading';
+      var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.current;
+      var params = {
+        access_token: this.token,
+        ref: this.ref,
+        timestamp: Date.now()
+      };
+      this.$http.get(url, {params: params}).then(response => {
+        this.error = '';
+        this.files = response.body;
+        // We add to each file the extension and test whether it's an image
+        for (var i = 0, length = this.files.length; i < length; i++) {
+          this.files[i].extension = this.files[i].name.substr(this.files[i].name.lastIndexOf('.') + 1).toLowerCase();
+          if (['png', 'jpg', 'jpeg', 'gif', 'tiff', 'bmp'].indexOf(this.files[i].extension) > -1) this.files[i].image = true;
+          this.status = '';
+        }
+      }, response => {
+        this.error = 'Error: ' + response.body.message;
+        this.status = '';
+      });
+    },
+    changeDir: function (path) {
+      this.selected = {};
+      this.current = path;
+    },
+    select: function (file) {
+      this.selected = (this.selected.path == file.path) ? {} : file;
+    }
+  },
+  computed: {
+    breadcrumb: function () {
+      var segments = this.current.split('/');
+      if (segments.length == 1 && segments[0] == '') segments = [];
+      var path = '';
+      var breadcrumb = [];
+      for (var i = 0, length = segments.length; i < length; i++) {
+        path += segments[i];
+        breadcrumb.push({
+          label: segments[i],
+          path: path,
+          last: i == length - 1
+        });
+        path += '/';
+      }
+      return breadcrumb;
+    },
+    filteredFiles: function () {
+      if (this.type == 'image') return this.files.filter(file => file.type == 'dir' || file.image);
+      else return this.files;
+    }
+  },
+}
+</script>

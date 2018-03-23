@@ -87,6 +87,22 @@
         border-color: $line;
       }
     }
+    &.danger {
+      background: $red;
+      border-color: $red;
+      color: #FFF;
+      &:hover {
+        background: darken($red, 5%);
+        border-color: darken($red, 5%);
+      }
+      &[disabled=disabled],
+      &[disabled=true],
+      &[disabled],
+      &.disabled {
+        background: $line;
+        border-color: $line;
+      }
+    }
   }
 
   .bundle {
