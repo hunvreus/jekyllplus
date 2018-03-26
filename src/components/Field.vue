@@ -1,6 +1,6 @@
 <template>
   <div class="field full-width" v-if="model">
-    <label>{{ field.label }}</label>
+    <label v-if="field.label">{{ field.label }}</label>
     <!-- String -->
     <div v-if="field.type == 'string'">
       <div v-if="field.multiple" class="multiple">
@@ -82,6 +82,8 @@
         <field v-for="childField in field.fields" :key="childField.name" :field="childField" :model="model[field.name]"></field>
       </fieldset>
     </div>
+    <!-- Description if it exists -->
+    <small v-if="field.description" class="description">{{ field.description }}</small>
     <!-- Add an entry for multiple fields -->
     <a v-if="field.multiple && field.type != 'hidden'" @click="addEntry" class="button smaller add">Add an entry</a>
   </div>
@@ -96,7 +98,6 @@ export default {
   props: ['field', 'model'],
   components: { FilePicker },
   data: function () {
-    // TODO: Remove
     return {
       username: this.$route.params.username,
       repo: this.$route.params.repo,

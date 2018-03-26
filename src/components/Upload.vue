@@ -21,7 +21,6 @@ export default {
       token: this.$root.$data.token,
       file: {},
       content: '',
-      error: '',
       status: ''
     };
   },
@@ -62,7 +61,11 @@ export default {
         this.$emit('uploaded', this.file);
       }, response => {
         this.status = '';
-        this.error = 'Couldn\'t upload the file: ' + response.body.message;
+        this.$notify({
+          type: 'error',
+          text: 'Failed to upload the file (' + response.body.message + ')',
+          duration: -1
+        });
       });
     }
   }

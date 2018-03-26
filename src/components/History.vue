@@ -37,7 +37,7 @@
 <script>
 export default {
   name: 'history',
-  props: ['path'],
+  props: ['path', 'sha'],
   data: function() {
     return {
       username: this.$route.params.username,
@@ -48,23 +48,33 @@ export default {
       modal: false
     };
   },
-  computed: {
-    updated: function () {
-      return "Updated " + this.$options.filters.fromNow(this.history[0].commit.author.date);
-    }
-  },
   mounted() {
     this.getHistory();
     document.addEventListener('keydown', (e) => {
       if (e.keyCode == 27) this.modal = false;
     });
   },
+  computed: {
+    updated: function () {
+      return "Updated " + this.$options.filters.fromNow(this.history[0].commit.author.date);
+    }
+  },
+  watch: {
+    'sha': function (to, from) {
+      this.getHistory();
+    }
+  },
   methods: {
     getHistory: function () {
       // Retrieve the commit history of the file we edit from GitHub
-      var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/commits?path=' + this.path + '&access_token=' + this.token;
-      this.$http.get(url).then(response => {
-        this.error = '';
+      var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/commits';
+      var params = {
+        access_token: this.token,
+        sha: this.ref,
+        path: this.path,
+        timestamp: Date.now()
+      };
+      this.$http.get(url, { params: params }).then(response => {
         this.history = response.body;
       }, response => {
         this.$notify({

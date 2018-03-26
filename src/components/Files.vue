@@ -96,7 +96,7 @@ export default {
       ref: this.$route.params.ref,
       path:  this.$route.query.path ? this.$route.query.path : '',
       token: this.$root.$data.token,
-      modal: true,
+      modal: false,
       files: [],
       status: ''
     };

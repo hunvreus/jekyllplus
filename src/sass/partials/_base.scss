@@ -136,34 +136,33 @@
   /* Tables */
 
   table {
-    border: 1px solid $line;
+    border: 0;
+    border-collapse: collapse;
     margin: 0 0 $space;
     text-align: left;
-    th,
-    td {
-      border-right: 1px solid $light;
-      padding: $space/4 $space/2;
-      &:last-child {
-        border-right: 0;
+    width: 100%;
+    thead,
+    tbody {
+      th,
+      td {
+        border: 0;
+        padding: $space/6 $space/4;
       }
     }
-    td {
-      padding: $space/2 $space/2;
-    }
     thead {
-      background: $light;
-      color: tint($black, 20%);
       @include font-size($small);
+      font-weight: bold;
       th {
-        font-weight: normal;
         white-space: nowrap;
       }
     }
     tbody {
       tr {
-        border-top: 1px solid $line;
-        transition-property: border;
-        transition-duration: $ease;
+        td,
+        th {
+          border-top: 1px solid $line-3;
+          padding: $space/4;
+        }
       }
     }
   }

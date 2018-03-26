@@ -1,6 +1,7 @@
 <template>
   <div class="file-picker">
     <div class="input">
+      <img src="">
       <input readonly type="text" v-model="value"/>
       <a class="button" @click.prevent="show = true">Select file</a>
     </div>
@@ -74,7 +75,7 @@ export default {
       default: ''
     },
     path: {
-      default: 'images'
+      default: ''
     },
     type: {
       default: ''
@@ -86,7 +87,7 @@ export default {
       repo: this.$route.params.repo,
       ref: this.$route.params.ref,
       token: this.$root.$data.token,
-      current: this.path,
+      current: (this.value != '') ? '' : this.path,
       files: [],
       preview: null,
       selected: {},
@@ -106,8 +107,11 @@ export default {
     }
   },
   methods: {
+    getDir: function() {
+      // TODO: Get the parent directory from the file path
+    },
     setFiles: function () {
-      // Retrieve the configuration (`.jekyllplus.yml`) from GitHub
+      // Retrieve the files for the current path from GitHub
       this.status = 'loading';
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.current;
       var params = {
@@ -116,7 +120,6 @@ export default {
         timestamp: Date.now()
       };
       this.$http.get(url, {params: params}).then(response => {
-        this.error = '';
         this.files = response.body;
         // We add to each file the extension and test whether it's an image
         for (var i = 0, length = this.files.length; i < length; i++) {
@@ -125,7 +128,11 @@ export default {
           this.status = '';
         }
       }, response => {
-        this.error = 'Error: ' + response.body.message;
+        this.$notify({
+          type: 'error',
+          text: 'Couldn\'t retrive the files (' + response.body.message + ')',
+          duration: -1
+        });
         this.status = '';
       });
     },

@@ -30,13 +30,15 @@ export default {
       // Retrieve user's details from GitHub
       var url = 'https://api.github.com/user?access_token=' + this.$root.$data.token;
       this.$http.get(url).then(response => {
-        this.error = '';
         this.user = response.body;
-
         this.$root.$data.user = this.user;
       }, response => {
         if (response.status == 401) this.logout(); // 401 is "Unauthorized access" (either the token expired or is invalid)
-        this.error = 'Error: ' + response.body.message;
+        this.$notify({
+          type: 'error',
+          text: 'Failed to retrieve the user profile (' + response.body.message + ')',
+          duration: -1
+        });
       });
     },
     logout: function () {

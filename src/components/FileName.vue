@@ -31,7 +31,7 @@ import moment from 'moment'
 
 export default {
   name: 'file-name',
-  props: [ 'value', 'title', 'collection' ],
+  props: [ 'value', 'title', 'collection', 'jekyllConfig' ],
   data: function() {
     return {
       username: this.$route.params.username,
@@ -59,7 +59,39 @@ export default {
     }
   },
   mounted() {
-    this.createPath();
+    // If we're translating a file, we figure out the path and lock it
+    if (this.$route.query.translate) {
+      var from = this.$route.query.from;
+      var to = this.$route.query.to;
+      var path = this.$route.query.translate;
+      if (this.collection == 'pages') {
+        if (from == this.jekyllConfig.lang[0]) {
+          this.path = to + '/' + this.path;
+        }
+        else if (to == this.jekyllConfig.lang[0]) {
+          this.path = path.replace(from + '/', '');
+        }
+        else {
+          this.path = path.replace(from + '/', lang + '/');
+        }
+      }
+      else {
+        if (from == this.jekyllConfig.lang[0]) {
+          this.path = path.replace('_' + this.collection + '/', '_' + this.collection + '/' + to + '/')
+        }
+        else if (to == this.jekyllConfig.lang[0]) {
+          this.path = path.replace('_' + this.collection + '/' + from + '/', '_' + this.collection + '/');
+        }
+        else {
+          this.path = path.replace('_' + this.collection + '/' + from + '/', '_' + this.collection + '/' + to + '/');
+        }
+      }
+      this.lock = true;
+    }
+    else {
+      // Otherwise we create the path based on title and date
+      this.createPath();
+    }
     this.newPath = this.path;
     document.addEventListener('keydown', (e) => {
       if (e.keyCode == 27) this.closeModal();
@@ -139,19 +171,39 @@ export default {
                   this.modal = false;
                   this.$router.push('/' + this.username + '/' + this.repo + '/' + this.ref + '/edit/' + encodeURIComponent(this.path));
                 }, response => {
-                  // TODO: Throw error
+                  this.$notify({
+                    type: 'error',
+                    text: 'Couldn\'t rename the file (Failed at step 5: ' + response.body.message + ')',
+                    duration: -1
+                  });
                 });
               }, response => {
-                // TODO: Throw error
+                this.$notify({
+                  type: 'error',
+                  text: 'Couldn\'t rename the file (Failed at step 4: ' + response.body.message + ')',
+                  duration: -1
+                });
               });
             }, response => {
-              // TODO: Throw error
+              this.$notify({
+                type: 'error',
+                text: 'Couldn\'t rename the file (Failed at step 3: ' + response.body.message + ')',
+                duration: -1
+              });
             });
           }, response => {
-            // TODO: Throw error
+            this.$notify({
+              type: 'error',
+              text: 'Couldn\'t rename the file (Failed at step 2: ' + response.body.message + ')',
+              duration: -1
+            });
           });
         }, response => {
-          // TODO: Throw error
+          this.$notify({
+            type: 'error',
+            text: 'Couldn\'t rename the file (Failed at step 1: ' + response.body.message + ')',
+            duration: -1
+          });
         });
       }
       else if (this.$route.name == 'new') {

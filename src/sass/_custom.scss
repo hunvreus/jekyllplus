@@ -340,8 +340,12 @@ body,
       float: left;
       line-height: 120%;
       .file-name {
-        > a {
-          @include font-size($smaller);
+        a {
+          color: $black;
+          &:hover {
+            color: $blue;
+            text-decoration: none;
+          }
         }
         .modal {
           line-height: 160%;
@@ -355,11 +359,14 @@ body,
         padding: $space/12 $space/6;
         text-transform: uppercase;
       }
-      a {
+      small {
         color: $grey;
-        &:hover {
-          color: $black;
-          text-decoration: none;
+        a {
+          color: inherit;
+          &:hover {
+            color: $blue;
+            text-decoration: none;
+          }
         }
       }
     }
@@ -662,6 +669,31 @@ body,
         .thumbnail {
           border-color: $blue;
           box-shadow: 0 0 0 4px rgba($blue, 0.2);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Language selector
+ */
+.language {
+  .translations {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    .button {
+      margin-left: $space/4;
+      white-space: nowrap;
+    }
+    .modal {
+      table {
+        .controls {
+          text-align: right;
         }
       }
     }

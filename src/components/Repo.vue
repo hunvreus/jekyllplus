@@ -108,7 +108,8 @@ export default {
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/.jekyllplus.yml';
       var params = {
         access_token: this.token,
-        ref: this.ref
+        ref: this.ref,
+        timestamp: Date.now()
       };
       this.$http.get(url, {headers: {'Accept': 'application/vnd.github.v3.raw'}, params: params}).then(response => {
         // Upon retrieval, we parse the YAML file
@@ -127,7 +128,8 @@ export default {
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/_config.yml';
       var params = {
         access_token: this.token,
-        ref: this.ref
+        ref: this.ref,
+        timestamp: Date.now()
       };
       this.$http.get(url, {headers: {'Accept': 'application/vnd.github.v3.raw'}, params: params}).then(response => {
         // Upon retrieval, we parse the YAML file

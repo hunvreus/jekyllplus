@@ -5,7 +5,7 @@
       <div class="container">
         <div class="controls">
           <!-- History -->
-          <history :path="path"/>
+          <history :path="path" :sha="sha"/>
           <!-- Save -->
           <button class="button primary save" :disabled="status != ''" :class="{ processing: status != '' }"  @click.prevent="saveFile">Save</button>
           <!-- More -->
@@ -28,17 +28,26 @@
           </svg>
         </a>
         <div class="meta">
-          <span class="type" v-if='collection'>{{ collection }}</span>
-          <span class="type" v-else>Default</span>
-          <file-name v-if="model" v-model="path" :title="model.title" :collection="collection"/>
+          <file-name v-if="model && jekyllConfig" v-model="path" :title="model.title" :collection="collection" :jekyllConfig="jekyllConfig"/>
+          <small>
+            <span v-if="editor == 'collection'" class="collection">{{ config.collections[collection].name }} collection ·</span>
+            <a :href="'https://github.com/' + username + '/' + repo + '/blob/' + ref + '/' + path" target="_blank">See on GitHub</a>
+          </small>
         </div>
       </div>
     </header>
     <!-- Body (fields for editing) -->
     <div class="body container narrow">
-      <form v-if="fields" v-on:submit.prevent="saveFile">
-        <field v-for="field in fields" :key="field.name" :field="field" :model="model"></field>
-      </form>
+      <div v-if="editor == 'collection'">
+        <div v-if="model && multilingual && jekyllConfig" class="field full-width">
+          <label>Language & Translations</label>
+          <language v-model="model.lang" :jekyllConfig="jekyllConfig" :collection="collection" :path="path" :sha="sha"/>
+        </div>
+        <field v-if="fields" v-for="field in fields" :key="field.name" :field="field" :model="model"></field>
+      </div>
+      <div v-else class="field full-width">
+        <textarea v-if="model" v-model="model.content" rows="20"/>
+      </div>
     </div>
   </div>
 </template>
@@ -47,13 +56,14 @@
 const YAML = require('js-yaml');
 import Field from './Field.vue';
 import FileName from './FileName.vue';
+import Language from './Language.vue';
 import DeleteFile from './DeleteFile.vue';
 import History from './History.vue';
 import Helper from '../helper.js';
 
 export default {
   name: 'editor',
-  components: { Field, History, FileName, DeleteFile },
+  components: { Field, History, FileName, DeleteFile, Language },
   props: [ 'config', 'jekyllConfig' ],
   data: function() {
     return {
@@ -64,9 +74,11 @@ export default {
       path: this.$route.params.path,
       rename: this.$route.params.path,
       file: {},
+      editor: 'default',
+      multilingual: false,
       fields: null,
       extension: '',
-      collection: '',
+      collection: null,
       sha: '',
       model: null,
       status: 'loading',
@@ -75,45 +87,24 @@ export default {
   },
   mounted() {
     if (this.config) {
-      this.setCollection();
+      this.setEditor();
       this.setModel();
     }
   },
   watch: {
     'config': function (to, from) {
-      this.setCollection();
+      this.setEditor();
       this.setModel();
     },
     '$route': function (to, from) {
       this.path = '';
-      this.setCollection();
+      this.setEditor();
       this.setModel();
     }
   },
   methods: {
-    setConfig: function () {
-      // Retrieve the configuration (`.jekyllplus.yml`) from GitHub
-      var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/.jekyllplus.yml';
-      var params = {
-        access_token: this.token,
-        ref: this.ref
-      };
-      this.$http.get(url, {headers: {'Accept': 'application/vnd.github.v3.raw'}, params: params}).then(response => {
-        // Upon retrieval, we parse the YAML file
-        this.config = YAML.safeLoad(response.body);
-        this.config['__content'] = this.config.body;
-        // We then retrieve the file we want to edit
-        this.setCollection();
-        this.setModel();
-      }, response => {
-        this.$notify({
-          type: 'error',
-          text: 'Couldn\'t retrieve the configuration file',
-          duration: -1
-        });
-      });
-    },
-    setCollection: function () {
+    setEditor: function () {
+      // First we try and figure out if we're dealing with a collection
       if (this.$route.name == 'new') {
         if (this.$route.query.collection) {
           this.collection = this.$route.query.collection;
@@ -121,9 +112,16 @@ export default {
         else if (this.$route.query.duplicate) {
           this.getCollection(this.$route.query.duplicate);
         }
+        else if (this.$route.query.translate) {
+          this.getCollection(this.$route.query.translate);
+        }
       }
       else {
         this.getCollection(this.path);
+      }
+      // If the collection has a configuration in .jekyllplus.yml, we switch the editor to "collection"
+      if (this.collection != '' && this.config.collections[this.collection]) {
+        this.editor = 'collection';
       }
     },
     getCollection: function (path) {
@@ -131,43 +129,63 @@ export default {
       this.extension = path.substr(path.lastIndexOf('.') + 1).toLowerCase();
       // First, we check the extension is html or md
       if (['html', 'md'].indexOf(this.extension) > -1) {
+        // We assume it's a collection
+        // TODO: check if it really is a collection (rely on the Jekyll conf)
+        this.type = 'collection';
         var segments = path.split('/');
         if (segments.length > 1 && segments[0].substring(0, 1) == '_') {
-          // Path includes a subfolder that starts with a "_": it's collection (maybe)
+          // Path includes a subfolder that starts with a "_": it maybe be a collection
           this.collection = segments[0].substring(1);
         }
         else {
-          // Path doesn't include a subfolder, we're defaulting to a page
+          // Path doesn't include a subfolder starting with "_", it's a page
           this.collection = 'pages';
         }
       }
-      else {
-        this.$notify({
-          type: 'warn',
-          text: 'The editor only supports HTML and Markdown: switching to default.'
-        });
-      }
     },
     setModel: function () {
-      this.fields = (this.collection != '' && this.config.collections[this.collection]) ? this.config.collections[this.collection].fields : this.config.default.fields;
       var path = '';
       if (this.$route.name == 'edit') path = this.path;
       if (this.$route.name == 'new' && this.$route.query.duplicate) path = this.$route.query.duplicate;
+      if (this.$route.name == 'new' && this.$route.query.translate) path = this.$route.query.translate;
+      if (this.editor == 'collection') {
+        this.fields = this.config.collections[this.collection].fields;
+        // We also check if this collection is multilingual
+        this.multilingual = (this.config.collections[this.collection].multilingual) ? true : false;
+      }
       if (path != '') {
-        // We retrieve the file we want to edit or duplicate from GitHub
-        var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + path + '?access_token=' + this.token;
-        this.$http.get(url).then(response => {
-          // Upon retrieval, we decode and parse the YAML front matter and body
-          this.error = '';
+        // We retrieve the file we want to edit, duplicate or translate from GitHub
+        var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + path;
+        var params = {
+          access_token: this.token,
+          ref: this.ref,
+          timestamp: Date.now()
+        };
+
+        this.$http.get(url, { params: params }).then(response => {
           this.status = '';
-          this.file = jsyaml.loadFront(Base64.decode(response.body.content), 'body');
-          // Somehow the library returns the body with a new line at the beginning
-          this.file.body = this.file.body.replace(/^\n/, '');
           // When editing, we need the sha
           if (this.$route.name == 'edit') this.sha = response.body.sha;
-          var content = this.file;
-          // We create a model by merging the file and config
-          this.model = Helper.createModel(this.fields, content);
+          // Upon retrieval, we prepare the editor
+          if (this.editor == 'collection') {
+            // If it's a collection, we decode and parse the YAML front matter and body
+            this.file = jsyaml.loadFront(Base64.decode(response.body.content), 'body');
+            // Somehow the library returns the body with a new line at the beginning
+            this.file.body = this.file.body.replace(/^\n/, '');
+            // We create a model by merging the file and config
+            this.model = Helper.createModel(this.fields, this.file);
+            // If multilingual, we add language to the model
+            if (this.multilingual) this.model.lang = this.file.lang;
+          }
+          else {
+            this.model = {
+              content: Base64.decode(response.body.content)
+            }
+          }
+          // If we're translating a file, we override the language
+          if (this.$route.query.lang && this.$route.query.lang != '') {
+            this.model.lang = this.$route.query.lang;
+          }
         }, response => {
           this.$notify({
             type: 'error',
@@ -179,24 +197,38 @@ export default {
         });
       }
       else {
-        // If it's a new file, we simply create a model with no content
-        this.model = Helper.createModel(this.fields, {});
-        this.status = '';
+        if (this.editor == 'collection') {
+          // If it's a new file, we simply create a model with no content
+          this.model = Helper.createModel(this.fields, {});
+          this.status = '';
+        }
+        else {
+          this.model = {
+            content: ''
+          }
+        }
       }
     },
-    deleteFile: function (e) {
-
-    },
     saveFile: function (e) {
-      // Prepare the file content from the model
-      var body = this.model.body;
-      var yaml = this.model;
-      delete yaml.body;
-      yaml = YAML.safeDump(yaml);
-      var content = '---\n';
-          content += yaml;
-          content += '---\n';
-          content += body;
+      if (this.editor == 'collection') {
+        if (this.multilingual && this.model.lang != this.jekyllConfig.lang[0]) {
+          // If the file is multilingual, and if it's not the default language,
+          // we need to double `lang` with `categories`
+          this.model.categories = this.model.lang;
+        }
+        // Prepare the file content from the model
+        var body = this.model.body;
+        var yaml = this.model;
+        delete yaml.body;
+        yaml = YAML.safeDump(yaml);
+        var content = '---\n';
+            content += yaml;
+            content += '---\n';
+            content += body;
+      }
+      else {
+        var content = this.model.content;
+      }
 
       // We edit/create the file on GitHub
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.path + '?access_token=' + this.token;
@@ -223,7 +255,7 @@ export default {
           this.$router.push('/' + this.username + '/' + this.repo + '/' + this.ref + '/edit/' + encodeURIComponent(this.path));
         }
         else {
-          // Upon editing a file, we getch again the file to update the state
+          // Upon editing a file, we fetch again the file to update the state
           this.setModel();
         }
       }, response => {
