@@ -273,6 +273,9 @@ export default {
     });
   },
   watch: {
+    '$route': function (to, from) {
+      this.initLanguage();
+    },
     'sha': function (to, from) {
       this.initLanguage();
     },
