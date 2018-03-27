@@ -54,50 +54,60 @@ export default {
       this.$emit('input', this.path);
     },
     '$route': function (to, from) {
-      this.lock = (this.$route.name == 'edit');
-      this.createPath();
+      this.initFilename();
     }
   },
   mounted() {
-    // If we're translating a file, we figure out the path and lock it
-    if (this.$route.query.translate) {
-      var from = this.$route.query.from;
-      var to = this.$route.query.to;
-      var path = this.$route.query.translate;
-      if (this.collection == 'pages') {
-        if (from == this.jekyllConfig.lang[0]) {
-          this.path = to + '/' + this.path;
-        }
-        else if (to == this.jekyllConfig.lang[0]) {
-          this.path = path.replace(from + '/', '');
-        }
-        else {
-          this.path = path.replace(from + '/', lang + '/');
-        }
-      }
-      else {
-        if (from == this.jekyllConfig.lang[0]) {
-          this.path = path.replace('_' + this.collection + '/', '_' + this.collection + '/' + to + '/')
-        }
-        else if (to == this.jekyllConfig.lang[0]) {
-          this.path = path.replace('_' + this.collection + '/' + from + '/', '_' + this.collection + '/');
-        }
-        else {
-          this.path = path.replace('_' + this.collection + '/' + from + '/', '_' + this.collection + '/' + to + '/');
-        }
-      }
-      this.lock = true;
-    }
-    else {
-      // Otherwise we create the path based on title and date
-      this.createPath();
-    }
-    this.newPath = this.path;
+    this.initFilename();
+
     document.addEventListener('keydown', (e) => {
       if (e.keyCode == 27) this.closeModal();
     });
   },
   methods: {
+    initFilename: function () {
+      if (this.$route.name == 'new') {
+        // If we're translating a file, we figure out the path and lock it
+        if (this.$route.query.translate) {
+          var from = this.$route.query.from;
+          var to = this.$route.query.to;
+          var path = this.$route.query.translate;
+          if (this.collection == 'pages') {
+            if (from == this.jekyllConfig.lang[0]) {
+              this.path = to + '/' + this.path;
+            }
+            else if (to == this.jekyllConfig.lang[0]) {
+              this.path = path.replace(from + '/', '');
+            }
+            else {
+              this.path = path.replace(from + '/', lang + '/');
+            }
+          }
+          else {
+            if (from == this.jekyllConfig.lang[0]) {
+              this.path = path.replace('_' + this.collection + '/', '_' + this.collection + '/' + to + '/')
+            }
+            else if (to == this.jekyllConfig.lang[0]) {
+              this.path = path.replace('_' + this.collection + '/' + from + '/', '_' + this.collection + '/');
+            }
+            else {
+              this.path = path.replace('_' + this.collection + '/' + from + '/', '_' + this.collection + '/' + to + '/');
+            }
+          }
+          this.lock = true;
+        }
+        else {
+          // Otherwise we create the path based on title and date
+          this.createPath();
+          this.lock = false;
+        }
+      }
+      else {
+        // If editing the file, we just lock the path
+        this.lock = true;
+      }
+      this.newPath = this.path;
+    },
     closeModal: function () {
       if (this.status == '') {
         this.newPath = this.path;

@@ -16,7 +16,7 @@
               </svg>
             </a>
             <div class="options">
-              <router-link :to="{ name: 'new', query: { duplicate: path } }" :class="'option'">Duplicate</router-link>
+              <router-link :to="{ name: 'new', query: { duplicate: path } }" target="_blank" :class="'option'">Duplicate</router-link>
               <hr/>
               <delete-file :path="path" :sha="sha"/>
             </div>
