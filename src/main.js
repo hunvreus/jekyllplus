@@ -17,7 +17,7 @@ import Editor from './components/Editor.vue'
 import Login from './components/Login.vue'
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   base: __dirname,
   routes: [
     {
