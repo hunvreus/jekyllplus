@@ -11,7 +11,7 @@
   bottom: 24px;
   left: 24px;
   position: fixed;
-  z-index: 999;
+  z-index: 999999;
 }
 #jekyllplus .menu {
   background: #FFF;
