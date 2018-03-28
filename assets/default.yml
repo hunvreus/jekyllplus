@@ -1,0 +1,66 @@
+collections:
+  pages:
+    name: Pages
+    fields:
+      - name: published
+        label: Published
+        type: switch
+      - name: title
+        label: Title
+        type: string
+      - name: description
+        label: Description
+        type: string
+        description: This may be used for SEO (<code>&lt;meta name="description"&gt;</code>)
+      - name: category
+        label: Categories
+        type: string
+        multiple: true
+      - name: keywords
+        label: Keywords
+        type: string
+        multiple: true
+      - name: image
+        label: Image
+        type: image
+        description: This may be used as a preview in social cards.
+      - name: layout
+        label: Layout
+        type: string
+      - name: body
+        label: Body
+        type: markdown
+  posts:
+    name: Posts
+    fields:
+      - name: published
+        label: Published
+        type: switch
+      - name: title
+        label: Title
+        type: string
+      - name: date
+        label: Date
+        type: date
+      - name: description
+        label: Description
+        type: string
+        description: This may be used for SEO (<code>&lt;meta name="description"&gt;</code>)
+      - name: category
+        label: Categories
+        type: string
+        multiple: true
+      - name: keywords
+        label: Keywords
+        type: string
+        multiple: true
+      - name: image
+        label: Image
+        type: image
+        description: This may be used as a preview in social cards.
+      - name: layout
+        label: Layout
+        type: string
+      - name: body
+        label: Body
+        type: markdown
