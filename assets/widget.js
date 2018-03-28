@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     jekyllplus.setAttribute('id', 'jekyllplus');
     var jekyllplus_content = '';
     jekyllplus_content += '<div class="menu">';
-    jekyllplus_content += '<img src="/assets/jekyllplus.svg"/>';
+    jekyllplus_content += '<img src="http://jekyllplus.wiredcraft.jekyllpro.com/assets/logo.png"/>';
     jekyllplus_content += '</div>';
     jekyllplus_content += '<div class="options">';
     for (var i = 0; i < JEKYLLPLUS_MENU.length; i++) {
