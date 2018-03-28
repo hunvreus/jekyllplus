@@ -103,25 +103,51 @@ export default {
     }
   },
   methods: {
-    setConfig: function () {
-      // Retrieve the configuration (`.jekyllplus.yml`) from GitHub
-      var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/.jekyllplus.yml';
-      var params = {
-        access_token: this.token,
-        ref: this.ref,
-        timestamp: Date.now()
-      };
-      this.$http.get(url, {headers: {'Accept': 'application/vnd.github.v3.raw'}, params: params}).then(response => {
-        // Upon retrieval, we parse the YAML file
-        this.config = YAML.safeLoad(response.body);
-        this.setJekyllConfig();
-      }, response => {
-        this.$notify({
-          type: 'error',
-          text: 'Couldn\'t retrieve the configuration file',
-          duration: -1
+    setConfig: function (defaultConfig = false) {
+      if (defaultConfig == false) {
+        // Retrieve the configuration (`.jekyllplus.yml`) from GitHub
+        var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/.jekyllplus.yml';
+        var params = {
+          access_token: this.token,
+          ref: this.ref,
+          timestamp: Date.now()
+        };
+        this.$http.get(url, {headers: {'Accept': 'application/vnd.github.v3.raw'}, params: params}).then(response => {
+          // Upon retrieval, we parse the YAML file
+          this.config = YAML.safeLoad(response.body);
+          this.setJekyllConfig();
+        }, response => {
+          if (response.status == 404) {
+            // File isn't there, we try to switch to default configuration
+            this.setConfig(true);
+          }
+          else {
+            this.$notify({
+              type: 'error',
+              text: 'Couldn\'t retrieve the configuration file (' + response.body.message + ')',
+              duration: -1
+            });
+          }
         });
-      });
+      }
+      else {
+        // Retrieve the default configuration
+        this.$http.get('/assets/default.yml').then(response => {
+          // We warn developers in the console
+          console.warn('Missing .jekyllpro.yml configuration file, switched to default configuration.');
+          // Upon retrieval, we parse the YAML file
+          this.config = YAML.safeLoad(response.body);
+          this.setJekyllConfig();
+        }, response => {
+          this.$notify({
+            type: 'error',
+            text: 'Couldn\'t retrieve the configuration file (' + response.body.message + ')',
+            duration: -1
+          });
+        });
+      }
+
+
     },
     setJekyllConfig: function () {
       // Retrieve the Jekyll configuration (`_config.yml`) from GitHub
@@ -137,7 +163,7 @@ export default {
       }, response => {
         this.$notify({
           type: 'error',
-          text: 'Couldn\'t retrieve the Jekyll configuration file',
+          text: 'Couldn\'t retrieve the Jekyll configuration file (' + response.body.message + ')',
           duration: -1
         });
       });
@@ -151,7 +177,7 @@ export default {
       }, response => {
         this.$notify({
           type: 'error',
-          text: 'Couldn\'t retrieve the list of branches',
+          text: 'Couldn\'t retrieve the list of branches (' + response.body.message + ')',
           duration: -1
         });
       });
