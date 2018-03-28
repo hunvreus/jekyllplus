@@ -1,5 +1,5 @@
-#jekyllpro { all: initial; }
-#jekyllpro * {
+#jekyllplus { all: initial; }
+#jekyllplus * {
   all: unset;
   box-sizing: border-box;
   color: #1b2733;
@@ -7,30 +7,35 @@
   font-size: 16px;
   line-height: 160%;
 }
-#jekyllpro {
+#jekyllplus {
   bottom: 24px;
   left: 24px;
   position: fixed;
   z-index: 999;
 }
-#jekyllpro .menu {
-  background: #0070e0;
-  border-radius: 3px;
+#jekyllplus .menu {
+  background: #FFF;
+  border: 1px solid rgba(193, 199, 205, 0.8);
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 4px 0;
   color: #FFF;
   cursor: pointer;
   display: inline-block;
-  font-size: 12px;
-  line-height: 160%;
-  padding: 6px 18px;
+  padding: 12px;
   text-align: center;
   text-transform: uppercase;
   transition-property: background, border, box-shadow, color;
   transition-duration: 0.2s;
 }
-#jekyllpro .menu:hover {
-  background: #0063c7;
+#jekyllplus .menu:hover {
+  background: #f7f9fa;
 }
-#jekyllpro .options {
+#jekyllplus .menu img {
+  display: block;
+  height: 18px;
+  width: 18px;
+}
+#jekyllplus .options {
   background: #FFF;
   border: 1px solid rgba(193, 199, 205, 0.6);
   border-radius: 3px;
@@ -47,14 +52,19 @@
   visibility: hidden;
   z-index: 999;
 }
-#jekyllpro:hover,
-#jekyllpro .menu:hover + .options,
-#jekyllpro .options:hover {
+#jekyllplus:hover,
+#jekyllplus .menu:hover + .options,
+#jekyllplus .options:hover {
   opacity: 1;
   transform: translateY(0);
   visibility: visible;
 }
-#jekyllpro .options a {
+#jekyllplus .options hr {
+  border-top: 1px solid rgba(193, 199, 205, 0.6);
+  display: block;
+  margin: 4px 0;
+}
+#jekyllplus .options a {
   background: rgba(#f7f9fa, 0);
   cursor: pointer;
   display: block;
@@ -66,6 +76,6 @@
   transition-duration: 0.2s;
   white-space: nowrap;
 }
-#jekyllpro .options a:hover {
+#jekyllplus .options a:hover {
   background: #f7f9fa;
 }

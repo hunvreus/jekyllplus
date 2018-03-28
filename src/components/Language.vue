@@ -348,7 +348,6 @@ export default {
           path: translation,
           exists: true
         });
-        console.log(this.translations);
       }, response => {
         if (response.status == 404) {
           // File doesn't exist
