@@ -1,7 +1,0 @@
----
-# Optional
-pre:
-  - npm install
-  - npm run build
-
-post: []
