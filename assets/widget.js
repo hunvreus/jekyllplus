@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
+  var JEKYLLPLUS_URL = 'http://jekyllplus.wiredcraft.jekyllpro.com/';
+  var JEKYLLPLUS_PREFIX = JEKYLLPLUS_URL + '/' + JEKYLLPLUS_REPO + '/';
+  var JEKYLLPLUS_MENU = [
+    { label: 'Create a page', path: 'new?collection=pages' },
+    { label: 'Create a post', path: 'new?collection=posts' }
+  ];
+
   if ((window.location.href.indexOf('?jekyllplus=true') != -1) || (window.location.href.indexOf('&jekyllplus=true') != -1)) {
     localStorage.setItem('jekyllplus', 'show');
   }
