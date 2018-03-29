@@ -8,12 +8,21 @@
       </div>
       <input type="text" v-else v-model="model[field.name]"/>
     </div>
+    <!-- Tags -->
+    <div v-if="field.type == 'tags'">
+      <!-- <div v-if="field.multiple" class="multiple">
+        <input type="text" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+      </div> -->
+      <!-- <input type="text" v-else v-model="model[field.name]"/> -->
+      <input-tag :tags.sync="model[field.name]"></input-tag>
+
+    </div>
     <!-- Hidden -->
     <div v-if="field.type == 'hidden'">
       <div v-if="field.multiple" class="multiple">
-        <input type="text" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        <input type="hidden" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
       </div>
-      <input type="text" v-else v-model="model[field.name]"/>
+      <input type="hidden" v-else v-model="model[field.name]"/>
     </div>
     <!-- Image -->
     <div v-if="field.type == 'image'">
@@ -92,6 +101,7 @@
 <script>
 import FilePicker from './FilePicker.vue';
 import Helper from '../helper.js';
+import InputTag from 'vue-input-tag'
 
 export default {
   name: 'field',

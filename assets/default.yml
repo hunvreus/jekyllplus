@@ -14,11 +14,11 @@ collections:
         description: This may be used for SEO (<code>&lt;meta name="description"&gt;</code>)
       - name: category
         label: Categories
-        type: string
+        type: tags
         multiple: true
       - name: keywords
         label: Keywords
-        type: string
+        type: tags
         multiple: true
       - name: image
         label: Image
@@ -45,7 +45,7 @@ collections:
       - name: description
         label: Description
         type: string
-        description: This may be used for SEO (<code>&lt;meta name="description"&gt;</code>)
+        description: This may be used for SEO (<meta name="description">).
       - name: category
         label: Categories
         type: string
