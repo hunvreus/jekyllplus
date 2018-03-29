@@ -218,8 +218,9 @@ export default {
         }
         // Prepare the file content from the model
         var body = this.model.body;
-        var yaml = this.model;
+        var yaml = JSON.parse(JSON.stringify(this.model));
         delete yaml.body;
+        Helper.sanitizeObject(yaml); // Removing empty/null attributes from the object
         yaml = YAML.safeDump(yaml);
         var content = '---\n';
             content += yaml;

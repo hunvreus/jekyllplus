@@ -53,4 +53,23 @@ module.exports = {
     }
     return model;
   },
+  sanitizeObject: function (obj) {
+    // Traverse the object and remove all empty/null/undefined values
+    Object.keys(obj).forEach((key) => {
+      const val = obj[key]
+      if (!!val && typeof val === 'object') {
+        const keys = Object.keys(val)
+        if (!keys.length || keys.every((key) => !val[key])) {
+          delete obj[key]
+        }
+        else if (!this.sanitizeObject(val)) {
+          delete obj[key]
+        }
+      }
+      else if (!val) {
+        delete obj[key]
+      }
+    });
+    return !!Object.keys(obj).length;
+  }
 }
