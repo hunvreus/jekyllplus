@@ -11,14 +11,14 @@ collections:
       - name: description
         label: Description
         type: string
-        description: This may be used for SEO (<code>&lt;meta name="description"&gt;</code>)
+        description: This may be used for SEO (<meta name="description">).
       - name: category
         label: Categories
-        type: tags
+        type: string
         multiple: true
       - name: keywords
         label: Keywords
-        type: tags
+        type: string
         multiple: true
       - name: image
         label: Image
