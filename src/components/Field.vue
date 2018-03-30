@@ -11,9 +11,9 @@
     <!-- Hidden -->
     <div v-if="field.type == 'hidden'">
       <div v-if="field.multiple" class="multiple">
-        <input type="hidden" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        <input type="text" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
       </div>
-      <input type="hidden" v-else v-model="model[field.name]"/>
+      <input type="text" v-else v-model="model[field.name]"/>
     </div>
     <!-- Image -->
     <div v-if="field.type == 'image'">

@@ -1,6 +1,7 @@
 collections:
   pages:
     name: Pages
+
     fields:
       - name: published
         label: Published
@@ -14,8 +15,7 @@ collections:
         description: This may be used for SEO (<meta name="description">).
       - name: category
         label: Categories
-        type: string
-        multiple: true
+        type: tags
       - name: keywords
         label: Keywords
         type: string
@@ -32,6 +32,7 @@ collections:
         type: markdown
   posts:
     name: Posts
+    multilingual: true
     fields:
       - name: published
         label: Published

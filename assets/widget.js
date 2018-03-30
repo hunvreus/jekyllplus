@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  var JEKYLLPLUS_URL = '//jekyllplus.wiredcraft.jekyllpro.com';
+  var JEKYLLPLUS_URL = '//cms.jekyllplus.com';
   var JEKYLLPLUS_PREFIX = JEKYLLPLUS_URL + '/' + JEKYLLPLUS_REPO + '/';
   var JEKYLLPLUS_MENU = [
     { label: 'Create a page', path: 'new?collection=pages' },
