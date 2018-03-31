@@ -31,7 +31,7 @@
           </header>
           <!-- Files -->
           <ul v-if="filteredFiles.length">
-            <li v-for="file in filteredFiles" :key="file.name" :class="{ active: file.path == selected.path, image: file.image }" :title="file.name">
+            <li v-for="file in filteredFiles" :key="file.name" :class="{ active: file.path == selected, image: file.image }" :title="file.name">
               <!-- Directories -->
               <div class="directory" v-if="file.type === 'dir'" @click="changeDir(file.path)">
                 <div class="thumbnail">
@@ -57,7 +57,7 @@
         <footer class="footer">
           <upload :path="current" :class="'primary smaller'" @uploaded="setFiles"/>
           <a class="button smaller" @click.prevent="show = false">Cancel</a>
-          <a class="button primary smaller" @click.prevent="$emit('input', '/' + selected.path); show = false">Select</a>
+          <a class="button primary smaller" @click.prevent="$emit('input', (selected != '' ? '/' + selected : '')); show = false">Select</a>
         </footer>
       </div>
     </div>
@@ -70,32 +70,31 @@ import Upload from './Upload.vue';
 export default {
   name: 'file-picker',
   components: { Upload },
-  props: {
-    value: {
-      default: ''
-    },
-    path: {
-      default: ''
-    },
-    type: {
-      default: ''
-    }
-  },
+  props: [ 'value', 'path', 'type', 'config' ],
   data: function() {
     return {
       username: this.$route.params.username,
       repo: this.$route.params.repo,
       ref: this.$route.params.ref,
       token: this.$root.$data.token,
-      current: (this.value != '') ? '' : this.path,
+      current: '',
       files: [],
       preview: null,
-      selected: {},
+      selected: (this.value != '') ? this.value.replace(/^\/+/g, '') : {},
       show: false,
       status: ''
     };
   },
   mounted() {
+    if (this.value && this.value != '') {
+      this.current = this.getParent(this.value.replace(/^\/+/g, ''));
+    }
+    else if (this.path) {
+      this.current = this.path;
+    }
+    else if (config.folders) {
+
+    }
     this.setFiles();
     document.addEventListener('keydown', (e) => {
       if (e.keyCode == 27) this.show = false;
@@ -107,8 +106,11 @@ export default {
     }
   },
   methods: {
-    getDir: function() {
-      // TODO: Get the parent directory from the file path
+    getParent: function(path) {
+      // Get the parent directory from a path
+      path = path.split('/');
+      path.pop();
+      return (path.join('/'));
     },
     setFiles: function () {
       // Retrieve the files for the current path from GitHub
@@ -137,11 +139,11 @@ export default {
       });
     },
     changeDir: function (path) {
-      this.selected = {};
+      this.selected = '';
       this.current = path;
     },
     select: function (file) {
-      this.selected = (this.selected.path == file.path) ? {} : file;
+      this.selected = (this.selected == file.path) ? '' : file.path;
     }
   },
   computed: {

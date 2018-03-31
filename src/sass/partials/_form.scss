@@ -35,6 +35,8 @@
   input,
   textarea,
   select {
+    box-shadow: none;
+    color: inherit;
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;

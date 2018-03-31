@@ -1,3 +1,7 @@
+folders:
+  images: images
+  files: files
+
 collections:
   pages:
     name: Pages
@@ -5,6 +9,7 @@ collections:
       - name: published
         label: Published
         type: switch
+        default: true
       - name: title
         label: Title
         type: string
@@ -14,12 +19,10 @@ collections:
         description: This may be used for SEO (<meta name="description"</code>).
       - name: category
         label: Categories
-        type: string
-        multiple: true
+        type: tags
       - name: keywords
         label: Keywords
-        type: string
-        multiple: true
+        type: tags
       - name: image
         label: Image
         type: image
@@ -36,6 +39,7 @@ collections:
       - name: published
         label: Published
         type: switch
+        default: true
       - name: title
         label: Title
         type: string
@@ -48,19 +52,11 @@ collections:
         description: This may be used for SEO (<meta name="description">).
       - name: category
         label: Categories
-        type: string
-        multiple: true
-      - name: keywords
-        label: Keywords
-        type: string
-        multiple: true
+        type: tags
       - name: image
         label: Image
         type: image
         description: This may be used as a preview in social cards.
-      - name: layout
-        label: Layout
-        type: string
       - name: body
         label: Body
         type: markdown

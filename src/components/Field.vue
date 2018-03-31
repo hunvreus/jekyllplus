@@ -18,9 +18,9 @@
     <!-- Image -->
     <div v-if="field.type == 'image'">
       <div v-if="field.multiple" class="multiple">
-        <file-picker v-for="n in model[field.name].length" :key="n" v-model="model[field.name][n - 1]" :type="'image'"/>
+        <file-picker v-for="n in model[field.name].length" :key="n" v-model="model[field.name][n - 1]" :type="'image'" :config="config"/>
       </div>
-      <file-picker v-else v-model="model[field.name]" :type="'image'"/>
+      <file-picker v-else v-model="model[field.name]" :type="'image'" :config="config"/>
     </div>
     <!-- Checkbox -->
     <div v-if="field.type == 'checkbox'">
@@ -64,6 +64,13 @@
         </select>
       </span>
     </div>
+    <!-- Tags -->
+    <div v-if="field.type == 'tags'">
+      <!-- <div v-if="field.multiple" class="multiple">
+        <input type="text" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+      </div> -->
+      <v-select taggable :close-on-select="false" :no-drop="true" multiple v-model="model[field.name]" ></v-select>
+    </div>
     <!-- Text -->
     <div v-else-if="field.type == 'text' || field.type=='markdown'">
       <div v-if="field.multiple" class="multiple">
@@ -92,11 +99,14 @@
 <script>
 import FilePicker from './FilePicker.vue';
 import Helper from '../helper.js';
+import vSelect from 'vue-select'
+
+// Vue.component('v-select', vSelect)
 
 export default {
   name: 'field',
-  props: ['field', 'model'],
-  components: { FilePicker },
+  props: ['field', 'model', 'config'],
+  components: { FilePicker, vSelect },
   data: function () {
     return {
       username: this.$route.params.username,

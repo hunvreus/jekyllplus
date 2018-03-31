@@ -23,9 +23,9 @@ module.exports = {
           else {
             // Content doesn't exists for this field, we define a default value
             var value;
-            if (fields[i].default) {
+            if (typeof fields[i].default !== 'undefined') {
               // Default is pre-defined
-              value = field[i].default;
+              value = fields[i].default;
             }
             else {
               // No pre-defined default, we rely on the type of field
@@ -33,7 +33,7 @@ module.exports = {
                 case 'select':
                   value = [''];
                   break;
-                case 'toggle':
+                case 'switch':
                 case 'checkbox':
                   value = false;
                   break;

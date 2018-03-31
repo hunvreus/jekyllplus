@@ -43,7 +43,7 @@
           <label>Language & Translations</label>
           <language v-model="model.lang" :jekyllConfig="jekyllConfig" :collection="collection" :path="path" :sha="sha"/>
         </div>
-        <field v-if="fields" v-for="field in fields" :key="field.name" :field="field" :model="model"></field>
+        <field v-if="fields" v-for="field in fields" :key="field.name" :field="field" :model="model" :config="config"></field>
       </div>
       <div v-else class="field full-width">
         <textarea v-if="model" v-model="model.content" rows="20"/>
