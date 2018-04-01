@@ -20,9 +20,6 @@ collections:
       - name: category
         label: Categories
         type: tags
-      - name: keywords
-        label: Keywords
-        type: tags
       - name: image
         label: Image
         type: image
