@@ -92,8 +92,9 @@ export default {
     else if (this.path) {
       this.current = this.path;
     }
-    else if (config.folders) {
-
+    else if (this.config.folders) {
+      if (this.config.folders.file) this.current = this.config.folders.file;
+      if (this.type && this.type != '' && this.config.folders[this.type]) this.current = this.config.folders[this.type];
     }
     this.setFiles();
     document.addEventListener('keydown', (e) => {

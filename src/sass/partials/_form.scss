@@ -51,7 +51,7 @@
     box-sizing: border-box;
     display: inline-block;
     padding: $space/4 $space/2;
-    transition-property: background, border;
+    transition-property: border;
     transition-duration: $ease;
     &.small {
       padding: $space/8 $space/4;

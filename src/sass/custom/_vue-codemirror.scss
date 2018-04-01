@@ -1,0 +1,34 @@
+.vue-codemirror.autoresize {
+  .CodeMirror,
+  .CodeMirror-scroll {
+    height: auto;
+  }
+}
+
+.CodeMirror {
+  border: 1px solid $line;
+  border-radius: $radius;
+  font-family: inherit;
+  padding: $space/4 $space/2;
+  transition-property: border;
+  transition-duration: $ease;
+  &:hover {
+    border-color: shade($line, 20%);
+  }
+  &.CodeMirror-focused,
+  &:focus {
+    border-color: $blue;
+    box-shadow: 0 0 0 2px rgba($blue, 0.2);
+    outline: none;
+  }
+}
+
+.cm-s-default {
+  .cm-link { color: $blue; }
+  .cm-string { color: $purple; }
+  .cm-attribute { color: $blue; }
+  .cm-hr { color: $grey-3; }
+  .cm-variable-2 { color: inherit; }
+  .cm-tag { color: $purple; }
+  .cm-error { color: $red; }
+}

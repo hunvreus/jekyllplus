@@ -1,6 +1,6 @@
-folders:
-  images: images
-  files: files
+# folders:
+#   file: files
+#   image: images
 
 collections:
   pages:
@@ -33,6 +33,7 @@ collections:
       - name: body
         label: Body
         type: markdown
+        autoresize: true
   posts:
     name: Posts
     fields:
@@ -60,3 +61,4 @@ collections:
       - name: body
         label: Body
         type: markdown
+        autoresize: true

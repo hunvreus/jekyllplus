@@ -72,11 +72,18 @@
       <v-select taggable :close-on-select="false" :no-drop="true" multiple v-model="model[field.name]" ></v-select>
     </div>
     <!-- Text -->
-    <div v-else-if="field.type == 'text' || field.type=='markdown'">
+    <div v-else-if="field.type == 'text'">
       <div v-if="field.multiple" class="multiple">
         <textarea rows="20" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
       </div>
       <textarea rows="20" v-else v-model="model[field.name]"/>
+    </div>
+    <!-- Markdown -->
+    <div v-else-if="field.type == 'text' || field.type=='markdown'">
+      <div v-if="field.multiple" class="multiple">
+        <codemirror v-for="n in model[field.name].length" v-model="model[field.name][n-1]" :options="codemirrorOptions"></codemirror>
+      </div>
+      <codemirror v-model="model[field.name]" :options="codemirrorOptions" :class="{ autoresize: field.autoresize }"></codemirror>
     </div>
     <!-- Object -->
     <div v-else-if="field.type == 'object'">
@@ -100,20 +107,26 @@
 import FilePicker from './FilePicker.vue';
 import Helper from '../helper.js';
 import vSelect from 'vue-select'
-
-// Vue.component('v-select', vSelect)
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/mode/markdown/markdown.js';
+import 'codemirror/lib/codemirror.css';
+// import 'codemirror/theme/base16-dark.css';
 
 export default {
   name: 'field',
   props: ['field', 'model', 'config'],
-  components: { FilePicker, vSelect },
+  components: { FilePicker, vSelect, codemirror },
   data: function () {
     return {
       username: this.$route.params.username,
       repo: this.$route.params.repo,
       ref: this.$route.params.ref,
       token: this.$root.$data.token,
-      empty: (this.field.type == 'object') ? Helper.createModel(this.field.fields, {}) : ''
+      empty: (this.field.type == 'object') ? Helper.createModel(this.field.fields, {}) : '',
+      codemirrorOptions: {
+        mode: 'text/markdown',
+        lineWrapping: true
+      }
     }
   },
   methods: {
