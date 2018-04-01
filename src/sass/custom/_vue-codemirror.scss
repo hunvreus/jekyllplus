@@ -8,7 +8,10 @@
 .CodeMirror {
   border: 1px solid $line;
   border-radius: $radius;
+  color: inherit;
   font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
   padding: $space/4 $space/2;
   transition-property: border;
   transition-duration: $ease;
@@ -28,7 +31,28 @@
   .cm-string { color: $purple; }
   .cm-attribute { color: $blue; }
   .cm-hr { color: $grey-3; }
-  .cm-variable-2 { color: inherit; }
+  .cm-variable-2,
+  .cm-variable-3,
+  .cm-keyword {
+    color: inherit;
+    display: inline-block;
+    &:first-letter {
+      color: $purple;
+    }
+  }
   .cm-tag { color: $purple; }
   .cm-error { color: $red; }
+  .cm-header { color: inherit; }
+  .cm-header-1 { @include font-size($huge); }
+  .cm-header-2 { @include font-size($large); }
+  .cm-header-3,
+  .cm-header-4,
+  .cm-header-5,
+  .cm-header-6 { font-size: inherit; }
+  .cm-header-1,
+  .cm-header-2,
+  .cm-header-3,
+  .cm-header-4,
+  .cm-header-5,
+  .cm-header-6 { line-height: 120%; }
 }
