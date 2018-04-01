@@ -33,13 +33,7 @@
   .cm-hr { color: $grey-3; }
   .cm-variable-2,
   .cm-variable-3,
-  .cm-keyword {
-    color: inherit;
-    display: inline-block;
-    &:first-letter {
-      color: $purple;
-    }
-  }
+  .cm-keyword { color: inherit; }
   .cm-atom { color: $purple; }
   .cm-tag { color: $purple; }
   .cm-error { color: $red; }
