@@ -35,7 +35,6 @@
               <!-- Directories -->
               <div class="directory" v-if="file.type === 'dir'" @click="changeDir(file.path)">
                 <div class="thumbnail">
-                  {{ file.path }}
                   <svg viewBox="0 0 24 24">
                     <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
                   </svg>
@@ -43,8 +42,13 @@
                 <div class="name">{{ file.name }}</div>
               </div>
               <!-- Images -->
-              <div class="file" v-if="file.type === 'file'" @click="select(file)">
-                <div class="thumbnail" :style="{ backgroundImage: 'url(' + file.download_url + '&sanitize=1)' }"></div>
+              <div class="file" :class="{ image: file.image }" v-if="file.type === 'file'" @click="select(file)">
+                <div v-if="file.image" class="thumbnail" :style="{ backgroundImage: 'url(' + file.download_url + '&sanitize=1)' }"></div>
+                <div v-else class="thumbnail">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />
+                  </svg>
+                </div>
                 <div class="name">{{ file.name }}</div>
               </div>
             </li>

@@ -15,12 +15,12 @@
       </div>
       <input type="text" v-else v-model="model[field.name]"/>
     </div>
-    <!-- Image -->
-    <div v-if="field.type == 'image'">
+    <!-- File & Image -->
+    <div v-if="field.type == 'image' || field.type == 'file'">
       <div v-if="field.multiple" class="multiple">
-        <file-picker v-for="n in model[field.name].length" :key="n" v-model="model[field.name][n - 1]" :type="'image'" :config="config"/>
+        <file-picker v-for="n in model[field.name].length" :key="n" v-model="model[field.name][n - 1]" :type="field.type" :config="config"/>
       </div>
-      <file-picker v-else v-model="model[field.name]" :type="'image'" :config="config"/>
+      <file-picker v-else v-model="model[field.name]" :type="field.type" :config="config"/>
     </div>
     <!-- Checkbox -->
     <div v-if="field.type == 'checkbox'">
@@ -49,7 +49,7 @@
       </div>
       <input type="date" v-else v-model="model[field.name]"/>
     </div>
-    <!-- List -->
+    <!-- Select -->
     <div v-else-if="field.type == 'select'">
       <div v-if="field.multiple" class="multiple">
         <span class="select" v-for="n in model[field.name].length">

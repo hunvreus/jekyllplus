@@ -605,7 +605,6 @@ body,
       padding-bottom: $space/2;
     }
     ul {
-
       @include breakpoint(mobile) {
         @include grid(2);
       }
@@ -629,12 +628,12 @@ body,
         width: 100%;
         svg {
           fill: rgba($blue, 0.6);
-          height: 80%;
+          height: 60%;
           left: 50%;
           position: absolute;
           top: 50%;
           transform: translate(-50%, -50%);
-          width: 80%;
+          width: 60%;
         }
       }
       .name {
@@ -650,6 +649,19 @@ body,
       .directory {
         .thumbnail {
           border: 0;
+        }
+      }
+      .file {
+        .thumbnail {
+          border: transparent;
+          svg {
+            fill: rgba($blue, 0.2);
+          }
+        }
+        &.image {
+          .thumbnail {
+            border: 1px solid $line;
+          }
         }
       }
       &:hover {
