@@ -105,6 +105,8 @@ A few things:
     - `object`: allows to define multiple children fields (requires a `fields` attribute).
   - `default`: default value for the field.
   - `options`: see `select` type above.
+  - `fields`: see `object` type above.
+  - `autoresize`: see `markdown` type above.
   - `multiple`: when set to `true`, allows the user to add multiple instances of the field (this making the field an array of values).
 - **Folders**: as hinted at in the default configuration, you can define default folders for images and files by setting `folders.images` and `folders.files`.
 
