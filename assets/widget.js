@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-  var JEKYLLPLUS_URL = '//cms.jekyllplus.com';
-  var JEKYLLPLUS_PREFIX = JEKYLLPLUS_URL + '/' + JEKYLLPLUS_REPO + '/';
-  var JEKYLLPLUS_MENU = [
+  var JEKYLLPLUS_URL = JEKYLLPLUS_URL || '//cms.jekyllplus.com';
+  var JEKYLLPLUS_MENU = JEKYLLPLUS_MENU || [
     { label: 'Create a page', path: 'new?collection=pages' },
     { label: 'Create a post', path: 'new?collection=posts' }
   ];
+  var JEKYLLPLUS_PREFIX = JEKYLLPLUS_URL + '/' + JEKYLLPLUS_REPO + '/';
 
   if ((window.location.href.indexOf('?jekyllplus=true') != -1) || (window.location.href.indexOf('&jekyllplus=true') != -1)) {
     localStorage.setItem('jekyllplus', 'show');
@@ -22,7 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
     jekyllplus_content += '</div>';
     jekyllplus_content += '<div class="options">';
     for (var i = 0; i < JEKYLLPLUS_MENU.length; i++) {
-      jekyllplus_content += '  <a target="_blank" href="' + JEKYLLPLUS_PREFIX + JEKYLLPLUS_MENU[i].path + '">' + JEKYLLPLUS_MENU[i].label + '</a>';
+      jekyllplus_content += (typeof JEKYLLPLUS_MENU[i].path === 'undefined') ?
+        '  <a target="_blank" href="' + JEKYLLPLUS_MENU[i].url + '">' + JEKYLLPLUS_MENU[i].label + '</a>':
+        '  <a target="_blank" href="' + JEKYLLPLUS_PREFIX + JEKYLLPLUS_MENU[i].path + '">' + JEKYLLPLUS_MENU[i].label + '</a>';
     }
     jekyllplus_content += '  <hr/>';
     jekyllplus_content += '  <a target="_blank" href="' + JEKYLLPLUS_PREFIX + 'edit/' + encodeURIComponent(JEKYLLPLUS_PATH) + '">Edit this page</a>';

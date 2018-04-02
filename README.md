@@ -165,6 +165,20 @@ You can also point at your own client url for the JS and CSS files. For example,
 <link rel='stylesheet' href='//localhost:8080/assets/widget.css'/>
 ```
 
+By default, the widget offers link to edit or duplicate the content of the current page (this is what `JEKYLLPLUS_PATH` is for), as well as links to create a new page or a new post. You can extend the list of menu items, especially if you have custom collections, by defining the `JEKYLLPLUS_MENU` array. For example:
+
+```
+var JEKYLLPLUS_MENU = JEKYLLPLUS_MENU || [
+  { label: 'Create a page', path: 'new?collection=pages' },
+  { label: 'Create a post', path: 'new?collection=posts' },
+  { label: 'Create a news', path: 'new?collection=news' },
+  { label: 'See all files', path: 'files' },
+  { label: 'Go to Google', url: 'https://google.com' }
+];
+```
+
+Note that you can use a `url` attribute instead of `path` if you want to point at a full url.
+
 ## Installation & development
 
 You can run Jekyll+ on your own. The client is a simple Vue.js application:
