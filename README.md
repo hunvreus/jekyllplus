@@ -20,7 +20,7 @@ By default, Jekyll+ will load a default configuration (`/assets/default.yml` in 
 
 If you want to customize the fields and/or support additional collections, you will need to add a `.jekyllplus.yml` file at the root of the repo hosting your site. Use the [default configuration](https://github.com/Wiredcraft/jekyllplus/blob/master/assets/default.yml) as an example:
 
-```
+```yaml
 # folders:
 #   file: files
 #   image: images
@@ -117,7 +117,7 @@ A few things:
 
 When defining a collection, you can set `multilingual` to `true`, for example:
 
-```
+```yaml
 collections:
   pages:
     name: pages
@@ -132,7 +132,7 @@ A few things about this feature:
 2. **It will save translations in subfolders**. For example, if English is the default language, the English pages will show at the root of the site and posts will be at the root of `_posts`. French pages would be available in the `fr/` subfolder, translated posts would be in `_posts/fr/`.
 3. **It relies on the `lang` and `categories` attributes in the YAML front matter**. For the default language, content only has a `lang` attribute (e.g. `lang: en`). Translation have both:
 
-```
+```yaml
 lang: fr
 categories: fr
 ```
@@ -149,7 +149,7 @@ It adds a (hidden) menu to your pages that allows you to easily edit/duplicate p
 
 To do so, just add the following at the bottom of all of your pages (probably using an include in your default layout):
 
-```
+```html
 <script>
 var JEKYLLPLUS_REPO = 'org/repo/branch';
 var JEKYLLPLUS_PATH = '{{ page.path }}';
@@ -164,14 +164,14 @@ Obviously, replace `'org/repo/branch'` with your repo and branch information (I'
 
 You can also point at your own client url for the JS and CSS files. For example, if working with your local dev version:
 
-```
+```html
 <script src='//localhost:8080/assets/widget.js'/></script>
 <link rel='stylesheet' href='//localhost:8080/assets/widget.css'/>
 ```
 
 By default, the widget offers link to edit or duplicate the content of the current page (this is what `JEKYLLPLUS_PATH` is for), as well as links to create a new page or a new post. You can extend the list of menu items, especially if you have custom collections, by defining the `JEKYLLPLUS_MENU` array. For example:
 
-```
+```javascript
 var JEKYLLPLUS_MENU = JEKYLLPLUS_MENU || [
   { label: 'Create a page', path: 'new?collection=pages' },
   { label: 'Create a post', path: 'new?collection=posts' },
@@ -200,7 +200,7 @@ npm run build
 
 Additionally, you'll need a microservice for the GitHub Oauth. Simply deploy [Wiredcraft/micro-github ](https://github.com/Wiredcraft/micro-github) with [now](https://zeit.co/now):
 
-```
+```bash
 now Wiredcraft/micro-github -e GH_CLIENT_ID={CLIENT_ID} -e GH_CLIENT_SECRET={CLIENT_SECRET} -e REDIRECT_URL={CLIENT_URL}
 ```
 
