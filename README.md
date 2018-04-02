@@ -158,6 +158,8 @@ var JEKYLLPLUS_PATH = '{{ page.path }}';
 
 Obviously, replace `'org/repo/branch'` with your repo and branch information (I'm working on automating this).
 
+**Once the widget is added to your site, visit any page with the `jekyllplus` parameter set to true to display it (e.g. `https://example.com?jekyllplus=true`)**. To hide it, simple do the reverse: `https://example.com?jekyllplus=false`.
+
 You can also point at your own client url for the JS and CSS files. For example, if working with your local dev version:
 
 ```
