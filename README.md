@@ -8,6 +8,22 @@ It provides a user friendly interface for users to edit the content of their Jek
 
 <p align="center"><img src="https://user-images.githubusercontent.com/306868/38175180-c7e02184-360a-11e8-8b40-9df7b213a5f4.gif"/></p>
 
+## Quick start
+
+1. Open the default layout for your Jekyll site (`_layouts/default.html`),
+2. Add the following snippet at the bottom of your page right before `</body>`, making sure `JEKYLLPLUS_REPO` is set to the  repo and branch names for your Jekyll site (e.g. `var JEKYLLPLUS_REPO = 'Wiredcraft/jekyllplus/master'` if this repo was a Jekyll site):
+
+    ```html
+    <script>
+    var JEKYLLPLUS_REPO = 'ORG/REPO/BRANCH';
+    var JEKYLLPLUS_PATH = '{{ page.path }}';
+    </script>
+    <script src='//cms.jekyllplus.com/assets/widget.js'/></script>
+    <link rel='stylesheet' href='//cms.jekyllplus.com/assets/widget.css'/>
+    ```
+    
+3. Visit your site and add `?jekyllplus=true` at the end of your url (i.e. http://example.com/?jekyllplus-true). You will see the Jekyll widget at the bottom left corner of your site. You can now edit and create pages or posts.
+
 ## Usage
 
 ### Use the online version at cms.jekyllplus.com
