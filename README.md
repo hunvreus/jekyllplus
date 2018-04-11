@@ -22,7 +22,7 @@ It provides a user friendly interface for users to edit the content of their Jek
     <link rel='stylesheet' href='//cms.jekyllplus.com/assets/widget.css'/>
     ```
     
-3. Visit your site and add `?jekyllplus=true` at the end of your url (i.e. http://example.com/?jekyllplus-true). You will see the Jekyll widget at the bottom left corner of your site. You can now edit and create pages or posts.
+3. Visit your site and add `?jekyllplus=true` at the end of your url (i.e. http://example.com/?jekyllplus=true). You will see the Jekyll widget at the bottom left corner of your site. You can now edit and create pages or posts.
 
 ## Usage
 
