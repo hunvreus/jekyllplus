@@ -10,10 +10,14 @@ module.exports = {
           // For objects, we use a recursion
           content[name] = content[name] ? content[name] : {};
           model[name] = {};
-          // We wrap the model in an array if the field is "multiple"
+          // We reduce the model in an array if the field is "multiple"
           model[name] = (fields[i].multiple) ?
-            [ this.createModel(fields[i].fields, content[name], model[name]) ] :
-            this.createModel(fields[i].fields, content[name], model[name]);
+            [...content[name]].reduce((acc, cur) => {
+              return [
+                ...acc,
+                this.createModel(fields[i].fields, cur),
+              ];
+            }, []) : this.createModel(fields[i].fields, content[name], model[name]);
         }
         else {
           if (content.hasOwnProperty(name)) {
