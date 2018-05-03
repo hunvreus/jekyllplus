@@ -118,6 +118,7 @@ export default {
       return (path.join('/'));
     },
     setFiles: function () {
+      return
       // Retrieve the files for the current path from GitHub
       this.status = 'loading';
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.current;
