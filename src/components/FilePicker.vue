@@ -84,7 +84,7 @@ export default {
       current: '',
       files: [],
       preview: null,
-      selected: (this.value != '') ? this.value.replace(/^\/+/g, '') : {},
+      selected: (this.value && this.value != '') ? this.value.replace(/^\/+/g, '') : {},
       show: false,
       status: ''
     };
@@ -96,7 +96,7 @@ export default {
     else if (this.path) {
       this.current = this.path;
     }
-    else if (this.config.folders) {
+    else if (this.config && this.config.folders) {
       if (this.config.folders.file) this.current = this.config.folders.file;
       if (this.type && this.type != '' && this.config.folders[this.type]) this.current = this.config.folders[this.type];
     }
