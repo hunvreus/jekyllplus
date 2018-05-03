@@ -88,9 +88,11 @@
     <!-- Object -->
     <div v-else-if="field.type == 'object'">
       <div v-if="field.multiple" class="multiple">
-        <fieldset v-for="n in model[field.name].length" v-model="model[field.name][n - 1]">
-          <field v-for="childField in field.fields" :key="childField.name" :field="childField" :model="model[field.name][n - 1]"></field>
-        </fieldset>
+        <draggable v-model="model[field.name]">
+          <fieldset v-for="n in model[field.name].length" v-model="model[field.name][n - 1]">
+            <field v-for="childField in field.fields" :key="childField.name" :field="childField" :model="model[field.name][n - 1]"></field>
+          </fieldset>
+        </draggable>
       </div>
       <fieldset v-else>
         <field v-for="childField in field.fields" :key="childField.name" :field="childField" :model="model[field.name]"></field>
@@ -110,12 +112,13 @@ import vSelect from 'vue-select'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/markdown/markdown.js';
 import 'codemirror/lib/codemirror.css';
+import draggable from 'vuedraggable';
 // import 'codemirror/theme/base16-dark.css';
 
 export default {
   name: 'field',
   props: ['field', 'model', 'config'],
-  components: { FilePicker, vSelect, codemirror },
+  components: { FilePicker, vSelect, codemirror, draggable },
   data: function () {
     return {
       username: this.$route.params.username,
@@ -132,7 +135,7 @@ export default {
   methods: {
     addEntry: function () {
       this.model[this.field.name].push(this.empty);
-    }
+    },
   }
 }
 </script>

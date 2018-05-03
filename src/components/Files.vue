@@ -87,7 +87,9 @@
 import Upload from './Upload.vue';
 
 export default {
-  components: { Upload },
+  components: { 
+    Upload
+  },
   props: [ 'config', 'jekyllConfig' ],
   data: function() {
     return {
