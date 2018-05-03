@@ -4,38 +4,48 @@
     <!-- String -->
     <div v-if="field.type == 'string'">
       <div v-if="field.multiple" class="multiple">
-        <input type="text" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        <draggable v-model="model[field.name]" :options="draggableOptions">
+          <input type="text" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        </draggable>
       </div>
       <input type="text" v-else v-model="model[field.name]"/>
     </div>
     <!-- Hidden -->
     <div v-if="field.type == 'hidden'">
       <div v-if="field.multiple" class="multiple">
-        <input type="text" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        <draggable v-model="model[field.name]" :options="draggableOptions">
+          <input type="text" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        </draggable>
       </div>
       <input type="text" v-else v-model="model[field.name]"/>
     </div>
     <!-- File & Image -->
     <div v-if="field.type == 'image' || field.type == 'file'">
       <div v-if="field.multiple" class="multiple">
-        <file-picker v-for="n in model[field.name].length" :key="n" v-model="model[field.name][n - 1]" :type="field.type" :config="config"/>
+        <draggable v-model="model[field.name]" :options="draggableOptions">
+          <file-picker v-for="n in model[field.name].length" :key="n" v-model="model[field.name][n - 1]" :type="field.type" :config="config"/>
+        </draggable>
       </div>
       <file-picker v-else v-model="model[field.name]" :type="field.type" :config="config"/>
     </div>
     <!-- Checkbox -->
     <div v-if="field.type == 'checkbox'">
       <div v-if="field.multiple" class="multiple">
-        <input type="checkbox" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        <draggable v-model="model[field.name]" :options="draggableOptions">
+          <input type="checkbox" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        </draggable>
       </div>
       <input type="checkbox" v-else v-model="model[field.name]"/>
     </div>
     <!-- Switch -->
     <div v-if="field.type == 'switch'">
       <div v-if="field.multiple" class="multiple">
-        <label class="switch" v-for="n in model[field.name].length">
-          <input type="checkbox" v-model="model[field.name][n - 1]"/>
-          <div class="slider"><span></span></div>
-        </label>
+        <draggable v-model="model[field.name]" :options="draggableOptions">
+          <label class="switch" v-for="n in model[field.name].length">
+            <input type="checkbox" v-model="model[field.name][n - 1]"/>
+            <div class="slider"><span></span></div>
+          </label>
+        </draggable>
       </div>
       <label v-else class="switch">
         <input type="checkbox" v-model="model[field.name]"/>
@@ -45,18 +55,22 @@
     <!-- Date -->
     <div v-else-if="field.type == 'date'">
       <div v-if="field.multiple" class="multiple">
-        <input type="date" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        <draggable v-model="model[field.name]" :options="draggableOptions">
+          <input type="date" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        </draggable>
       </div>
       <input type="date" v-else v-model="model[field.name]"/>
     </div>
     <!-- Select -->
     <div v-else-if="field.type == 'select'">
       <div v-if="field.multiple" class="multiple">
-        <span class="select" v-for="n in model[field.name].length">
-          <select v-model="model[field.name][n - 1]">
-            <option v-for="option in field.options" :value="(typeof option == 'string') ? option : option.value">{{ (typeof option == 'string') ? option : option.label }}</option>
-          </select>
-        </span>
+        <draggable v-model="model[field.name]" :options="draggableOptions">
+          <span class="select" v-for="n in model[field.name].length">
+            <select v-model="model[field.name][n - 1]">
+              <option v-for="option in field.options" :value="(typeof option == 'string') ? option : option.value">{{ (typeof option == 'string') ? option : option.label }}</option>
+            </select>
+          </span>
+        </draggable>
       </div>
       <span class="select" v-else>
         <select v-model="model[field.name]">
@@ -74,21 +88,25 @@
     <!-- Text -->
     <div v-else-if="field.type == 'text'">
       <div v-if="field.multiple" class="multiple">
-        <textarea rows="20" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        <draggable v-model="model[field.name]" :options="draggableOptions">
+          <textarea rows="20" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+        </draggable>
       </div>
       <textarea rows="20" v-else v-model="model[field.name]"/>
     </div>
     <!-- Markdown -->
     <div v-else-if="field.type == 'text' || field.type=='markdown'">
       <div v-if="field.multiple" class="multiple">
-        <codemirror v-for="n in model[field.name].length" v-model="model[field.name][n-1]" :options="codemirrorOptions"></codemirror>
+        <draggable v-model="model[field.name]" :options="draggableOptions">
+          <codemirror v-for="n in model[field.name].length" v-model="model[field.name][n-1]" :options="codemirrorOptions"></codemirror>
+        </draggable>
       </div>
       <codemirror v-model="model[field.name]" :options="codemirrorOptions" :class="{ autoresize: field.autoresize }"></codemirror>
     </div>
     <!-- Object -->
     <div v-else-if="field.type == 'object'">
       <div v-if="field.multiple" class="multiple">
-        <draggable v-model="model[field.name]">
+        <draggable v-model="model[field.name]" :options="draggableOptions">
           <fieldset v-for="n in model[field.name].length" v-model="model[field.name][n - 1]">
             <field v-for="childField in field.fields" :key="childField.name" :field="childField" :model="model[field.name][n - 1]"></field>
           </fieldset>
@@ -117,8 +135,15 @@ import draggable from 'vuedraggable';
 
 export default {
   name: 'field',
-  props: ['field', 'model', 'config'],
+  props: ['field', 'model', 'config', 'fixedOrder'],
   components: { FilePicker, vSelect, codemirror, draggable },
+  computed: {
+    draggableOptions: function () {
+      return {
+        disabled: this.fixedOrder
+      }
+    }
+  },
   data: function () {
     return {
       username: this.$route.params.username,
