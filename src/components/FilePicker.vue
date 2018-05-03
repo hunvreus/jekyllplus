@@ -61,7 +61,7 @@
         <footer class="footer">
           <upload :path="current" :class="'primary smaller'" @uploaded="setFiles"/>
           <a class="button smaller" @click.prevent="show = false">Cancel</a>
-          <a class="button primary smaller" @click.prevent="$emit('input', (selected != '' ? '/' + selected : '')); show = false">Select</a>
+          <a class="button primary smaller" @click.prevent="onChange(selected != '' ? '/' + selected : ''); show=false">Select</a>
         </footer>
       </div>
     </div>
@@ -74,7 +74,7 @@ import Upload from './Upload.vue';
 export default {
   name: 'file-picker',
   components: { Upload },
-  props: [ 'value', 'path', 'type', 'config' ],
+  props: [ 'value', 'path', 'type', 'config', 'onChange'],
   data: function() {
     return {
       username: this.$route.params.username,

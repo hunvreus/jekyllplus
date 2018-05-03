@@ -15,6 +15,7 @@
         :type="type"
         :config="config"
         :value="value"
+        :onChange="handleFilePickerChange"
       />
     </div>
     <!-- Else -->
@@ -50,10 +51,10 @@ export default {
   //     }
   //   }
   // },
-  // methods: {
-  //   addEntry: function () {
-  //     this.model[this.field.name].push(this.empty);
-  //   },
-  // }
+  methods: {
+    handleFilePickerChange: function (val) {
+      this.$emit('input', val)
+    }
+  }
 }
 </script>
