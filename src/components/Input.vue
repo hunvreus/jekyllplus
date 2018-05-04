@@ -70,7 +70,7 @@
     <!-- Object -->
     <div v-else-if="type === 'object'">
       <fieldset>
-        <field v-for="field in childFields" :key="field.name" :field="field" :model="model"></field>
+        <field v-for="childField in childFields" :key="childField.name" :field="childField" :model="model"></field>
       </fieldset>
     </div>
     <div v-else-if="type === 'markdown'">
@@ -108,28 +108,23 @@ import 'codemirror/lib/codemirror.css';
 
 export default {
   name: 'custom-input',
-  props: ['field', 'model', 'childFields'],
+  props: ['field', 'value', 'config', 'model'],
   components: { FilePicker, vSelect, codemirror },
   methods: {
     handleInputChange: function (val) {
-      console.log(val)
       this.$emit('input', val)
     },
-  },
-  computed: function () {
-    return {
-      type: this.field.type,
-      options: this.field.options,
-      childFields: this.field.fields,
-      autoresize: this.field.autoresize
-    }
   },
   data: function () {
     return {
       codemirrorOptions: {
         mode: 'text/markdown',
         lineWrapping: true
-      }
+      },
+      type: this.field.type,
+      options: this.field.options,
+      childFields: this.field.fields,
+      autoresize: this.field.autoresize
     }
   },
 }

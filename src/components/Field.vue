@@ -37,7 +37,7 @@ import draggable from 'vuedraggable';
 export default {
   name: 'field',
   props: ['field', 'model', 'config', 'fixedOrder'],
-  components: { Input, draggable },
+  components: { 'custom-input': Input, draggable },
   computed: {
     draggableOptions: function () {
       return {
