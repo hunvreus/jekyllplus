@@ -16,6 +16,8 @@ import Files from './components/Files.vue'
 import Editor from './components/Editor.vue'
 import Login from './components/Login.vue'
 
+Vue.component("field", Field);
+
 const router = new VueRouter({
   mode: 'history',
   base: __dirname,

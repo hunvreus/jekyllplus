@@ -61,7 +61,7 @@
         <footer class="footer">
           <upload :path="current" :class="'primary smaller'" @uploaded="setFiles"/>
           <a class="button smaller" @click.prevent="show = false">Cancel</a>
-          <a class="button primary smaller" @click.prevent="onChange(selected != '' ? '/' + selected : ''); show=false">Select</a>
+          <a class="button primary smaller" @click.prevent="handleSelectConfirm">Select</a>
         </footer>
       </div>
     </div>
@@ -84,7 +84,7 @@ export default {
       current: '',
       files: [],
       preview: null,
-      selected: (this.value && this.value != '') ? this.value.replace(/^\/+/g, '') : {},
+      selected: (this.value != '') ? this.value.replace(/^\/+/g, '') : {},
       show: false,
       status: ''
     };
@@ -96,7 +96,7 @@ export default {
     else if (this.path) {
       this.current = this.path;
     }
-    else if (this.config && this.config.folders) {
+    else if (this.config.folders) {
       if (this.config.folders.file) this.current = this.config.folders.file;
       if (this.type && this.type != '' && this.config.folders[this.type]) this.current = this.config.folders[this.type];
     }
@@ -118,7 +118,6 @@ export default {
       return (path.join('/'));
     },
     setFiles: function () {
-      return
       // Retrieve the files for the current path from GitHub
       this.status = 'loading';
       var url = 'https://api.github.com/repos/' + this.username + '/' + this.repo + '/contents/' + this.current;
@@ -150,7 +149,11 @@ export default {
     },
     select: function (file) {
       this.selected = (this.selected == file.path) ? '' : file.path;
-    }
+    },
+    handleSelectConfirm: function () {
+      this.onChange(this.selected != '' ? '/' + this.selected : '');
+      this.show = false;
+    } 
   },
   computed: {
     breadcrumb: function () {
