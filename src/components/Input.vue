@@ -71,7 +71,7 @@
     <div v-else-if="type === 'object'">
       <fieldset>
         <div @click="handleFieldToggleClick">
-          <span v-if="collapsed">{{ order || 1 }} of {{ total || 1 }}</span>
+          <span v-if="collapsed">{{ order || 1 }} of {{ total || 1 }} {{ field.label }}</span>
           <span>{{ collapsed ? 'expand' : 'collapse' }}</span>
         </div>
         <field v-if="!collapsed" v-for="childField in childFields" :key="childField.name" :field="childField" :model="model"></field>

@@ -5,17 +5,19 @@
     <div v-if="field.multiple" @click="handleToggleAllClick">{{ allCollapsed ? 'expand all' : 'collapse all' }}</div>
     <div>
       <div v-if="field.multiple" class="multiple">
-        <draggable v-model="model[field.name]">
-          <custom-input
-            v-for="n in model[field.name].length"
-            v-model="model[field.name][n - 1]"
-            :config="config"
-            :model="model[field.name][n - 1]"
-            :field="field"
-            :order="n"
-            :total="model[field.name].length"
-            :allCollapsed="allCollapsed"
-          />
+        <draggable v-model="model[field.name]" :options="{handle:'.handle'}">
+          <div v-for="n in model[field.name].length">
+            <span class="handle">drag and drop</span>
+            <custom-input
+              v-model="model[field.name][n - 1]"
+              :config="config"
+              :model="model[field.name][n - 1]"
+              :field="field"
+              :order="n"
+              :total="model[field.name].length"
+              :allCollapsed="allCollapsed"
+            />
+          </div>
         </draggable>
       </div>
       <custom-input
