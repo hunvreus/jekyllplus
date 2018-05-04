@@ -6,25 +6,19 @@
         <draggable v-model="model[field.name]">
           <custom-input
             v-for="n in model[field.name].length"
-            :type="field.type"
             v-model="model[field.name][n - 1]"
             :config="config"
-            :options="field.options"
             :model="model[field.name][n - 1]"
-            :childFields="field.fields"
-            :autoresize="field.autoresize"
+            :field="field"
           />
         </draggable>
       </div>
       <custom-input
         v-else
-        :type="field.type"
         v-model="model[field.name]"
         :config="config"
-        :options="field.options"
         :model="model[field.name]"
-        :childFields="field.fields"
-        :autoresize="field.autoresize"
+        :field="field"
       />
     </div>
     <!-- Description if it exists -->

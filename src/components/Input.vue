@@ -108,13 +108,21 @@ import 'codemirror/lib/codemirror.css';
 
 export default {
   name: 'custom-input',
-  props: ['type', 'config', 'value', 'model', 'childFields', 'autoresize'],
+  props: ['field', 'model', 'childFields'],
   components: { FilePicker, vSelect, codemirror },
   methods: {
     handleInputChange: function (val) {
       console.log(val)
       this.$emit('input', val)
     },
+  },
+  computed: function () {
+    return {
+      type: this.field.type,
+      options: this.field.options,
+      childFields: this.field.fields,
+      autoresize: this.field.autoresize
+    }
   },
   data: function () {
     return {
