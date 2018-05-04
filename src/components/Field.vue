@@ -1,6 +1,8 @@
 <template>
   <div class="field full-width" v-if="model">
     <label v-if="field.label">{{ field.label }}</label>
+    <!-- add nav btn for collapsing/expanding all  -->
+    <div v-if="field.multiple" @click="handleToggleAllClick">{{ allCollapsed ? 'expand all' : 'collapse all' }}</div>
     <div>
       <div v-if="field.multiple" class="multiple">
         <draggable v-model="model[field.name]">
@@ -10,6 +12,9 @@
             :config="config"
             :model="model[field.name][n - 1]"
             :field="field"
+            :order="n"
+            :total="model[field.name].length"
+            :allCollapsed="allCollapsed"
           />
         </draggable>
       </div>
@@ -51,12 +56,16 @@ export default {
       repo: this.$route.params.repo,
       ref: this.$route.params.ref,
       token: this.$root.$data.token,
-      empty: (this.field.type == 'object') ? Helper.createModel(this.field.fields, {}) : ''
+      empty: (this.field.type == 'object') ? Helper.createModel(this.field.fields, {}) : '',
+      allCollapsed: true
     }
   },
   methods: {
     addEntry: function () {
       this.model[this.field.name].push(this.empty);
+    },
+    handleToggleAllClick: function () {
+      this.allCollapsed = !this.allCollapsed
     }
   }
 }

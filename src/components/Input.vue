@@ -70,7 +70,11 @@
     <!-- Object -->
     <div v-else-if="type === 'object'">
       <fieldset>
-        <field v-for="childField in childFields" :key="childField.name" :field="childField" :model="model"></field>
+        <div @click="handleFieldToggleClick">
+          <span v-if="collapsed">{{ order || 1 }} of {{ total || 1 }}</span>
+          <span>{{ collapsed ? 'expand' : 'collapse' }}</span>
+        </div>
+        <field v-if="!collapsed" v-for="childField in childFields" :key="childField.name" :field="childField" :model="model"></field>
       </fieldset>
     </div>
     <div v-else-if="type === 'markdown'">
@@ -108,13 +112,8 @@ import 'codemirror/lib/codemirror.css';
 
 export default {
   name: 'custom-input',
-  props: ['field', 'value', 'config', 'model'],
+  props: ['field', 'value', 'config', 'model', 'order', 'total', 'allCollapsed'],
   components: { FilePicker, vSelect, codemirror },
-  methods: {
-    handleInputChange: function (val) {
-      this.$emit('input', val)
-    },
-  },
   data: function () {
     return {
       codemirrorOptions: {
@@ -124,7 +123,21 @@ export default {
       type: this.field.type,
       options: this.field.options,
       childFields: this.field.fields,
-      autoresize: this.field.autoresize
+      autoresize: this.field.autoresize,
+      collapsed: true
+    }
+  },
+  watch: {
+    allCollapsed: function (to, from) {
+      this.collapsed = to
+    } 
+  },
+  methods: {
+    handleInputChange: function (val) {
+      this.$emit('input', val)
+    },
+    handleFieldToggleClick: function () {
+      this.collapsed = !this.collapsed
     }
   },
 }
