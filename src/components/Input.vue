@@ -71,10 +71,25 @@
     <div v-else-if="type === 'object'">
       <fieldset>
         <div>
-          <span v-if="collapsed">{{ order || 1 }} of {{ total || 1 }} {{ field.label }}</span>
-          <span @click="handleFieldToggleClick">{{ collapsed ? 'expand' : 'collapse' }}</span>
-          <span v-if="deleteBtn" @click="onDelete(order-1)">delete</span>
-          <span v-if="handle" class="handle">drag and drop</span>
+          <label class="collapsed-field" v-if="collapsed">{{ order || 1 }} of {{ total || 1 }}</label>
+          <div class="input-nav">
+            <a v-if="deleteBtn" class="icon" @click="handleFieldToggleClick">
+              <svg viewBox="0 0 24 24">
+                <path v-if="collapsed" d="M20 5.41L18.59 4 7 15.59V9H5v10h10v-2H8.41z" />
+                <path v-if="!collapsed" d="M9 5v2h6.59L4 18.59 5.41 20 17 8.41V15h2V5z" />
+              </svg>
+            </a>
+            <a v-if="deleteBtn" class="icon" @click="onDelete(order-1)">
+              <svg viewBox="0 0 24 24">
+                <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+              </svg>
+            </a>
+            <a v-if="handle" class="icon handle">
+              <svg viewBox="0 0 24 24">
+                <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z" />
+              </svg>
+            </a>
+          </div>
         </div>
         <field v-if="!collapsed" v-for="childField in childFields" :key="childField.name" :field="childField" :model="model"></field>
       </fieldset>

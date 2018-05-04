@@ -1,8 +1,7 @@
 <template>
   <div class="field full-width" v-if="model">
     <label v-if="field.label">{{ field.label }}</label>
-    <!-- add nav btn for collapsing/expanding all  -->
-    <div v-if="field.multiple" @click="handleToggleAllClick">{{ allCollapsed ? 'expand all' : 'collapse all' }}</div>
+    <a class="toggle" v-if="field.multiple" @click="handleToggleAllClick">{{ allCollapsed ? 'expand all' : 'collapse all' }}</a>
     <div>
       <div v-if="field.multiple" class="multiple">
         <draggable v-model="model[field.name]" :options="{handle:'.handle'}">

@@ -1,6 +1,7 @@
 @if index($partials, form) {
   .field {
     margin-bottom: 1.5*$space/2;
+    position: relative;
     .description {
       color: $grey;
       display: block;
@@ -30,6 +31,9 @@
     font-weight: 500;
     text-transform: uppercase;
     display: block;
+    &.collapsed-field {
+      margin-bottom: 12px;
+    }
   }
 
   input,
@@ -114,5 +118,17 @@
     > * {
       margin-right: $space/4;
     }
+  }
+
+  .input-nav {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+  }
+
+  .toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 }
