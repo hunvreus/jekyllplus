@@ -7,7 +7,6 @@
       <div v-if="field.multiple" class="multiple">
         <draggable v-model="model[field.name]" :options="{handle:'.handle'}">
           <div v-for="n in model[field.name].length">
-            <span class="handle">drag and drop</span>
             <custom-input
               v-model="model[field.name][n - 1]"
               :config="config"
@@ -16,6 +15,9 @@
               :order="n"
               :total="model[field.name].length"
               :allCollapsed="allCollapsed"
+              :onDelete="handleDeleteClick"
+              :handle="true"
+              :deleteBtn="true"
             />
           </div>
         </draggable>
@@ -45,13 +47,6 @@ export default {
   name: 'field',
   props: ['field', 'model', 'config', 'fixedOrder'],
   components: { 'custom-input': Input, draggable },
-  computed: {
-    draggableOptions: function () {
-      return {
-        disabled: this.fixedOrder
-      }
-    }
-  },
   data: function () {
     return {
       username: this.$route.params.username,
@@ -68,6 +63,9 @@ export default {
     },
     handleToggleAllClick: function () {
       this.allCollapsed = !this.allCollapsed
+    },
+    handleDeleteClick: function (n) {
+      this.model[this.field.name].splice(n, 1)
     }
   }
 }

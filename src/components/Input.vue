@@ -70,9 +70,11 @@
     <!-- Object -->
     <div v-else-if="type === 'object'">
       <fieldset>
-        <div @click="handleFieldToggleClick">
+        <div>
           <span v-if="collapsed">{{ order || 1 }} of {{ total || 1 }} {{ field.label }}</span>
-          <span>{{ collapsed ? 'expand' : 'collapse' }}</span>
+          <span @click="handleFieldToggleClick">{{ collapsed ? 'expand' : 'collapse' }}</span>
+          <span v-if="deleteBtn" @click="onDelete(order-1)">delete</span>
+          <span v-if="handle" class="handle">drag and drop</span>
         </div>
         <field v-if="!collapsed" v-for="childField in childFields" :key="childField.name" :field="childField" :model="model"></field>
       </fieldset>
@@ -112,7 +114,7 @@ import 'codemirror/lib/codemirror.css';
 
 export default {
   name: 'custom-input',
-  props: ['field', 'value', 'config', 'model', 'order', 'total', 'allCollapsed'],
+  props: ['field', 'value', 'config', 'model', 'order', 'total', 'allCollapsed', 'onDelete', 'deleteBtn', 'handle'],
   components: { FilePicker, vSelect, codemirror },
   data: function () {
     return {
