@@ -4,6 +4,7 @@
     <div>
       <div v-if="field.multiple" class="multiple">
         <draggable v-model="model[field.name]">
+<<<<<<< HEAD
           <custom-input
             v-for="n in model[field.name].length"
             :type="field.type"
