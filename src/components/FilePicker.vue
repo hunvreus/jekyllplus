@@ -3,7 +3,7 @@
     <div class="input">
       <img src="">
       <input readonly type="text" v-model="value"/>
-      <a class="button" @click.prevent="handleSelectClick(); show = true">Select file</a>
+      <a class="button" @click.prevent="handleSelectClick();">Select file</a>
     </div>
     <div class="modal" :class="{ active: show }" @click.self.prevent="show = false">
       <div class="box larger">
@@ -150,7 +150,8 @@ export default {
       this.selected = (this.selected == file.path) ? '' : file.path;
     },
     handleSelectClick: function () {
-      this.setFiles()
+      this.setFiles();
+      this.show = true;
     }
   },
   computed: {
