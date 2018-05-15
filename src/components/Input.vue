@@ -71,9 +71,9 @@
     <div v-else-if="type === 'object'">
       <fieldset>
         <div>
-          <label class="collapsed-field" v-if="collapsed">{{ order || 1 }} of {{ total || 1 }}</label>
+          <label class="collapsed-field" v-if="collapsed && field.multiple">{{ order || 1 }} of {{ total || 1 }}</label>
           <div class="input-nav">
-            <a v-if="deleteBtn" class="icon" @click="handleFieldToggleClick">
+            <a v-if="field.multiple" class="icon" @click="handleFieldToggleClick">
               <svg viewBox="0 0 24 24">
                 <path v-if="collapsed" d="M20 5.41L18.59 4 7 15.59V9H5v10h10v-2H8.41z" />
                 <path v-if="!collapsed" d="M9 5v2h6.59L4 18.59 5.41 20 17 8.41V15h2V5z" />
@@ -91,7 +91,7 @@
             </a>
           </div>
         </div>
-        <field v-if="!collapsed" v-for="childField in childFields" :key="childField.name" :field="childField" :model="model"></field>
+        <field v-if="!collapsed || !field.multiple" v-for="childField in childFields" :key="childField.name" :field="childField" :model="model"></field>
       </fieldset>
     </div>
     <div v-else-if="type === 'markdown'">
