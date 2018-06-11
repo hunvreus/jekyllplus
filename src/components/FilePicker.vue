@@ -3,7 +3,7 @@
     <div class="input">
       <img src="">
       <input readonly type="text" v-model="value"/>
-      <a class="button" @click.prevent="show = true">Select file</a>
+      <a class="button" @click.prevent="handleSelectClick();">Select file</a>
     </div>
     <div class="modal" :class="{ active: show }" @click.self.prevent="show = false">
       <div class="box larger">
@@ -100,14 +100,13 @@ export default {
       if (this.config.folders.file) this.current = this.config.folders.file;
       if (this.type && this.type != '' && this.config.folders[this.type]) this.current = this.config.folders[this.type];
     }
-    this.setFiles();
     document.addEventListener('keydown', (e) => {
       if (e.keyCode == 27) this.show = false;
     });
   },
   watch: {
     'current': function (to, from) {
-      this.setFiles();
+      if(from) this.setFiles();
     }
   },
   methods: {
@@ -153,7 +152,11 @@ export default {
     handleSelectConfirm: function () {
       this.onChange(this.selected != '' ? '/' + this.selected : '');
       this.show = false;
-    } 
+    },
+    handleSelectClick: function () {
+      this.setFiles();
+      this.show = true;
+    }
   },
   computed: {
     breadcrumb: function () {
