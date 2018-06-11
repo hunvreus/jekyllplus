@@ -70,7 +70,7 @@ module.exports = {
           delete obj[key]
         }
       }
-      else if (!val) {
+      else if (!val && typeof val != 'boolean') {
         delete obj[key]
       }
     });
