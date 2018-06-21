@@ -21,7 +21,7 @@ It provides a user friendly interface for users to edit the content of their Jek
     <script src='//cms.jekyllplus.com/assets/widget.js'/></script>
     <link rel='stylesheet' href='//cms.jekyllplus.com/assets/widget.css'/>
     ```
-    
+
 3. Visit your site and add `?jekyllplus=true` at the end of your url (i.e. http://example.com/?jekyllplus=true). You will see the Jekyll widget at the bottom left corner of your site. You can now edit and create pages or posts.
 
 ## Usage
@@ -236,7 +236,7 @@ now Wiredcraft/micro-github -e GH_CLIENT_ID={CLIENT_ID} -e GH_CLIENT_SECRET={CLI
 - **Add widgets**:
   - Autocomplete from third party.
   - Map for coordinates and addresses.
-- **Improve the file picker**: in particular it seems to fail with a lot of images and shouldn't try to load directory content until opened. It would also be useful to support multi-files upload and selection, as well as folder creation.
+- **Improve the file picker**: add multi-files upload and selection, as well as folder creation.
 - **Offer image manipulation**: either through third party (CDN) and/or in-browser libraries (e.g cropping)
 - **Review caching strategy**: especially once collections are supported.
 - **Add support for GitHub pages status**: for build & errors (see https://developer.github.com/v3/repos/pages/). Then integrate Jekyll+ hosting.
