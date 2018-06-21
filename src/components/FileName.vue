@@ -74,7 +74,7 @@ export default {
           var path = this.$route.query.translate;
           if (this.collection == 'pages') {
             if (from == this.jekyllConfig.lang[0]) {
-              this.path = to + '/' + this.path;
+              this.path = to + '/' + path;
             }
             else if (to == this.jekyllConfig.lang[0]) {
               this.path = path.replace(from + '/', '');
