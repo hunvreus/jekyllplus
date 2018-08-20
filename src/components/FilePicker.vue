@@ -137,7 +137,7 @@ export default {
       }, response => {
         this.$notify({
           type: 'error',
-          text: 'Couldn\'t retrive the files (' + response.body.message + ')',
+          text: 'Couldn\'t retrieve the files (' + response.body.message + ')',
           duration: -1
         });
         this.status = '';

@@ -49,6 +49,20 @@
       </div>
       <input type="date" v-else v-model="model[field.name]"/>
     </div>
+    <!-- URL -->
+    <div v-else-if="field.type == 'url'">
+      <div v-if="field.multiple" class="multiple">
+        <input type="url" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+      </div>
+      <input type="url" v-else v-model="model[field.name]"/>
+    </div>
+    <!-- Number -->
+    <div v-else-if="field.type == 'number'">
+      <div v-if="field.multiple" class="multiple">
+        <input type="number" v-for="n in model[field.name].length" v-model="model[field.name][n - 1]"/>
+      </div>
+      <input type="number" v-else v-model="model[field.name]"/>
+    </div>
     <!-- Select -->
     <div v-else-if="field.type == 'select'">
       <div v-if="field.multiple" class="multiple">
