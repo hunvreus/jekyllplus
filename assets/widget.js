@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-  console.log(JEKYLLPLUS_URL);
-  console.log(JEKYLLPLUS_MENU);
-  // var JEKYLLPLUS_URL = JEKYLLPLUS_URL || '//cms.jekyllplus.com';
-  // var JEKYLLPLUS_MENU = JEKYLLPLUS_MENU || [
-  //   { label: 'Create a page', path: 'new?collection=pages' },
-  //   { label: 'Create a post', path: 'new?collection=posts' }
-  // ];
+  JEKYLLPLUS_URL = JEKYLLPLUS_URL || '//cms.jekyllplus.com';
+  JEKYLLPLUS_MENU = JEKYLLPLUS_MENU || [
+    { label: 'Create a page', path: 'new?collection=pages' },
+    { label: 'Create a post', path: 'new?collection=posts' }
+  ];
   var JEKYLLPLUS_PREFIX = JEKYLLPLUS_URL + '/' + JEKYLLPLUS_REPO + '/';
 
   if ((window.location.href.indexOf('?jekyllplus=true') != -1) || (window.location.href.indexOf('&jekyllplus=true') != -1)) {
