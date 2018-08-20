@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-  JEKYLLPLUS_URL = JEKYLLPLUS_URL || '//cms.jekyllplus.com';
-  JEKYLLPLUS_MENU = JEKYLLPLUS_MENU || [
+  if (window.JEKYLLPLUS_URL === undefined) var JEKYLLPLUS_URL = '//cms.jekyllplus.com';
+  if (window.JEKYLLPLUS_MENU === undefined) var JEKYLLPLUS_MENU = [
     { label: 'Create a page', path: 'new?collection=pages' },
     { label: 'Create a post', path: 'new?collection=posts' }
   ];
