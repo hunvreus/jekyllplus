@@ -97,7 +97,6 @@ export default {
       this.setModel();
     },
     '$route': function (to, from) {
-      this.path = '';
       this.setEditor();
       this.setModel();
     }
