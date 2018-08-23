@@ -61,7 +61,7 @@
         <footer class="footer">
           <upload :path="current" :class="'primary smaller'" @uploaded="setFiles"/>
           <a class="button smaller" @click.prevent="show = false">Cancel</a>
-          <a class="button primary smaller" @click.prevent="$emit('input', (selected != '' ? '/' + selected : '')); show = false">Select</a>
+          <a class="button primary smaller" :disabled="!isSelectActive" @click.prevent="$emit('input', (selected != '' ? '/' + selected : '')); show = false">Select</a>
         </footer>
       </div>
     </div>
@@ -86,7 +86,8 @@ export default {
       preview: null,
       selected: (this.value != '') ? this.value.replace(/^\/+/g, '') : {},
       show: false,
-      status: ''
+      status: '',
+      isSelectActive: false
     };
   },
   mounted() {
@@ -108,6 +109,9 @@ export default {
   watch: {
     'current': function (to, from) {
       this.setFiles();
+    },
+    'selected': function (to, from) {
+      this.isSelectActive = this.selected
     }
   },
   methods: {
