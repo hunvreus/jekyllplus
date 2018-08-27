@@ -3,6 +3,9 @@
     <div class="input">
       <img src="">
       <input readonly type="text" v-model="value"/>
+      <a class="button" @click.prevent="$emit('input', '')">
+        Clear
+      </a>
       <a class="button" @click.prevent="show = true">Select file</a>
     </div>
     <div class="modal" :class="{ active: show }" @click.self.prevent="show = false">
