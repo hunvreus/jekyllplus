@@ -66,7 +66,7 @@
         </section>
         <!-- Footer -->
         <footer class="footer">
-          <upload :path="current" :class="'primary smaller'" @uploaded="setFiles"/>
+          <upload :path="current" :class="'primary smaller'" @uploaded="handleUploadDone"/>
           <a class="button smaller" @click.prevent="show = false">Cancel</a>
           <a class="button primary smaller" :disabled="!isSelectActive" @click.prevent="$emit('input', (selected != '' ? '/' + selected : '')); show = false">Select</a>
         </footer>
@@ -164,11 +164,15 @@ export default {
     },
     handleMouseover: function () {
       if(this.value.length) {
-        this.isClearVisible = true
+        this.isClearVisible = true;
       }
     },
     handleMouseleave: function () {
-      this.isClearVisible = false
+      this.isClearVisible = false;
+    },
+    handleUploadDone: function (file, path) {
+      this.$emit('input', path);
+      this.show = false;
     }
   },
   computed: {
