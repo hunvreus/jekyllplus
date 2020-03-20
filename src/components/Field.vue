@@ -103,11 +103,11 @@
     <div v-else-if="field.type == 'object'">
       <div v-if="field.multiple" class="multiple">
         <fieldset v-for="n in model[field.name].length" v-model="model[field.name][n - 1]">
-          <field v-for="childField in field.fields" :key="childField.name" :field="childField" :model="model[field.name][n - 1]"></field>
+          <field v-for="childField in field.fields" :key="childField.name" :field="childField" :model="model[field.name][n - 1]" :config="config"></field>
         </fieldset>
       </div>
       <fieldset v-else>
-        <field v-for="childField in field.fields" :key="childField.name" :field="childField" :model="model[field.name]"></field>
+        <field v-for="childField in field.fields" :key="childField.name" :field="childField" :model="model[field.name]" :config="config"></field>
       </fieldset>
     </div>
     <!-- Description if it exists -->

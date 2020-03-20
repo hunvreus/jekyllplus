@@ -117,7 +117,7 @@ export default {
     createPath: function () {
       if (!this.lock) {
         var time = moment().format('YYYY-MM-DD');
-        var title = this.title.trim();
+        var title = (this.title) ? this.title.trim() : '';
         var name = '';
         if (title == '') name = time + '-Untitled.md';
         else name = time + '-' + title.replace(/\W+/g, '-').toLowerCase() + '.md';
