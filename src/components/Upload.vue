@@ -58,7 +58,7 @@ export default {
 
       this.$http.put(url, params).then(response => {
         this.status = '';
-        this.$emit('uploaded', this.file);
+        this.$emit('uploaded', this.file, response.body.content.path);
       }, response => {
         this.status = '';
         this.$notify({

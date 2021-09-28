@@ -1,8 +1,15 @@
 <template>
-  <div class="file-picker">
+  <div class="file-picker" @mouseover="handleMouseover" @mouseleave="handleMouseleave">
     <div class="input">
       <img src="">
       <input readonly type="text" v-model="value"/>
+      <div class="icon clear" v-show="isClearVisible" @click.prevent="$emit('input', '')">
+        <svg viewBox="0 0 24 24">
+          <path d="M12,2C6.47,2,2,6.47,2,12c0,5.53,4.47,10,10,10c5.53,0,10-4.47,10-10C22,6.47,17.53,2,12,2z M12,20c-4.41,0-8-3.59-8-8
+          s3.59-8,8-8s8,3.59,8,8S16.41,20,12,20z"/>
+          <polygon points="15.59,7 12,10.59 8.41,7 7,8.41 10.59,12 7,15.59 8.41,17 12,13.41 15.59,17 17,15.59 13.41,12 17,8.41"/>
+        </svg>
+      </div>
       <a class="button" @click.prevent="show = true">Select file</a>
     </div>
     <div class="modal" :class="{ active: show }" @click.self.prevent="show = false">
@@ -59,9 +66,9 @@
         </section>
         <!-- Footer -->
         <footer class="footer">
-          <upload :path="current" :class="'primary smaller'" @uploaded="setFiles"/>
+          <upload :path="current" :class="'primary smaller'" @uploaded="handleUploadDone"/>
           <a class="button smaller" @click.prevent="show = false">Cancel</a>
-          <a class="button primary smaller" @click.prevent="$emit('input', (selected != '' ? '/' + selected : '')); show = false">Select</a>
+          <a class="button primary smaller" :disabled="!isSelectActive" @click.prevent="$emit('input', (selected != '' ? '/' + selected : '')); show = false">Select</a>
         </footer>
       </div>
     </div>
@@ -86,7 +93,9 @@ export default {
       preview: null,
       selected: (this.value != '') ? this.value.replace(/^\/+/g, '') : {},
       show: false,
-      status: ''
+      status: '',
+      isSelectActive: false,
+      isClearVisible: false
     };
   },
   mounted() {
@@ -108,6 +117,9 @@ export default {
   watch: {
     'current': function (to, from) {
       this.setFiles();
+    },
+    'selected': function (to, from) {
+      this.isSelectActive = this.selected
     }
   },
   methods: {
@@ -149,6 +161,18 @@ export default {
     },
     select: function (file) {
       this.selected = (this.selected == file.path) ? '' : file.path;
+    },
+    handleMouseover: function () {
+      if(this.value.length) {
+        this.isClearVisible = true;
+      }
+    },
+    handleMouseleave: function () {
+      this.isClearVisible = false;
+    },
+    handleUploadDone: function (file, path) {
+      this.$emit('input', path);
+      this.show = false;
     }
   },
   computed: {

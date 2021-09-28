@@ -392,6 +392,16 @@ body,
       .button.add {
         margin-top: $space/3;
       }
+      .file-picker {
+        position: relative;
+      }
+      .clear {
+        position: absolute;
+        top: 50%;
+        right: 115px;
+        transform: translate(0, -50%);
+        cursor: pointer;
+      }
     }
   }
 }
