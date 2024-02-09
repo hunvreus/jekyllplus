@@ -1,3 +1,7 @@
+# Jekyll+ is unmaintained. I suggest you check [Pages CMS](https://github.com/pages-cms/pages-cms) instead.
+
+---
+
 **This is an early version. It's functional, but there are still some missing features (see "Todo") and (maybe) a few bugs.**
 
 # Jekyll+
